@@ -84,7 +84,7 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
-        $lot_url = "http://ibid-lot.dev/api/getallLot";
+        $lot_url = $this->config->item('ibid_lot')."/api/getallLot";
         $lotdata = json_decode($this->get_curl($lot_url));
         // var_dump($lotdata); die();
         $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
