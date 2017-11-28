@@ -30,7 +30,7 @@ app.ready(function() {
   |
   */
 
-  require('./plugins/typeahead.js');
+  //require('./plugins/something.js');
 
 
 
@@ -43,12 +43,7 @@ app.ready(function() {
   |
   */
 
-  require('./partials/notification.js');
-  require('./partials/color-changer.js');
-  require('./partials/icon.js');
-  require('./partials/quickview.js');
-  require('./partials/sidebar.js');
-  require('./partials/timeline.js');
+  //require('./partials/something.js');
 
 
 });
