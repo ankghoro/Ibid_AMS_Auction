@@ -60,3 +60,8 @@ div.dataTables_city select {
 .block {
 	display: block !important;
 }
+
+.detail_stock {
+	border-width: 1px;
+	border-style: solid;
+}

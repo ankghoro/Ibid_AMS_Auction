@@ -82,6 +82,57 @@ class Auction extends CI_Controller {
         $data['content_modal'] = 'modal';
         $this->load->view('/templates/theadmin', $data);
 	}
+
+    public function datalot($id){
+        $lot_url = "http://ibid-lot.dev/api/getallLot";
+        $lotdata = json_decode($this->get_curl($lot_url));
+        // var_dump($lotdata); die();
+        $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
+        $stockdata = json_decode($this->get_curl($stock_url));
+        // var_dump($stockdata); die();
+        $no = 0;
+        $arr = array();
+        foreach ($stockdata->data as $stock) {
+                $datastatus = false;
+                    foreach ($lotdata->data as $lot) {
+                        if ($stock->AuctionItemId == (int)$lot->stock_id) {
+                            $datastatus = true;
+                            $lot_no = $lot->no_lot;
+                        }
+                    }
+
+                    if ($datastatus == true) {
+                        if ($lot_no == $id) {
+                            $arr['AuctionItemId'] = $stock->AuctionItemId; 
+                            $arr['Merk'] = $stock->Merk;
+                            $arr['Seri'] = $stock->Seri;
+                            $arr['Silinder'] = $stock->Silinder;
+                            $arr['Warna'] = $stock->Warna;
+                            $arr['Transmisi'] = $stock->Transmisi;
+                            $arr['Kilometer'] = $stock->Kilometer;
+                            $arr['BahanBakar'] = $stock->BahanBakar;
+                            $arr['Exterior'] = $stock->Exterior;
+                            $arr['Interior'] = $stock->Interior;
+                            $arr['Mechanical'] = $stock->Mechanical;
+                            $arr['Frame'] = $stock->Frame;
+                            $arr['ItemId'] = $stock->ItemId;
+                            $arr['NoLot'] = (int)$lot_no;
+                            $no++;
+                        }
+                    }
+            }
+            // var_dump($arr); die();
+            if (count($arr) > 0) {
+                $status = true;
+            } else {
+                $status = false;
+            }
+        $newData = [
+            'status' => $status,
+            'data' => $arr
+        ];
+        echo json_encode($newData);
+    }
 }
 
 ?>

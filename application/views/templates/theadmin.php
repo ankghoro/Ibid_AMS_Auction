@@ -6,7 +6,7 @@
     <meta name="description" content="Responsive admin dashboard and web application ui kit. ">
     <meta name="keywords" content="blank, starter">
 
-    <title>LOT &mdash; IBID AMS</title>
+    <title>AUCTION &mdash; IBID AMS</title>
 
     <!-- Fonts -->
     <link href="//fonts.googleapis.com/css?family=Roboto:100,300,400,500,300i" rel="stylesheet">
