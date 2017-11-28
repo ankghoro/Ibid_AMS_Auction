@@ -65,3 +65,9 @@ div.dataTables_city select {
 	border-width: 1px;
 	border-style: solid;
 }
+
+#grade {
+	border-width: 2px;
+	border-style: solid; 
+	border-radius: 30px;
+}

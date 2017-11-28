@@ -85,7 +85,7 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
-        $lot_url = $this->config->item('ibid_lot')."/api/getallLot";
+        $lot_url = "http://ibid-lot.dev/api/getallLot";
         $lotdata = json_decode($this->get_curl($lot_url));
         // var_dump($lotdata); die();
         $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
@@ -99,6 +99,7 @@ class Auction extends CI_Controller {
                         if ($stock->AuctionItemId == (int)$lot->stock_id) {
                             $datastatus = true;
                             $lot_no = $lot->no_lot;
+                            $no++;
                         }
                     }
 
@@ -118,19 +119,18 @@ class Auction extends CI_Controller {
                             $arr['Frame'] = $stock->Frame;
                             $arr['ItemId'] = $stock->ItemId;
                             $arr['NoLot'] = (int)$lot_no;
-                            $no++;
+                            $arr['StartPrice'] = $stock->StartPrice;
                         }
                     }
             }
             // var_dump($arr); die();
-            if (count($arr) > 0) {
-                $status = true;
-            } else {
-                $status = false;
-            }
+            
+            count($arr) > 0 ? $status = true : $status = false;
+            $id == $no ? $disable = true : $disable = false;
         $newData = [
             'status' => $status,
-            'data' => $arr
+            'data' => $arr,
+            'disable' => $disable
         ];
         echo json_encode($newData);
     }

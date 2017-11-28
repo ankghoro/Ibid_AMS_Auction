@@ -33,17 +33,19 @@
           var lot = "Lot "+data.data.NoLot;
           $('#item_name').append(name);
           $('#item_lot').append(lot);
-          $('#item_color').append(data.data.Warna);
-          $('#item_transmisi').append(data.data.Transmisi);
-          $('#item_km').append(data.data.Kilometer);
-          $('#item_bahanbakar').append(data.data.BahanBakar);
-          $('#item_exterior').append(data.data.Exterior);
-          $('#item_interior').append(data.data.Interior);
-          $('#item_mechanical').append(data.data.Mechanical);
-          $('#item_frame').append(data.data.Frame);
-        } else {
-          $('#btn_next').attr("disabled","disabled");
-        }
+          $('#item_color').append(data.data.Warna || '-');
+          $('#item_transmisi').append(data.data.Transmisi || '-');
+          $('#item_km').append(data.data.Kilometer || '-');
+          $('#item_bahanbakar').append(data.data.BahanBakar || '-');
+          $('#item_exterior').append(data.data.Exterior || '-');
+          $('#item_interior').append(data.data.Interior || '-');
+          $('#item_mechanical').append(data.data.Mechanical || '-');
+          $('#item_frame').append(data.data.Frame || '-');
+          $('#item_startprice').append("Rp. "+addPeriod(data.data.StartPrice) || '-');
+          if (data.disable) {
+            $('#btn_next').attr("disabled","disabled");
+          }
+        } 
       },
       error: function (jqXHR, textStatus, errorThrown) {
           alert('Error get data from ajax');
@@ -94,6 +96,19 @@ $('#btn_skip').on('click', function(){
           return true;
         }
 });
+
+function addPeriod(nStr)
+  {
+      nStr += '';
+      x = nStr.split('.');
+      x1 = x[0];
+      x2 = x.length > 1 ? '.' + x[1] : '';
+      var rgx = /(\d+)(\d{3})/;
+      while (rgx.test(x1)) {
+          x1 = x1.replace(rgx, '$1' + '.' + '$2');
+      }
+      return x1 + x2;
+  }
 
 
 </script>

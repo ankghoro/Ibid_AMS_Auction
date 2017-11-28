@@ -9,10 +9,27 @@
 		
 		<div class="row gap-2">
 			<div class="col-md-3">
-				<div class="card">
+				<div class="card card-outline-secondary card-carousel">
 					<h4 class="card-title text-center"><u class="data-lot" id="item_name">Mitsubishi Pajero Sport 2,5</u>
 						<small class="subtitle data-lot" id="item_lot">LOT 8</small>
 					</h4>
+					<div class="carousel-inner">
+						<div class="card-body carousel-item	active">
+							<img class="card-img-top img-fluid" src="http://placehold.it/500x400" alt="">
+						</div>
+					</div>
+					<footer class="card-footer">
+					<div class="row">
+						<div id="grade" class="col-md-4 text-center">
+							<span><b>Grade</b></span><br>
+							<span class="" id="item_grade">A</span>
+						</div>
+						<div class="col-md-8">
+							<span><b>Harga Awal</b></span><br>
+							<span class="data-lot" id="item_startprice"></span>
+						</div>
+					</div>
+					</footer>
 				</div>
 			</div>
 			<div class="col-md-3">
@@ -86,20 +103,20 @@
 						  			<input type="text" name="lot" class="form-control" id="skip" value="">
 
 						  		</div>
-						  		<button class="btn btn-sm btn-default" id="btn_skip">Skip</button>
+						  		<button class="btn btn-sm btn-outline btn-secondary" id="btn_skip">Skip</button>
 							</div>
 							<div class="col-md-6">
 						  		<div class="form-group date">
 						  			<label class="control-label text-center">Count : </label>
 						  			<input type="text" name="count" class="form-control" id="count" value="0" readonly>
 						  		</div>
-						  		<button class="btn btn-sm btn-default" id="btn_count">Count</button>
+						  		<button class="btn btn-sm btn-outline btn-secondary" id="btn_count">Count</button>
 							</div>
 							<div class="col-md-6" style="margin-top: 10px;">
-								<button class="btn btn-sm btn-default">+500000</button>
+								<button class="btn btn-sm btn-outline btn-secondary">+500000</button>
 							</div>
 							<div class="col-md-6" style="margin-top: 10px;">
-								<button class="btn btn-sm btn-default" id="btn_next">Next</button>
+								<button class="btn btn-sm btn-outline btn-secondary" id="btn_next">Next</button>
 							</div>
 						</div>
 					</div>
