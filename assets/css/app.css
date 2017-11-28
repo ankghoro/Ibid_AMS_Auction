@@ -10682,7 +10682,16 @@ svg.emojione {
 
 .fixed-table-header .table .th-inner {
   padding: .75rem;
-} 
+}
+
+.dataTables_wrapper {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.dataTables_wrapper tfoot .form-control {
+  width: auto;
+}
 
 .jsgrid-cell {
   padding: .625rem;

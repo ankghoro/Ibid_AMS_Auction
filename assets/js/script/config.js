@@ -13,7 +13,7 @@ app.config({
   |
   */
 
-  provide: ['typeahead'],
+  provide: [],
 
   /*
   |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ app.config({
   |--------------------------------------------------------------------------
   |
   | If you want to use Google Analytics, you can specify your Tracking ID in
-  | this option. Your key would be a value like: UA-12345678-9
+  | this option. Your key would be a value like: UA-XXXXXXXX-Y
   |
   */
 

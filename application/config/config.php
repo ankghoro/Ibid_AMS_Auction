@@ -23,7 +23,40 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = '';
+$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
+$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+
+// ADMS Auth
+$config['adms_auth']['check'] = "http://ibidadmsdevserviceaccount.azurewebsites.net/index.php/auth/oauth2/check";
+
+// Auth
+$config['ibid_auth'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['ibid_auth'] .= "://ibid-ams.stagingapps.net";
+
+// Schedule 
+$config['ibid_schedule'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['ibid_schedule'] .= "://ibid-ams-schedule.stagingapps.net";
+
+// Stock
+$config['ibid_stock'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['ibid_stock'] .= "://ibid-ams-stock.stagingapps.net";
+
+// Lot 
+$config['ibid_lot'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['ibid_lot'] .= "://ibid-ams-lot.stagingapps.net";
+
+// Auction 
+$config['ibid_auction'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['ibid_auction'] .= "://ibid-ams-auction.stagingapps.net";
+
+// AutoBid 
+$config['ibid_autobid'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['ibid_autobid'] .= "://ibid-ams-autobid.stagingapps.net";
+
+// KPL 
+$config['ibid_kpl'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
+$config['ibid_kpl'] .= "://ibid-ams-kpl.stagingapps.net";
 
 /*
 |--------------------------------------------------------------------------
@@ -136,7 +169,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FALSE;
+$config['composer_autoload'] = 'vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
