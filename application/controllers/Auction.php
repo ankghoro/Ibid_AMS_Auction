@@ -16,13 +16,7 @@ class Auction extends CI_Controller {
         $this->load->model('lot_model','lot');
         $this->load->helper(array('url','cookie'));
         $this->load->helper('domain_helper');
-        $AccessToken = isset($_COOKIE['AccessToken']) ? $_COOKIE['AccessToken'] : null;
-        if (is_null($AccessToken) || ($this->check_token($AccessToken) == false)) {
-            if(isset($AccessToken)){
-                delete_cookie('AccessToken', base_domain(base_url()));
-            }
-            redirect($this->config->item('ibid_auth'), 'refresh');
-        }
+        
     }
 
     private function check_token($token)
@@ -73,6 +67,13 @@ class Auction extends CI_Controller {
 
 	public function index()
 	{
+        $AccessToken = isset($_COOKIE['AccessToken']) ? $_COOKIE['AccessToken'] : null;
+        if (is_null($AccessToken) || ($this->check_token($AccessToken) == false)) {
+            if(isset($AccessToken)){
+                delete_cookie('AccessToken', base_domain(base_url()));
+            }
+            redirect($this->config->item('ibid_auth'), 'refresh');
+        }
 		$this->load->helper('custom');
 		$this->load->helper('url');
         $data['menu'] = load_menu()['menu'];
