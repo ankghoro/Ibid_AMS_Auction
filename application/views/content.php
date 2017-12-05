@@ -7,7 +7,7 @@
 		</div>
 	<?php } ?>
 		
-		<div class="row gap-2">
+		<div class="row gap-2" id="control-page">
 			<div class="col-md-3">
 				<div class="card card-outline-secondary card-carousel">
 					<h4 class="card-title text-center"><u class="data-lot" id="item_name">Mitsubishi Pajero Sport 2,5</u>
@@ -79,11 +79,7 @@
 					<h5 class="card-title">Bidding Log
 					</h5>
 					<div class="card-body no-gutters" style="padding:0;">
-						<select name="" id="" class="form-control" size="11" multiple="multiple">
-							<option value="">206.000.000 Floor Bid ....</option>
-							<option value="">206.000.000 Floor Bid ....</option>
-							<option value="">206.000.000 Floor Bid ....</option>
-							<option value="">206.000.000 Floor Bid ....</option>
+						<select name="" id="bid-log" class="form-control" size="11" multiple="multiple">
 						</select>
 					</div>
 				</div>
@@ -95,7 +91,7 @@
 					<div class="card-body">
 						<div class="row gap-2">
 							<div class="col-md-12">
-								<button class="btn btn-sm btn-success pull-right">Start</button>
+								<button class="btn btn-sm btn-success pull-right" id="start" disabled="disabled">Start</button>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group date">
@@ -113,10 +109,10 @@
 						  		<button class="btn btn-sm btn-outline btn-secondary" id="btn_count">Count</button>
 							</div>
 							<div class="col-md-6" style="margin-top: 10px;">
-								<button class="btn btn-sm btn-outline btn-secondary">+500000</button>
+								<button class="btn btn-sm btn-outline btn-secondary" id="floor-bid" disabled="disabled">+500000</button>
 							</div>
 							<div class="col-md-6" style="margin-top: 10px;">
-								<button class="btn btn-sm btn-outline btn-secondary" id="btn_next">Next</button>
+								<button class="btn btn-sm btn-outline btn-secondary" id="btn_next" disabled="disabled">Next</button>
 							</div>
 						</div>
 					</div>

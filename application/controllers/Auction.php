@@ -119,7 +119,7 @@ class Auction extends CI_Controller {
                             $arr['Rangka'] = $stock->Rangka;
                             $arr['ItemId'] = $stock->ItemId;
                             $arr['NoLot'] = (int)$lot_no;
-                            $arr['StartPrice'] = $stock->StartPrice;
+                            $arr['StartPrice'] = (int)$stock->StartPrice;
                         }
                     }
             }
@@ -133,6 +133,37 @@ class Auction extends CI_Controller {
             'disable' => $disable
         ];
         echo json_encode($newData);
+    }
+
+    public function bidLogExample($price,$interval){
+        $bidlog = array();
+        $status = true;
+        $nominal = $price + $interval;
+        $bidlog['Nominal'] = $nominal;
+        $bidlog['State'] = "Online Bid";
+        $bidlog['No'] = mt_rand(1000, 9999);
+        // var_dump($bidlog); die();
+
+        $output = [
+            'status' => $status,
+            'data' => $bidlog
+        ];
+        echo json_encode($output);
+    }
+
+    public function floorBidExample($price,$interval){
+        $bidlog = array();
+        $status = true;
+        $nominal = $price + $interval;
+        $bidlog['Nominal'] = $nominal;
+        $bidlog['State'] = "FloorBid";
+        // var_dump($bidlog); die();
+
+        $output = [
+            'status' => $status,
+            'data' => $bidlog
+        ];
+        echo json_encode($output);
     }
 }
 
