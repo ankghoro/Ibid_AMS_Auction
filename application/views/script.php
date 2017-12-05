@@ -29,7 +29,7 @@
       success: function(data){
         if (data.status) {
           $('.data-lot').html('');
-          var name = data.data.Merk+" "+data.data.Seri+" "+data.data.Silinder;
+          var name = data.data.Merk+" "+data.data.Tipe+" "+data.data.Silinder;
           var lot = "Lot "+data.data.NoLot;
           $('#item_name').append(name);
           $('#item_lot').append(lot);
@@ -39,8 +39,8 @@
           $('#item_bahanbakar').append(data.data.BahanBakar || '-');
           $('#item_exterior').append(data.data.Exterior || '-');
           $('#item_interior').append(data.data.Interior || '-');
-          $('#item_mechanical').append(data.data.Mechanical || '-');
-          $('#item_frame').append(data.data.Frame || '-');
+          $('#item_mechanical').append(data.data.Mesin || '-');
+          $('#item_frame').append(data.data.Rangka || '-');
           $('#item_startprice').append("Rp. "+addPeriod(data.data.StartPrice) || '-');
           if (data.disable) {
             $('#btn_next').attr("disabled","disabled");

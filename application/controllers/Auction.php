@@ -107,7 +107,7 @@ class Auction extends CI_Controller {
                         if ($lot_no == $id) {
                             $arr['AuctionItemId'] = $stock->AuctionItemId; 
                             $arr['Merk'] = $stock->Merk;
-                            $arr['Seri'] = $stock->Seri;
+                            $arr['Tipe'] = $stock->Tipe;
                             $arr['Silinder'] = $stock->Silinder;
                             $arr['Warna'] = $stock->Warna;
                             $arr['Transmisi'] = $stock->Transmisi;
@@ -115,8 +115,8 @@ class Auction extends CI_Controller {
                             $arr['BahanBakar'] = $stock->BahanBakar;
                             $arr['Exterior'] = $stock->Exterior;
                             $arr['Interior'] = $stock->Interior;
-                            $arr['Mechanical'] = $stock->Mechanical;
-                            $arr['Frame'] = $stock->Frame;
+                            $arr['Mesin'] = $stock->Mesin;
+                            $arr['Rangka'] = $stock->Rangka;
                             $arr['ItemId'] = $stock->ItemId;
                             $arr['NoLot'] = (int)$lot_no;
                             $arr['StartPrice'] = $stock->StartPrice;
