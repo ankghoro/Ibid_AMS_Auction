@@ -13,26 +13,39 @@
       return false;
     });
 
-    $('<input type="hidden" id="lot_id" value="0"></input').insertAfter('#body');
-    $('<input type="hidden" id="start-price" val="">').insertAfter('#body');
-    $('<input type="hidden" id="interval" val="">').insertAfter('#body');
+    $('<input type="text" id="lot_id" value="0"></input').insertAfter('#body');
+    $('<input type="text" id="start-price" val="">').insertAfter('#body');
+    $('<input type="text" id="interval" val="">').insertAfter('#body');
+    $('<input type="text" id="unit_name" val="">').insertAfter('#body');
+    $('<input type="text" id="unit_grade" val="">').insertAfter('#body');
+    $('<input type="text" id="schedule_id" val="">').insertAfter('#body');
+    $('<input type="text" id="stock_id" val="">').insertAfter('#body');
+    $('<input type="text" id="va" val="">').insertAfter('#body');
+    $('<input type="text" id="npl" val="">').insertAfter('#body');
 
     getLotData();
 
     var start = 0;
+    '<button type="button" class="btn btn-success btn-submit" id="submit_winner">Lanjutkan</button>'
 
     $('#start').on('click', function(){
-      var conf = confirm('Mulai lelang untuk lot ini?');
-      if (conf == true) {
+        $('#modal-auction-title').text('Mulai lelang untuk lot ini?');
+        $('#confirm-skip').hide();
+        $('#auction_modal').modal('show');
+    });
+
+    $('#confirm-start').on('click', function(){
+        $('#auction_modal').modal('hide');
         $('#floor-bid').prop("disabled", false);
-        $('#start').prop("disabled",true);
-        $('#btn_next').prop("disabled",true); 
+        $('#start').prop("disabled",true); 
         start = setInterval( getBidLog, 2000 );
-      } 
     });
 
     $('#floor-bid').on('click', function(){
       floorBid();
+      if(start == null){
+        start = setInterval( getBidLog, 2000 );
+      }
     });
 
     $('#btn_count').on('click', function(){
@@ -40,19 +53,119 @@
       if (count < 3) {
         count = parseInt(count) + 1;
         $('#count').val(count);
-        if (count == 3) {
-          $('#floor-bid').prop("disabled", true);
-          $('#btn_next').prop("disabled",false); 
-          alert('sold');
+        if (count == 2) {
           clearInterval(start);
+          start = null;
+        }
+        if (count == 3) {
+          var winner = $('#bid-log').find("option:first-child").val();
+          $('#floor-bid').prop("disabled", true);
+          $('#modal').modal({
+            backdrop: 'static',
+            keyboard: false
+          })
+          var lot = $('#lot_id').val();
+          var name = $('#unit_name').val();
+          var grade = $('#unit_grade').val();
+          var price = $('#start-price').val();
+          if (winner == '') {
+            $('#modal-title').text('Selamat, Pemenang Floor Bidder');
+            var body ='<h4 id="modal-header">Detail Unit</h4>'
+                      +'<div class="row">'
+                          +'<div class="col-md-12">'
+                          +'<div class="card>'
+                            +'<div class="card-body">'
+                              +'<div class="row">'
+                                +'<div class="col-md-3"><b class="pull-left">No.Lot</b></div>'
+                                +'<div class="col-md-9" id="show_date"> : '+lot+'</div>'
+                                +'<div class="col-md-3"><b class="pull-left">Unit Name</b></div>'
+                                +'<div class="col-md-9" id="show_company"> : '+name+'</div>'
+                                +'<div class="col-md-3"><b class="pull-left">Grade</b></div>'
+                                +'<div class="col-md-9" id="show_type"> : '+grade+'</div>'
+                                +'<div class="col-md-3"><b class="pull-left">Harga</b></div>'
+                                +'<div class="col-md-9" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
+                              +'</div>'
+                            +'</div>'
+                          +'</div>'
+                          +'</div>'
+                        +'</div>'
+                        +'<hr class="custom">'
+                        +'<h4 id="modal-header">Isi Npl Pemenang</h4>'
+                        +'<div class="form-group noLot-edit">'
+                          +'<div class="col-md-6" style="padding-left:0">'
+                            +'<input type="text" name="input_npl" class="form-control" id="input_npl">'
+                          +'</div>'
+                        +'</div>';
+              $('#modal-body').append(body);
+              $('#modal').modal('show');
+          } else {
+            $('#npl').val(winner);
+              $('#modal-title').text('Selamat, Pemenang Online Bidder');
+              var body ='<h4 id="modal-header">Detail Unit</h4>'
+                        +'<div class="row">'
+                          +'<div class="col-md-12">'
+                          +'<div class="card>'
+                            +'<div class="card-body">'
+                              +'<div class="row">'
+                                +'<div class="col-md-3"><b class="pull-left">No.Lot</b></div>'
+                                +'<div class="col-md-9" id="show_date"> : '+lot+'</div>'
+                                +'<div class="col-md-3"><b class="pull-left">Unit Name</b></div>'
+                                +'<div class="col-md-9" id="show_company"> : '+name+'</div>'
+                                +'<div class="col-md-3"><b class="pull-left">Grade</b></div>'
+                                +'<div class="col-md-9" id="show_type"> : '+grade+'</div>'
+                                +'<div class="col-md-3"><b class="pull-left">Harga</b></div>'
+                                +'<div class="col-md-9" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
+                              +'</div>'
+                            +'</div>'
+                          +'</div>'
+                          +'</div>'
+                        +'</div>'
+                        +'<hr class="custom">'
+                        +'<h4 id="modal-header">Detail Pemenang</h4>'
+                          +'<div class="row">'
+                            +'<div class="col-md-12">'
+                            +'<div class="card>'
+                              +'<div class="card-body">'
+                                +'<div class="row">'
+                                  +'<div class="col-md-3"><b class="pull-left">Peserta</b></div>'
+                                  +'<div class="col-md-9" id="show_date"> : Online Bidder</div>'
+                                  +'<div class="col-md-3"><b class="pull-left">Npl</b></div>'
+                                  +'<div class="col-md-9" id="show_company"> : '+winner+'</div>'
+                                +'</div>'
+                              +'</div>'
+                            +'</div>'
+                            +'</div>'
+                          +'</div>';
+                          +'<hr class="custom">'
+              $('#modal-body').append(body);
+              $('#modal').modal('show');
+          }
         }
         // alert('ok');
       } else {
         alert('Item already sold');
       }
     });
-    
-    // getBidLog();
+
+    $('#proceed-winner').on('click', function(){
+      $('input').removeClass('is-invalid');
+      $('.invalid-feedback').remove();
+      var npl = $('#npl').val();
+      if (npl == '') {
+        if ($('#input_npl').val() == '') {
+          $('[name="input_npl"]').addClass('is-invalid');
+          $('<div class="invalid-feedback">Wajib isi NPL pemenang</div>').insertAfter('[name="input_npl"]');
+          // alert('isi npl!!');
+        } else {
+          npl = $('#input_npl').val();
+          submitWinner(npl);
+        }
+      } else {
+        submitWinner(npl);
+      }
+      
+      
+    });
     
   });
 
@@ -70,9 +183,9 @@
           $('.data-lot').html('');
           $('#bid-log').empty();
           $('#btn_next').prop("disabled",false);
-          var name = data.data.Merk+" "+data.data.Tipe+" "+data.data.Silinder;
+          var name = data.data.Merk+" "+data.data.Tipe;
           var lot = "Lot "+data.data.NoLot;
-          $('#item_name').append(name);
+          $('#item_name').append(name+" "+data.data.Silinder);
           $('#item_lot').append(lot);
           $('#item_color').append(data.data.Warna || '-');
           $('#item_transmisi').append(data.data.Transmisi || '-');
@@ -82,9 +195,15 @@
           $('#item_interior').append(data.data.Interior || '-');
           $('#item_mechanical').append(data.data.Mesin || '-');
           $('#item_frame').append(data.data.Rangka || '-');
+          $('#item_grade').append(data.data.Grade || '-');
           $('#item_startprice').append("Rp. "+addPeriod(data.data.StartPrice) || '-');
           $('#start-price').val(data.data.StartPrice);
           $('#interval').val(500000);
+          $('#unit_name').val(name);
+          $('#unit_grade').val(data.data.Grade);
+          $('#stock_id').val(data.data.AuctionItemId);
+          $('#schedule_id').val(data.data.ScheduleId);
+          $('#va').val(data.data.VA);
           $('#floor-bid').prop("disabled",true);
           $('#start').prop("disabled",false);
           if (data.disable) {
@@ -99,6 +218,32 @@
     });
   }
 
+  function submitWinner(npl){
+    var UnitName = $('#unit_name').val();
+    var AuctionItemId = $('#stock_id').val();
+    var ScheduleId = $('#schedule_id').val();
+    var Va = $('#va').val();
+    var Lot = $('#lot_id').val();
+    var Schedule = '2017-12-06';
+    var Type = 0;
+    var Price = $('#start-price').val();
+      $.ajax({
+        type: "POST",
+        url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner",
+        data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va},
+        dataType: "json",
+        success: function(data){
+          if (data.status) {
+            alert('sukses');
+            $('#modal').modal('hide');
+          } 
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error get data from ajax');
+        },
+      });
+  }
+
   function getBidLog(){
     var price = $('#start-price').val();
     var interval = $('#interval').val();
@@ -109,7 +254,7 @@
       success: function(data){
         if (data.status) {
           // $('#bid-log').empty();
-          $('#bid-log').prepend('<option value="">'+addPeriod(data.data.Nominal)+' '+data.data.State+' '+data.data.No+'</option>');
+          $('#bid-log').prepend('<option value="'+data.data.No+'">'+addPeriod(data.data.Nominal)+' '+data.data.State+' '+data.data.No+'</option>');
           $('#start-price').val(data.data.Nominal);
         } 
       },
@@ -120,8 +265,13 @@
   }
 
   function floorBid(){
+    var count = $('#count').val();
     var price = $('#start-price').val();
     var interval = $('#interval').val();
+      if (count == 2) {
+        count = 1;
+        $('#count').val(count);
+      }
     $.ajax({
       type: "GET",
       url: "<?php echo base_url('auction/');?>floorBidExample/"+price+"/"+interval,
@@ -164,8 +314,9 @@ $('#btn_skip').on('click', function(){
         if(valid == false){
             return false; //is superfluous, but I put it here as a fallback
         } else {
-            $('.modal-title').text('Skip this lot?');
-            $('.modal-body').append(description);
+            $('#modal-auction-title').text('Skip this lot?');
+            $('#modal-auction-body').append(description);
+            $('#confirm-start').hide();
             $('#auction_modal').modal('show');
           return true;
         }

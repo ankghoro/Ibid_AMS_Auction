@@ -71,3 +71,8 @@ div.dataTables_city select {
 	border-style: solid; 
 	border-radius: 30px;
 }
+
+hr.custom {
+	margin-top: 5px;
+	margin-bottom: 15px;
+}
