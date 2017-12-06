@@ -85,7 +85,7 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
-        $lot_url = $this->config->item('ibid_lot')."/api/getallLot";
+        $lot_url = "http://ibid-lot.dev/api/getallLot";
         $lotdata = json_decode($this->get_curl($lot_url));
         // var_dump($lotdata); die();
         $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
@@ -99,6 +99,7 @@ class Auction extends CI_Controller {
                         if ($stock->AuctionItemId == (int)$lot->stock_id) {
                             $datastatus = true;
                             $lot_no = $lot->no_lot;
+                            $no++;
                         }
                     }
 
@@ -106,7 +107,7 @@ class Auction extends CI_Controller {
                         if ($lot_no == $id) {
                             $arr['AuctionItemId'] = $stock->AuctionItemId; 
                             $arr['Merk'] = $stock->Merk;
-                            $arr['Seri'] = $stock->Seri;
+                            $arr['Tipe'] = $stock->Tipe;
                             $arr['Silinder'] = $stock->Silinder;
                             $arr['Warna'] = $stock->Warna;
                             $arr['Transmisi'] = $stock->Transmisi;
@@ -114,25 +115,55 @@ class Auction extends CI_Controller {
                             $arr['BahanBakar'] = $stock->BahanBakar;
                             $arr['Exterior'] = $stock->Exterior;
                             $arr['Interior'] = $stock->Interior;
-                            $arr['Mechanical'] = $stock->Mechanical;
-                            $arr['Frame'] = $stock->Frame;
+                            $arr['Mesin'] = $stock->Mesin;
+                            $arr['Rangka'] = $stock->Rangka;
                             $arr['ItemId'] = $stock->ItemId;
                             $arr['NoLot'] = (int)$lot_no;
-                            $no++;
+                            $arr['StartPrice'] = (int)$stock->StartPrice;
                         }
                     }
             }
             // var_dump($arr); die();
-            if (count($arr) > 0) {
-                $status = true;
-            } else {
-                $status = false;
-            }
+            
+            count($arr) > 0 ? $status = true : $status = false;
+            $id == $no ? $disable = true : $disable = false;
         $newData = [
             'status' => $status,
-            'data' => $arr
+            'data' => $arr,
+            'disable' => $disable
         ];
         echo json_encode($newData);
+    }
+
+    public function bidLogExample($price,$interval){
+        $bidlog = array();
+        $status = true;
+        $nominal = $price + $interval;
+        $bidlog['Nominal'] = $nominal;
+        $bidlog['State'] = "Online Bid";
+        $bidlog['No'] = mt_rand(1000, 9999);
+        // var_dump($bidlog); die();
+
+        $output = [
+            'status' => $status,
+            'data' => $bidlog
+        ];
+        echo json_encode($output);
+    }
+
+    public function floorBidExample($price,$interval){
+        $bidlog = array();
+        $status = true;
+        $nominal = $price + $interval;
+        $bidlog['Nominal'] = $nominal;
+        $bidlog['State'] = "FloorBid";
+        // var_dump($bidlog); die();
+
+        $output = [
+            'status' => $status,
+            'data' => $bidlog
+        ];
+        echo json_encode($output);
     }
 }
 
