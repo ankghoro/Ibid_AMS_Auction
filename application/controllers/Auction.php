@@ -85,6 +85,10 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
+        $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay"; // Used for Staging
+        // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay"; //Used on local
+        $scheduledata = json_decode($this->get_curl($schedule_url));
+        // var_dump($scheduledata->data[0]); die();
         $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
         // $lot_url =  "http://ibid-lot.dev/api/getallLot";
         $lotdata = json_decode($this->get_curl($lot_url));
@@ -98,35 +102,39 @@ class Auction extends CI_Controller {
         foreach ($stockdata->data as $stock) {
                 $datastatus = false;
                     foreach ($lotdata->data as $lot) {
-                        if ($stock->AuctionItemId == (int)$lot->stock_id) {
+                        if ($stock->AuctionItemId == (int)$lot->stock_id && $lot->schedule_id == $scheduledata->data[0]->id) {
                             $datastatus = true;
                             $lot_no = $lot->no_lot;
                             $schedule_id = $lot->schedule_id;
                             $va = $lot->no_va;
+                            $reason = $lot->reason;
+                            $status = (int)$lot->status;
                             $no++;
                         }
-                    }
 
-                    if ($datastatus == true) {
-                        if ($lot_no == $id) {
-                            $arr['AuctionItemId'] = $stock->AuctionItemId; 
-                            $arr['Merk'] = $stock->Merk;
-                            $arr['Tipe'] = $stock->Tipe;
-                            $arr['Silinder'] = $stock->Silinder;
-                            $arr['Warna'] = $stock->Warna;
-                            $arr['Transmisi'] = $stock->Transmisi;
-                            $arr['Kilometer'] = $stock->Kilometer;
-                            $arr['BahanBakar'] = $stock->BahanBakar;
-                            $arr['Exterior'] = $stock->Exterior;
-                            $arr['Interior'] = $stock->Interior;
-                            $arr['Mesin'] = $stock->Mesin;
-                            $arr['Rangka'] = $stock->Rangka;
-                            $arr['Grade'] = $stock->Grade;
-                            $arr['ItemId'] = $stock->ItemId;
-                            $arr['NoLot'] = (int)$lot_no;
-                            $arr['ScheduleId'] = $schedule_id;
-                            $arr['VA'] = $va;
-                            $arr['StartPrice'] = (int)$stock->StartPrice;
+                        if ($datastatus == true) {
+                            if ($lot_no == $id) {
+                                $arr['AuctionItemId'] = $stock->AuctionItemId; 
+                                $arr['Merk'] = $stock->Merk;
+                                $arr['Tipe'] = $stock->Tipe;
+                                $arr['Silinder'] = $stock->Silinder;
+                                $arr['Warna'] = $stock->Warna;
+                                $arr['Transmisi'] = $stock->Transmisi;
+                                $arr['Kilometer'] = $stock->Kilometer;
+                                $arr['BahanBakar'] = $stock->BahanBakar;
+                                $arr['Exterior'] = $stock->Exterior;
+                                $arr['Interior'] = $stock->Interior;
+                                $arr['Mesin'] = $stock->Mesin;
+                                $arr['Rangka'] = $stock->Rangka;
+                                $arr['Grade'] = $stock->Grade;
+                                $arr['ItemId'] = $stock->ItemId;
+                                $arr['NoLot'] = (int)$lot_no;
+                                $arr['ScheduleId'] = $schedule_id;
+                                $arr['VA'] = $va;
+                                $arr['StartPrice'] = (int)$stock->StartPrice;
+                                $arr['Interval'] = (int)$scheduledata->data[0]->interval;
+                                break;
+                            }
                         }
                     }
             }

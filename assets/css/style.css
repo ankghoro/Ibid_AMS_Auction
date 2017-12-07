@@ -76,3 +76,7 @@ hr.custom {
 	margin-top: 5px;
 	margin-bottom: 15px;
 }
+
+li.menu-category:after {
+	content: none;
+}

@@ -111,7 +111,7 @@
 						  		<button class="btn btn-sm btn-outline btn-secondary" id="btn_count">Count</button>
 							</div>
 							<div class="col-md-6" style="margin-top: 10px;">
-								<button class="btn btn-sm btn-outline btn-secondary" id="floor-bid" disabled="disabled">+500000</button>
+								<button class="btn btn-sm btn-outline btn-secondary" id="floor-bid" disabled="disabled">+</button>
 							</div>
 							<div class="col-md-6" style="margin-top: 10px;">
 								<button class="btn btn-sm btn-outline btn-secondary" id="btn_next" disabled="disabled">Next</button>
