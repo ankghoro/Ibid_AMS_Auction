@@ -131,18 +131,45 @@ class Auction extends CI_Controller {
         $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay"; // Used for Staging
         // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay"; //Used on local
         $scheduledata = json_decode($this->get_curl($schedule_url));
+        $schedule_id = $scheduledata->data[0]->id;
         // var_dump($scheduledata->data[0]); die();
         $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
         // $lot_url =  "http://ibid-lot.dev/api/getallLot";
         $lotdata = json_decode($this->get_curl($lot_url));
         // var_dump($lotdata); die();
+        $lot_url2 = $this->config->item('ibid_lot')."/api/getLotReadyBySchedule/$schedule_id";
+        // $lot_url2 = "http://ibid-lot.dev/api/getLotReadyBySchedule/$schedule_id";
+        $lotReady = json_decode($this->get_curl($lot_url2));
+        // var_dump($lotReady); die();
+        $lot_url3 = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
+        // $lot_url3 = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
+        $lotBySchedule = json_decode($this->get_curl($lot_url3));
+        // var_dump($lotBySchedule); die();
         $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
         // $stock_url = "http://ibid-stock.dev/api/getallStock";
         $stockdata = json_decode($this->get_curl($stock_url));
         // var_dump($stockdata); die();
         $no = 0;
         $arr = array();
-        foreach ($stockdata->data as $stock) {
+        $countLotReady = count($lotReady->data);
+        $countLotSchedule = count($lotBySchedule->data);
+        if ($countLotReady != 0) {
+            do {
+                
+                foreach ($lotdata->data as $check) {
+                    if ($schedule_id == $check->schedule_id && $id == $check->no_lot) {
+                        $reason = $check->reason;
+                        $status = (int)$check->status;
+                        $lot_no = $check->no_lot;
+                        break;
+                    }
+                }
+                $id++;
+            } while ($reason != null || $status == 1);
+
+            
+            $no = (int)$lot_no;
+            foreach ($stockdata->data as $stock) {
                 $datastatus = false;
                     foreach ($lotdata->data as $lot) {
                         if ($stock->AuctionItemId == (int)$lot->stock_id && $lot->schedule_id == $scheduledata->data[0]->id) {
@@ -150,13 +177,10 @@ class Auction extends CI_Controller {
                             $lot_no = $lot->no_lot;
                             $schedule_id = $lot->schedule_id;
                             $va = $lot->no_va;
-                            $reason = $lot->reason;
-                            $status = (int)$lot->status;
-                            $no++;
                         }
 
                         if ($datastatus == true) {
-                            if ($lot_no == $id) {
+                            if ($lot_no == $no) {
                                 $arr['AuctionItemId'] = $stock->AuctionItemId; 
                                 $arr['Merk'] = $stock->Merk;
                                 $arr['Tipe'] = $stock->Tipe;
@@ -184,7 +208,11 @@ class Auction extends CI_Controller {
             // var_dump($arr); die();
             
             count($arr) > 0 ? $status = true : $status = false;
-            $id == $no ? $disable = true : $disable = false;
+            $no == $countLotSchedule ? $disable = true : $disable = false;   
+        } else {
+            $status = false;
+            $disable = true;
+        }
         $newData = [
             'status' => $status,
             'data' => $arr,

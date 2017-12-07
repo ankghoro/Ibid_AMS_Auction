@@ -13,6 +13,8 @@
       return false;
     });
 
+    sidebar.fold();
+
     $('<input type="hidden" id="lot_id" value="0"></input').insertAfter('#body');
     $('<input type="hidden" id="start-price" val="">').insertAfter('#body');
     $('<input type="hidden" id="interval" val="">').insertAfter('#body');
@@ -38,6 +40,7 @@
         $('#auction_modal').modal('hide');
         $('#floor-bid').prop("disabled", false);
         $('#start').prop("disabled",true); 
+        $('#btn_count').prop("disabled",false);
         start = setInterval( getBidLog, 2000 );
     });
 
@@ -58,7 +61,7 @@
           start = null;
         }
         if (count == 3) {
-          var winner = $('#bid-log').find("option:first-child").val();
+          var winner = $('#npl').val();
           $('#floor-bid').prop("disabled", true);
           $('#modal').modal({
             backdrop: 'static',
@@ -99,7 +102,6 @@
               $('#modal-body').append(body);
               $('#modal').modal('show');
           } else {
-            $('#npl').val(winner);
               $('#modal-title').text('Selamat, Pemenang Online Bidder');
               var body ='<h4 id="modal-header">Detail Unit</h4>'
                         +'<div class="row">'
@@ -209,10 +211,20 @@
           $('#floor-bid').append("+"+addPeriod(data.data.Interval));
           $('#floor-bid').prop("disabled",true);
           $('#start').prop("disabled",false);
-          if (data.disable) {
-            $('#btn_next').prop("disabled",true);
-          }
+          $('#btn_count').prop("disabled",true);
+          
+        } else {
+          $('#modal').modal({
+            backdrop: 'static',
+            keyboard: false
+          })
+          $('#modal-title').text('Data lot tidak tersedia..');
+          $('#proceed-winner').hide();
+          $('#modal').modal('show');
+        }
 
+        if (data.disable) {
+            $('#btn_next').prop("disabled",true);
         } 
       },
       error: function (jqXHR, textStatus, errorThrown) {
@@ -232,8 +244,8 @@
     var Price = $('#start-price').val();
       $.ajax({
         type: "POST",
-        // url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
-        url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
+        url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
+        // url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
         data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va},
         dataType: "json",
         success: function(data){
@@ -257,7 +269,11 @@
       success: function(data){
         if (data.status) {
           // $('#bid-log').empty();
-          $('#bid-log').prepend('<option value="'+data.data.No+'">'+addPeriod(data.data.Nominal)+' '+data.data.State+' '+data.data.No+'</option>');
+          $('#npl').val(data.data.No);
+          $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
+          
+                                              
+                                              
           $('#start-price').val(data.data.Nominal);
         } 
       },
@@ -282,8 +298,8 @@
       success: function(data){
         if (data.status) {
           // $('#bid-log').empty();
-          $('#bid-log').prepend('<option value="">'+addPeriod(data.data.Nominal)+' '+data.data.State+' ....</option>');
-          $('#start-price').val(data.data.Nominal);
+          $('#npl').val('');
+          $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">....</div>');
         } 
       },
       error: function (jqXHR, textStatus, errorThrown) {
@@ -317,7 +333,8 @@ $('#btn_skip').on('click', function(){
         if(valid == false){
             return false; //is superfluous, but I put it here as a fallback
         } else {
-            $('#modal-auction-title').text('Skip this lot?');
+            $('#modal-auction-title').text('Skip lot');
+            $('#modal-auction-body').empty();
             $('#modal-auction-body').append(description);
             $('#confirm-start').hide();
             $('#auction_modal').modal('show');
