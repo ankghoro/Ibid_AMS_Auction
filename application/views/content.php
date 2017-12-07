@@ -22,7 +22,7 @@
 					<div class="row">
 						<div id="grade" class="col-md-4 text-center">
 							<span><b>Grade</b></span><br>
-							<span class="" id="item_grade">A</span>
+							<span class="data-lot" id="item_grade">A</span>
 						</div>
 						<div class="col-md-8">
 							<span><b>Harga Awal</b></span><br>
@@ -78,10 +78,12 @@
 				<div class="card card-outline-secondary">
 					<h5 class="card-title">Bidding Log
 					</h5>
-					<div class="card-body no-gutters" style="padding:0;">
-						<select name="" id="bid-log" class="form-control" size="11" multiple="multiple">
-						</select>
-					</div>
+					<form name="bidForm">
+						<div class="card-body no-gutters" style="padding:0;">
+							<select name="bidData" id="bid-log" class="form-control" size="11" multiple="multiple">
+							</select>
+						</div>
+					</form>
 				</div>
 			</div>
 			<div class="col-md-3">
