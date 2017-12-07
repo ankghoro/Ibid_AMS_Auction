@@ -5,58 +5,7 @@
 	display:inline-block;
 	width: 50%;
 }
-div.dataTables_wrapper div.dataTables_filter{
-	text-align: left !important;
-}
-div.dataTables_wrapper div.dataTables-schedule_add_btn{
-	text-align: right;
-}
-div.dataTables_schedule label {
-	font-weight: normal;
-	white-space: nowrap;
-	text-align: left;
-}
 
-div.dataTables_schedule input {
-	margin-left: 0.5em;
-	display: inline-block;
-	width: auto;
-}
-
-div.dataTables_schedule select {
-	width: 75%;
-	display: inline-block;
-}
-
-div.dataTables_type {
-	text-align: right;
-}
-
-div.dataTables_type label {
-	font-weight: normal;
-	text-align: left;
-	white-space: nowrap;
-}
-
-div.dataTables_type select {
-	width: 75%;
-	display: inline-block;
-}
-
-div.dataTables_city {
-	text-align: center;
-}
-
-div.dataTables_city label {
-	font-weight: normal;
-	text-align: left;
-	white-space: nowrap;
-}
-
-div.dataTables_city select {
-	width: 75%;
-	display: inline-block;
-}
 .block {
 	display: block !important;
 }
@@ -79,4 +28,324 @@ hr.custom {
 
 li.menu-category:after {
 	content: none;
+}
+
+html, body{
+	background-color: #f7f7f7;
+	font-family: open sans;
+	text-align: center;
+	color: #777777;
+}
+@font-face {
+    font-family: open sans;
+	src: url('../fonts/regular.ttf') format('ttf'),
+		 url('../fonts/regular.woff') format('woff');
+}
+hr {
+    display: block;
+	height: 1px;
+	width: 32vw;
+    border: 0;
+    border-top: 1px solid rgb(255, 255, 255);
+    margin: 0em 2em;
+	padding: 0; 
+}
+.top-border{
+	border-top: 1px solid white;
+	margin: 0px 20px;
+}
+.container-fluid{
+	padding-left: 30px;
+	padding-right: 30px;
+	width: 100%;
+	height: 100%;
+	margin-left: auto;
+    margin-right: auto;
+}
+.bid-name{
+	text-align: center;
+	background-color: #903e98;
+	color: white;
+}
+.card-block{
+	padding: 0;
+}
+
+.card{
+	min-height: 400px;
+	max-height: 400px;
+}
+.block-content{
+	padding: 10px !important;
+}
+
+.car-thumbnail{
+	min-width: 100px;
+	min-height: 30vh;
+	max-height: 30vh;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+	background: url('../img/ford.jpg');
+	background-size: cover;
+}
+.btn{
+	margin-top: 5px;
+	border-radius: 4px;
+}
+
+.control-label{
+	font-size: 10pt !important;
+}
+.bottom-content{
+	margin-top: 15px;
+	border-radius: 0 0 10px 10px ;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+	background-color: white;
+}
+
+.content-page {
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .content-page .content {
+	padding: 0 5px 10px 5px;
+	margin-top: 70px;
+  }
+.car-grade{
+	border-radius: 50%;
+	background-color: #903e98;
+	width: 80px;
+	height: 80px;
+	padding-top: 10px;
+	color: white;
+	font-size: 12pt;
+	margin: 10px;
+}
+.grade-alpha{
+	font-size: 28pt;
+	line-height: 25pt;
+}
+.first-bid{
+	text-align: left;
+	margin-top: 25px;
+	padding-left: 39px;
+	
+}
+.bid-topbid{
+	background-color: #fac917;
+	font-size: 3em;
+	font-weight: bold;
+	color: white;
+	padding:12px;
+}
+.left-content{
+	border-radius: 10px;
+	margin-right: 20px;
+	padding: 0;
+	width: 45%;
+}
+.right-content{
+	background-color: white;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+	border-radius: 10px ;
+	margin-left: 0px;
+	margin-top: 10px;
+}
+
+.bid-count{
+	background-color: #f7f7f7;
+	border: 1px solid #cccccc;
+	color: #777777;
+	font-size: 45pt;
+	font-weight: bold;
+	width: 100px;
+	height: 100px;
+	margin-top: 12px;
+}
+
+.count-wrap{
+	padding-top: 10px;	
+}
+
+.top-bidder{
+	font-size: 20pt;
+	font-weight: bold;
+	line-height: 35px;
+}
+
+.img-top{
+	bottom: 10px;
+}
+
+.fold-price{
+	background-color: #81be2a;
+	color: white;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+.right-bottom-content{
+	margin-top: 20px;
+	padding-bottom: 35px;
+}
+
+.spec{
+	background-color: #f7f7f7;
+	margin: 0;
+	margin-bottom: 40px;
+}
+
+.weight{
+	font-weight: bold;
+}
+
+.item1{
+	
+	border-right: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+}
+
+.item2{
+	border-bottom: 1px solid #cccccc;
+}
+
+.item3{
+	border-right: 1px solid #cccccc;
+}
+
+.item{
+	padding: 10px;
+}
+
+.bidding-log{
+	border: 1px solid #cccccc;
+	max-height: 300px;
+	min-height: 300px;
+	margin-bottom: 20px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+
+}
+
+.line-height{
+	line-height: 20pt;
+	font-size: 8pt;
+}
+
+@media only screen
+and (max-device-width : 320px) {
+	.bid-name > h4 {
+		font-size: 7pt;
+	}
+}
+
+@media only screen
+and (min-device-width : 321px)
+and (max-device-width : 480px) {
+	.bid-name > h4 {
+		font-size: 10pt;
+	}
+}
+
+@media only screen
+and (max-device-width : 768px)
+ {
+    .car-grade{
+		display:block;margin-left:auto;margin-right:auto;
+	}
+	.first-bid{
+		text-align: center;
+	}
+	.first-bid > h4{
+		font-size: 10pt;
+	}
+	.first-bid > h3{
+		font-size: 15pt;
+	}
+	.left-content{
+		width: 100%;
+	}
+	.card{
+		max-height: 100%;
+	}
+}
+
+@media only screen
+and (max-device-width : 640px)
+ {
+	.bid-topbid{
+		font-size: 15pt;
+	}
+}
+
+@media only screen
+and (max-device-width : 480px)
+{
+    .top-bidder{
+		font-size: 15pt;
+	}
+}
+
+@media only screen
+and (max-device-width : 1144px)
+{
+    .bid-topbid{
+		font-size: 15pt !important;
+	}
+    
+}
+
+@media only screen
+and (max-device-width : 1199px)
+{	
+	.item1 {
+	
+		border-right: none !important;
+	}
+	.item2 {
+		
+		border-right: none !important;
+	}
+	.item3 {
+		
+		border-right: none !important;
+	}
+
+	.title-caption{
+		font-size: 11pt !important;
+	}
+	.main-caption{
+		font-size: 11pt !important;
+	}
+
+}
+
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 992px)
+{
+	.bid-topbid{
+		font-size: 15pt !important;
+	}
+}
+
+@media only screen
+and (min-device-width : 640px)
+and (max-device-width : 1199px)
+{
+	.bid-topbid{
+		font-size: 25pt;
+	}
+	.bid-name{
+		font-size: 10pt;
+	}
+	.bid-topbid{
+		margin-left: 10%;
+	}
+}
+
+@media only screen
+and (min-device-width : 992px){
+	
+	
 }
