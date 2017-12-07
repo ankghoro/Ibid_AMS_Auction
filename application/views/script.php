@@ -13,15 +13,15 @@
       return false;
     });
 
-    $('<input type="text" id="lot_id" value="0"></input').insertAfter('#body');
-    $('<input type="text" id="start-price" val="">').insertAfter('#body');
-    $('<input type="text" id="interval" val="">').insertAfter('#body');
-    $('<input type="text" id="unit_name" val="">').insertAfter('#body');
-    $('<input type="text" id="unit_grade" val="">').insertAfter('#body');
-    $('<input type="text" id="schedule_id" val="">').insertAfter('#body');
-    $('<input type="text" id="stock_id" val="">').insertAfter('#body');
-    $('<input type="text" id="va" val="">').insertAfter('#body');
-    $('<input type="text" id="npl" val="">').insertAfter('#body');
+    $('<input type="hidden" id="lot_id" value="0"></input').insertAfter('#body');
+    $('<input type="hidden" id="start-price" val="">').insertAfter('#body');
+    $('<input type="hidden" id="interval" val="">').insertAfter('#body');
+    $('<input type="hidden" id="unit_name" val="">').insertAfter('#body');
+    $('<input type="hidden" id="unit_grade" val="">').insertAfter('#body');
+    $('<input type="hidden" id="schedule_id" val="">').insertAfter('#body');
+    $('<input type="hidden" id="stock_id" val="">').insertAfter('#body');
+    $('<input type="hidden" id="va" val="">').insertAfter('#body');
+    $('<input type="hidden" id="npl" val="">').insertAfter('#body');
 
     getLotData();
 
@@ -230,11 +230,11 @@
       $.ajax({
         type: "POST",
         url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner",
+        // url: "http://ibid-kpl.dev/api/submitWinner",
         data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va},
         dataType: "json",
         success: function(data){
           if (data.status) {
-            alert('sukses');
             $('#modal').modal('hide');
           } 
         },
