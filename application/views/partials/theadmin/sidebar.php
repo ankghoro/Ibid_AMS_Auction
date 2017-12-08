@@ -39,7 +39,7 @@
       </a>
     </li>
     <li class="menu-item">
-    <a class="menu-link" href="<?php echo $this->config->item('ibid_auth'); ?>">
+    <a class="menu-link" href="<?php echo $this->config->item('ibid_autobid'); ?>">
         <span class="icon fa fa-spinner"></span>
         <span class="title">Auto Bidding</span>
       </a>
