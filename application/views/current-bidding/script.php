@@ -1,17 +1,18 @@
 <!-- Include Firebase Library -->
 <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script>
-    // file: script.js
-// Initialize Firebase
-var config = {
-  apiKey: "AIzaSyAObMwjX_nQYkcvdpL0ajGoSrgxea7He8E",
-  authDomain: "jquery-firebase-11d6b.firebaseapp.com",
-  databaseURL: "https://jquery-firebase-11d6b.firebaseio.com",
-  projectId: "jquery-firebase-11d6b",
-  storageBucket: "",
-  messagingSenderId: "290931892924"
-};
-firebase.initializeApp(config);
+  // file: script.js
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC-ZoZ16SiFPoz76W0yJbqhlLOYpPrMU7I",
+    authDomain: "ibid-ams-sample.firebaseapp.com",
+    databaseURL: "https://ibid-ams-sample.firebaseio.com",
+    projectId: "ibid-ams-sample",
+    storageBucket: "",
+    messagingSenderId: "493210877814"
+  };
+  firebase.initializeApp(config);
+
 
 //create firebase database reference
 // var dbRef = firebase.database();
