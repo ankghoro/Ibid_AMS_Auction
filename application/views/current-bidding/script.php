@@ -1,3 +1,4 @@
+<script src="<?php echo base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
 <!-- Include Firebase Library -->
 <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script>
@@ -14,15 +15,15 @@
   firebase.initializeApp(config);
 
 
-//create firebase database reference
-// var dbRef = firebase.database();
-// var contactsRef = dbRef.ref('contacts');
+// create firebase database reference
+var dbRef = firebase.database();
+var contactsRef = dbRef.ref('3/1/1/log');
 
-//load older conatcts as well as any newly added one...
-// contactsRef.on("child_added", function(snap) {
-//   // console.log("added", snap.key, snap.val());
-//   $('#contacts').prepend(contactHtmlFromObject(snap.val()));
-// });
+// load older conatcts as well as any newly added one...
+contactsRef.on("child_added", function(snap) {
+  console.log("added", snap.key, snap.val());
+  $('.bidding-log').prepend(contactHtmlFromObject(snap.val()));
+});
 
 //save contact
 // $('.addValue').on("click", function( event ) {  
@@ -43,18 +44,29 @@
 //     }
 // });
 
-//prepare conatct object's HTML
-// function contactHtmlFromObject(contact){
-//   console.log( contact );
-//   var html = '';
-//   html += '<li class="list-group-item contact">';
-//     html += '<div>';
-//       html += '<p class="lead">'+contact.name+'</p>';
-//       html += '<p>'+contact.email+'</p>';
-//       html += '<p><small title="'+contact.location.zip+'">'+contact.location.city+', '+contact.location.state+'</small></p>';
-//     html += '</div>';
-//   html += '</li>';
-//   return html;
-// }
+// prepare conatct object's HTML
+
+function contactHtmlFromObject(log){
+  console.log(log);
+  var html = '<div class="row line-height">'
+                +'<div class="col-md-6">'+'Rp. ' + addPeriod(log.bid)+'</div>'
+                +'<div class="col-md-6 weight">'+log.type+' Bidder</div>'
+              +'</div>';
+  return html;
+}
+
+function addPeriod(nStr)
+  {
+      nStr += '';
+      x = nStr.split('.');
+      x1 = x[0];
+      x2 = x.length > 1 ? '.' + x[1] : '';
+      var rgx = /(\d+)(\d{3})/;
+      while (rgx.test(x1)) {
+          x1 = x1.replace(rgx, '$1' + '.' + '$2');
+      }
+      return x1 + x2;
+  }
+
 
 </script>

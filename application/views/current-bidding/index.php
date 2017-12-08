@@ -84,24 +84,6 @@
                 </div>
                 <div class="col-md-7" >
                     <div class="bidding-log" style="border: 1px solid #cccccc !important">
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
-                        <div class="row line-height"><div class="col-md-6">Rp. 200.500.000</div><div class="col-md-6 weight">Online Bidder</div></div>
                     </div>
                 </div>
                 </div>
