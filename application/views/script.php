@@ -181,12 +181,14 @@
       success: function(data){
         if (data.status) {
           $('.data-lot').html('');
+          $('#floor-bid').html('');
           $('#bid-log').empty();
           $('#btn_next').prop("disabled",false);
           var name = data.data.Merk+" "+data.data.Tipe;
           var lot = "Lot "+data.data.NoLot;
           $('#item_name').append(name+" "+data.data.Silinder);
           $('#item_lot').append(lot);
+          $('#lot_id').val(data.data.NoLot);
           $('#item_color').append(data.data.Warna || '-');
           $('#item_transmisi').append(data.data.Transmisi || '-');
           $('#item_km').append(data.data.Kilometer || '-');
@@ -198,12 +200,13 @@
           $('#item_grade').append(data.data.Grade || '-');
           $('#item_startprice').append("Rp. "+addPeriod(data.data.StartPrice) || '-');
           $('#start-price').val(data.data.StartPrice);
-          $('#interval').val(500000);
+          $('#interval').val(data.data.Interval);
           $('#unit_name').val(name);
           $('#unit_grade').val(data.data.Grade);
           $('#stock_id').val(data.data.AuctionItemId);
           $('#schedule_id').val(data.data.ScheduleId);
           $('#va').val(data.data.VA);
+          $('#floor-bid').append("+"+addPeriod(data.data.Interval));
           $('#floor-bid').prop("disabled",true);
           $('#start').prop("disabled",false);
           if (data.disable) {
@@ -229,8 +232,8 @@
     var Price = $('#start-price').val();
       $.ajax({
         type: "POST",
-        url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner",
-        // url: "http://ibid-kpl.dev/api/submitWinner",
+        // url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
+        url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
         data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va},
         dataType: "json",
         success: function(data){

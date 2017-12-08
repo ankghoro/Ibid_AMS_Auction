@@ -30,6 +30,36 @@ class Auction extends CI_Controller {
         }
     }
 
+    /**
+     * function for parameter refresh token
+     * @author akmal.m@smooets.com
+     * @return array
+    */  
+    private function refresh_params($UserLogon){
+        return [
+            "grant_type" => 'refresh_token',
+            "client_id" => 'ADMS web',
+            "client_secret" => '1234567890',
+            "refresh_token" => $UserLogon['refresh_token'],
+            "username" => $UserLogon['username'],
+            "ipAddress" => '127.0.0.1',
+            "createdOn" => '1509330606'
+        ];
+    }
+    
+    /**
+     * function for refresh token
+     * @author akmal.m@smooets.com
+     * @return object
+    */
+    private function refresh_token($UserLogon)
+    {
+        $url = $this->config->item('adms_auth')['login'];
+        $data = json_decode($this->postCURL($url, $this->refresh_params($UserLogon)));
+        return $data;
+    }
+
+
     private function postCURL($_url, $_param){
         $postData = '';
             //create name value pairs seperated by &
@@ -67,12 +97,25 @@ class Auction extends CI_Controller {
 
 	public function index()
 	{
-        $AccessToken = isset($_COOKIE['AccessToken']) ? $_COOKIE['AccessToken'] : null;
-        if (is_null($AccessToken) || ($this->check_token($AccessToken) == false)) {
-            if(isset($AccessToken)){
-                delete_cookie('AccessToken', base_domain(base_url()));
+        $UserLogon = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
+        if (is_null($UserLogon) || ($this->check_token($UserLogon['access_token']) == false)) {
+            if (!is_null($UserLogon) && $this->check_token($UserLogon['access_token']) == false) {
+                $refresh_token = $this->refresh_token($UserLogon);
+                if(isset($refresh_token->error)){
+                    delete_cookie('UserLogon', base_domain(base_url()));
+                    redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
+                }else {
+                    $userlogon = [
+                        "access_token" => $refresh_token->access_token,
+                        "refresh_token" => $refresh_token->refresh_token,
+                        "username" => $UserLogon['username'],
+                        "CompanyId" => $UserLogon['CompanyId'],
+                    ];
+                    setcookie('UserLogon', serialize($userlogon), time() + (3600 * 4), "/", base_domain(base_url()));
+                    redirect($this->config->item('ibid_kpl'), 'refresh');
+                }
             }
-            redirect($this->config->item('ibid_auth'), 'refresh');
+            redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
         }
 		$this->load->helper('custom');
 		$this->load->helper('url');
@@ -85,6 +128,10 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
+        $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay"; // Used for Staging
+        // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay"; //Used on local
+        $scheduledata = json_decode($this->get_curl($schedule_url));
+        // var_dump($scheduledata->data[0]); die();
         $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
         // $lot_url =  "http://ibid-lot.dev/api/getallLot";
         $lotdata = json_decode($this->get_curl($lot_url));
@@ -98,35 +145,39 @@ class Auction extends CI_Controller {
         foreach ($stockdata->data as $stock) {
                 $datastatus = false;
                     foreach ($lotdata->data as $lot) {
-                        if ($stock->AuctionItemId == (int)$lot->stock_id) {
+                        if ($stock->AuctionItemId == (int)$lot->stock_id && $lot->schedule_id == $scheduledata->data[0]->id) {
                             $datastatus = true;
                             $lot_no = $lot->no_lot;
                             $schedule_id = $lot->schedule_id;
                             $va = $lot->no_va;
+                            $reason = $lot->reason;
+                            $status = (int)$lot->status;
                             $no++;
                         }
-                    }
 
-                    if ($datastatus == true) {
-                        if ($lot_no == $id) {
-                            $arr['AuctionItemId'] = $stock->AuctionItemId; 
-                            $arr['Merk'] = $stock->Merk;
-                            $arr['Tipe'] = $stock->Tipe;
-                            $arr['Silinder'] = $stock->Silinder;
-                            $arr['Warna'] = $stock->Warna;
-                            $arr['Transmisi'] = $stock->Transmisi;
-                            $arr['Kilometer'] = $stock->Kilometer;
-                            $arr['BahanBakar'] = $stock->BahanBakar;
-                            $arr['Exterior'] = $stock->Exterior;
-                            $arr['Interior'] = $stock->Interior;
-                            $arr['Mesin'] = $stock->Mesin;
-                            $arr['Rangka'] = $stock->Rangka;
-                            $arr['Grade'] = $stock->Grade;
-                            $arr['ItemId'] = $stock->ItemId;
-                            $arr['NoLot'] = (int)$lot_no;
-                            $arr['ScheduleId'] = $schedule_id;
-                            $arr['VA'] = $va;
-                            $arr['StartPrice'] = (int)$stock->StartPrice;
+                        if ($datastatus == true) {
+                            if ($lot_no == $id) {
+                                $arr['AuctionItemId'] = $stock->AuctionItemId; 
+                                $arr['Merk'] = $stock->Merk;
+                                $arr['Tipe'] = $stock->Tipe;
+                                $arr['Silinder'] = $stock->Silinder;
+                                $arr['Warna'] = $stock->Warna;
+                                $arr['Transmisi'] = $stock->Transmisi;
+                                $arr['Kilometer'] = $stock->Kilometer;
+                                $arr['BahanBakar'] = $stock->BahanBakar;
+                                $arr['Exterior'] = $stock->Exterior;
+                                $arr['Interior'] = $stock->Interior;
+                                $arr['Mesin'] = $stock->Mesin;
+                                $arr['Rangka'] = $stock->Rangka;
+                                $arr['Grade'] = $stock->Grade;
+                                $arr['ItemId'] = $stock->ItemId;
+                                $arr['NoLot'] = (int)$lot_no;
+                                $arr['ScheduleId'] = $schedule_id;
+                                $arr['VA'] = $va;
+                                $arr['StartPrice'] = (int)$stock->StartPrice;
+                                $arr['Interval'] = (int)$scheduledata->data[0]->interval;
+                                break;
+                            }
                         }
                     }
             }
