@@ -94,7 +94,11 @@ class Current extends CI_Controller {
 
 	public function bidding()
 	{
-        echo "current bidding works";
+        $data['menu'] = load_menu()['menu'];
+        $data['content'] = 'current-bidding/index';
+        $data['content_script'] = 'script';
+        $data['content_modal'] = 'modal';
+        $this->load->view('/templates/current-bid', $data);
 	}
 }
 
