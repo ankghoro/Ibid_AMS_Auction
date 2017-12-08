@@ -13,6 +13,6 @@
     <section>
         <?php $this->load->view($content); ?>
     </section>
-    <?php $this->load->view($content_script); ?>
+    <?php isset($content_script) ?  $this->load->view($content_script) : ''; ?>
 </body>
 </html>
