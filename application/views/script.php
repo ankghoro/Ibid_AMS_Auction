@@ -13,8 +13,6 @@
       return false;
     });
 
-    sidebar.fold();
-
     $('<input type="hidden" id="lot_id" value="0"></input').insertAfter('#body');
     $('<input type="hidden" id="start-price" val="">').insertAfter('#body');
     $('<input type="hidden" id="interval" val="">').insertAfter('#body');
@@ -244,8 +242,8 @@
     var Price = $('#start-price').val();
       $.ajax({
         type: "POST",
-        url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
-        // url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
+        // url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
+        url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
         data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va},
         dataType: "json",
         success: function(data){
@@ -300,6 +298,7 @@
           // $('#bid-log').empty();
           $('#npl').val('');
           $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">....</div>');
+          $('#start-price').val(data.data.Nominal);
         } 
       },
       error: function (jqXHR, textStatus, errorThrown) {

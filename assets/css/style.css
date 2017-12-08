@@ -21,6 +21,10 @@
 	border-radius: 30px;
 }
 
+.first-price{
+	margin-top:20px;
+}
+
 hr.custom {
 	margin-top: 5px;
 	margin-bottom: 15px;
@@ -33,9 +37,13 @@ li.menu-category:after {
 html, body{
 	background-color: #f7f7f7;
 	font-family: open sans;
-	text-align: center;
 	color: #777777;
 }
+
+.center-align {
+	text-align: center;
+}
+
 @font-face {
     font-family: open sans;
 	src: url('../fonts/regular.ttf') format('ttf'),
@@ -65,7 +73,7 @@ hr {
 .bid-name{
 	text-align: center;
 	background-color: #903e98;
-	color: white;
+	color: white !important;
 }
 .card-block{
 	padding: 0;
@@ -230,6 +238,14 @@ hr {
 .line-height{
 	line-height: 20pt;
 	font-size: 8pt;
+}
+
+.main-title{
+	color: white;
+}
+
+.sub-title{
+	color: white;
 }
 
 @media only screen
