@@ -1,25 +1,13 @@
 {
-	"description": "The CodeIgniter framework",
-	"name": "codeigniter/framework",
-	"type": "project",
-	"homepage": "https://codeigniter.com",
-	"license": "MIT",
-	"support": {
-		"forum": "http://forum.codeigniter.com/",
-		"wiki": "https://github.com/bcit-ci/CodeIgniter/wiki",
-		"slack": "https://codeigniterchat.slack.com",
-		"source": "https://github.com/bcit-ci/CodeIgniter"
-	},
-	"require": {
-		"php": ">=5.3.7",
-		"romainrg/codeigniter-rabbitmq-library": "^4.0",
-		"tempusdominus/bootstrap-4": "5.0.0-alpha.6"
-	},
-	"suggest": {
-		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
-	},
-	"require-dev": {
-		"mikey179/vfsStream": "1.1.*",
-		"phpunit/phpunit": "4.* || 5.*"
-	}
+    "name": "akmalmstfa/ibid-auction",
+    "authors": [
+        {
+            "name": "akmal.m",
+            "email": "akmal.m@smooets.com"
+        }
+    ],
+    "require": {
+        "php": "7.1.12",
+        "kreait/firebase-php": "^3.0"
+    }
 }

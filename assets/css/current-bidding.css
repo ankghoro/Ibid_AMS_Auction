@@ -1,0 +1,152 @@
+html, body{
+	background-color: #f7f7f7;
+	font-family: open sans;
+	text-align: center;
+	color: #777777;
+}
+hr {
+    display: block;
+	height: 1px;
+	width: 70vh;
+    border: 0;
+    border-top: 1px solid rgb(255, 255, 255);
+    margin: 0em 2em;
+	padding: 0; 
+}
+.container-fluid{
+	width: 100vw;
+	height: 100vh;
+	padding: 40px 50px 30px 50px;
+}
+.bid-name{
+	text-align: center;
+	background-color: #903e98;
+	padding: 5px 0px;
+	color: white;
+	border-radius: 10px 10px 0 0;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+	margin-top: 10px;
+}
+.car-thumbnail{
+	max-height: 70vh;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+}
+.bottom-content{
+	margin-top: 15px;
+	border-radius: 0 0 10px 10px ;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+	background-color: white;
+}
+
+.car-grade{
+	border-radius: 50%;
+	background-color: #903e98;
+	width: 80px;
+	height: 80px;
+	padding-top: 10px;
+	color: white;
+	font-size: 12pt;
+	margin: 10px;
+}
+.grade-alpha{
+	font-size: 28pt;
+	line-height: 25pt;
+}
+
+.first-bid{
+	text-align: left;
+	margin-top: 10px;
+}
+
+.bid-topbid{
+	background-color: #fac917;
+	font-size: 3em;
+	font-weight: bold;
+	color: white;
+	padding:12px;
+}
+
+.right-content{
+	background-color: white;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+	border-radius: 10px ;
+	margin-left: 0px;
+	margin-top: 10px;
+}
+
+.bid-count{
+	background-color: #f7f7f7;
+	border: 1px solid #cccccc;
+	color: #777777;
+	font-size: 45pt;
+	font-weight: bold;
+	width: 100px;
+	height: 100px;
+}
+
+.count-wrap{
+	padding-top: 10px;	
+}
+
+.top-bidder{
+	font-size: 20pt;
+	font-weight: bold;
+	line-height: 35px;
+}
+
+.img-top{
+	bottom: 10px;
+}
+
+.fold-price{
+	background-color: #81be2a;
+	color: white;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+.right-bottom-content{
+	margin-top: 20px;
+}
+
+.spec{
+	background-color: #f7f7f7;
+	margin: 0;
+	margin-bottom: 40px;
+}
+
+.weight{
+	font-weight: bold;
+}
+
+.item1{
+	
+	border-right: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+}
+
+.item2{
+	border-bottom: 1px solid #cccccc;
+}
+
+.item3{
+	border-right: 1px solid #cccccc;
+}
+
+.item{
+	padding: 10px;
+}
+
+.bidding-log{
+	border: 1px solid #cccccc;
+	max-height: 60vh;
+	min-height: 100%;
+	margin-bottom: 20px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+
+}
+
+.line-height{
+	line-height: 25pt;
+}

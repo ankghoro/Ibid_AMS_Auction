@@ -117,8 +117,6 @@ class Auction extends CI_Controller {
             }
             redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
         }
-		$this->load->helper('custom');
-		$this->load->helper('url');
         $data['menu'] = load_menu()['menu'];
         $data['assets_url'] = load_header()['assets_url'];
         $data['content'] = 'content';
