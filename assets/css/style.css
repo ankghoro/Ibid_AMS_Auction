@@ -40,6 +40,10 @@ html, body{
 	color: #777777;
 }
 
+.main-content{
+	padding-top: 0;
+}
+
 .center-align {
 	text-align: center;
 }
