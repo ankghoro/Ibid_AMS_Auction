@@ -32,7 +32,7 @@
         <span class="title">Schedule</span>
       </a>
     </li>
-    <li class="menu-item active">
+    <li class="menu-item">
     <a class="menu-link" href="<?php echo $this->config->item('ibid_lot'); ?>">
         <span class="icon fa fa-cubes"></span>
         <span class="title">LOT</span>
@@ -44,8 +44,14 @@
         <span class="title">Auto Bidding</span>
       </a>
     </li>
+    <li class="menu-item active">
+    <a class="menu-link" href="<?php echo $this->config->item('ibid_auction'); ?>">
+        <span class="icon fa fa-gavel"></span>
+        <span class="title">Auction Management</span>
+      </a>
+    </li>
     <li class="menu-item">
-    <a class="menu-link" href="<?php echo $this->config->item('ibid_auth'); ?>">
+    <a class="menu-link" href="<?php echo $this->config->item('ibid_kpl'); ?>">
         <span class="icon fa fa-key"></span>
         <span class="title">KPL</span>
       </a>
