@@ -96,7 +96,7 @@ class Current extends CI_Controller {
 	{
         $data['menu'] = load_menu()['menu'];
         $data['content'] = 'current-bidding/index';
-        $data['content_script'] = 'script';
+        $data['content_script'] = 'current-bidding/script';
         $data['content_modal'] = 'modal';
         $this->load->view('/templates/current-bid', $data);
 	}
