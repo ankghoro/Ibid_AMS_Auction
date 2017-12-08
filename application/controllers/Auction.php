@@ -128,13 +128,13 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
-        if (isset($_COOKIE['UserLogon'])) {
-            $datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
-            $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
-            // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
-            $scheduledata = json_decode($this->get_curl($schedule_url));
-            $check_schedule = count($scheduledata->data);
-            $arr = array();
+        if (isset($_COOKIE['UserLogon'])) {             
+		$datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
+		$schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
+		// $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local             
+		$scheduledata = json_decode($this->get_curl($schedule_url));
+		$check_schedule = count($scheduledata->data);
+		$arr = array();
             if ($check_schedule != 0) {
                 $schedule_id = $scheduledata->data[0]->id;
                 $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
