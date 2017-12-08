@@ -84,7 +84,7 @@
                                                 Bidding Log
                                              </div>
                                         <div class="bidding-log" style="border: 1px solid #cccccc !important">
-                                            <div class="row gap-2 line-height" id="bid-log">
+                                            <div class="row no-gutters line-height" id="bid-log">
                                             </div>
                                         </div>
                                         </div>
