@@ -30,7 +30,10 @@
 
     $('#start').on('click', function(){
         $('#modal-auction-title').text('Mulai lelang untuk lot ini?');
+        $('#modal-auction-body').empty();
         $('#confirm-skip').hide();
+        $('#confirm-next').hide();
+        $('#confirm-start').show();
         $('#auction_modal').modal('show');
     });
 
@@ -40,6 +43,20 @@
         $('#start').prop("disabled",true); 
         $('#btn_count').prop("disabled",false);
         start = setInterval( getBidLog, 2000 );
+    });
+
+    $('#btn_next').on('click', function(){
+        $('#modal-auction-title').text('Jump into next lot?');
+        $('#modal-auction-body').empty();
+        $('#confirm-start').hide();
+        $('#confirm-skip').hide();
+        $('#confirm-next').show();
+        $('#auction_modal').modal('show');
+    });
+
+    $('#confirm-next').on('click', function(){
+        getLotData();
+        $('#auction_modal').modal('hide');
     });
 
     $('#floor-bid').on('click', function(){
@@ -307,17 +324,6 @@
     });
   }
 
-
-
-$('#btn_next').on('click', function(){
-  var show = confirm('Jump into next lot?');
-  if (show == true) {
-    getLotData();
-  } else {
-
-  }
-});
-
 $('#btn_skip').on('click', function(){
   var valid = true;
   var description = '<div class="form-group"><label for="textarea">Description : </label><textarea class="form-control" id="textarea" rows="6"></textarea></div>'
@@ -336,6 +342,7 @@ $('#btn_skip').on('click', function(){
             $('#modal-auction-body').empty();
             $('#modal-auction-body').append(description);
             $('#confirm-start').hide();
+            $('#confirm-next').hide();
             $('#auction_modal').modal('show');
           return true;
         }
