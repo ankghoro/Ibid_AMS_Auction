@@ -1,9 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-use Kreait\Firebase\Factory;
-use Kreait\Firebase\ServiceAccount;
-
 class Bidding extends CI_Controller {
 	
  	public function __construct()
@@ -26,14 +23,7 @@ class Bidding extends CI_Controller {
         $interval = (int)$this->input->post('interval');
         $biddertype = $this->input->post('biddertype');
         $startprice = 1000000;
-        $serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json');
-        $apiKey = 'AIzaSyC-ZoZ16SiFPoz76W0yJbqhlLOYpPrMU7I';
-        $firebase = (new Factory)
-        ->withServiceAccountAndApiKey($serviceAccount,$apiKey)
-        ->withDatabaseUri('https://ibid-ams-sample.firebaseio.com')
-        ->create();
-
-        $database = $firebase->getDatabase();
+        $database = $this->bid->firebase()->getDatabase();
         $reference = $database->getReference('3/1/1/log');
         $last = $reference->orderByKey()->limitToLast(1)->getValue();
 
