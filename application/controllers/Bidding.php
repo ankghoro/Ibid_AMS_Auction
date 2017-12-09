@@ -28,9 +28,8 @@ class Bidding extends CI_Controller {
         $last = $reference->orderByKey()->limitToLast(1)->getValue();
 
         if (count($last) > 0) {
-            foreach ($last as $key => $value) {
-                $bid = $value['bid'] + $interval;
-            }
+            $last = reset($last);
+            $bid = $last['bid'] + $interval;
         }else{
             $bid = $startprice + $interval;
         }
