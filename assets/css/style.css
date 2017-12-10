@@ -34,6 +34,10 @@ li.menu-category:after {
 	content: none;
 }
 
+.new-loader{
+	color: #41B8DF;
+}
+
 html, body{
 	background-color: #f7f7f7;
 	font-family: open sans;

@@ -95,6 +95,17 @@ class Auction extends CI_Controller {
         return $result;
     }
 
+    private function jsonPost($url,$data_json){
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$data_json);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response  = curl_exec($ch);
+        curl_close($ch);
+        return $response;
+    }
 	public function index()
 	{
         $UserLogon = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
@@ -134,6 +145,7 @@ class Auction extends CI_Controller {
             // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
             $scheduledata = json_decode($this->get_curl($schedule_url));
             $check_schedule = count($scheduledata->data);
+            
             $arr = array();
             if ($check_schedule != 0) {
                 $schedule_id = $scheduledata->data[0]->id;
@@ -151,7 +163,7 @@ class Auction extends CI_Controller {
                 $stockdata = json_decode($this->get_curl($stock_url));
                 // var_dump($stockdata); die();
                 $no = 0;
-                
+                $date = $scheduledata->data[0]->date;
                 $countLotReady = count($lotReady->data);
                 $countLotSchedule = count($lotBySchedule->data);
                 if ($countLotReady != 0) {
@@ -198,6 +210,7 @@ class Auction extends CI_Controller {
                                         $arr['ItemId'] = $stock->ItemId;
                                         $arr['NoLot'] = (int)$lot_no;
                                         $arr['ScheduleId'] = $schedule_id;
+                                        $arr['Date'] = $date;
                                         $arr['VA'] = $va;
                                         $arr['StartPrice'] = (int)$stock->StartPrice;
                                         $arr['Interval'] = (int)$scheduledata->data[0]->interval;
@@ -231,6 +244,47 @@ class Auction extends CI_Controller {
         echo json_encode($newData);
     }
 
+    public function skip(){
+        $reason = $this->input->post('Reason');
+        $schedule_id = $this->input->post('ScheduleId');
+        $skiprange = (int)$this->input->post('SkipRange');
+        $lot = (int)$this->input->post('Lot');
+        $lot_url = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
+        // $lot_url = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
+        $lotBySchedule = json_decode($this->get_curl($lot_url));
+        $arr = array();
+        $data_json = array();
+        $no = 0;
+        $count = count($lotBySchedule->data);
+        $check = $count - $skiprange;
+        $status = true;
+        if ($check < 0) {
+            $status = false;
+        } else {
+            $data_json['schedule_id'] = $schedule_id;
+            $data_json['reason'] = $reason;
+            while ($lot <= $skiprange) {
+                $data_json['data'][$no]['lot'] = $lot;
+                $no++;
+                $lot++;
+            }
+            $data_json = json_encode($data_json);
+            $url = $this->config->item('ibid_lot')."/api/skipLot";
+            // $url = "http://ibid-lot.dev/api/skipLot";
+            $proceed = $this->jsonPost($url,$data_json);
+        }
+
+        $arr['total'] = $count;
+
+        $output = [
+            'status' => $status,
+            'data' => $arr,
+        ];
+
+        echo json_encode($output);
+        // var_dump($check); die();
+    }
+
     public function bidLogExample($price,$interval){
         $bidlog = array();
         $status = true;
@@ -252,7 +306,23 @@ class Auction extends CI_Controller {
         $status = true;
         $nominal = $price + $interval;
         $bidlog['Nominal'] = $nominal;
-        $bidlog['State'] = "FloorBid";
+        $bidlog['State'] = "Floor Bid";
+        // var_dump($bidlog); die();
+
+        $output = [
+            'status' => $status,
+            'data' => $bidlog
+        ];
+        echo json_encode($output);
+    }
+
+    public function proxyBidExample($price,$interval){
+        $bidlog = array();
+        $status = true;
+        $nominal = $price + $interval;
+        $bidlog['Nominal'] = $nominal;
+        $bidlog['State'] = "Proxy Bid";
+        $bidlog['No'] = mt_rand(1000, 9999);
         // var_dump($bidlog); die();
 
         $output = [
