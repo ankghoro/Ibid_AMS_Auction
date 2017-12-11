@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-md-10 count-wrap clearfix">
                     <img src="<?php echo base_url('assets/img/topbid.png'); ?>" class="img-top"><span class="top-bidder">TOP BIDDER</span>
-                    <div class="bid-topbid">Rp. 206.000.000,00</div>
+                    <div class="bid-topbid">Rp. -</div>
                 </div>
             </div>
             <div class="row right-bottom-content">
