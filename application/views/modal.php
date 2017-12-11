@@ -10,6 +10,7 @@
       </div>
       <div class="modal-footer" id="modal-footer">
       	<button type="button" class="btn btn-outline btn-primary" id="proceed-winner">Lanjutkan</button>
+        <button type="button" class="btn btn-outline btn-secondary" data-dismiss="modal" id="close">Close</button>
       </div>
     </div>
     
@@ -22,7 +23,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="modal-auction-title"></h4>
+        <h4 class="modal-title" id="modal-auction-title" style="padding-left: 15%;"></h4>
       </div>
       <div class="modal-body" id="modal-auction-body">
         
