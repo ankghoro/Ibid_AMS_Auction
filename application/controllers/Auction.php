@@ -137,6 +137,11 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
+        $userlogon = [
+                    "CompanyId" => '1',
+                ];
+        setcookie('UserLogon', serialize($userlogon));
+
         if (isset($_COOKIE['UserLogon'])) {
             $datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
             $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
@@ -162,27 +167,30 @@ class Auction extends CI_Controller {
                 // var_dump($stockdata); die();
                 $no = 0;
                 $date = $scheduledata->data[0]->date;
+                // var_dump($lotReady); die();
                 $countLotReady = count($lotReady->data);
                 $countLotSchedule = count($lotBySchedule->data);
+
                 if ($countLotReady != 0) {
                     do {
                         
                         foreach ($lotdata->data as $check) {
-                            if ($schedule_id == $check->schedule_id && $id == $check->no_lot) {
+                            if ($schedule_id == $check->schedule_id && (int)$id == (int)$check->no_lot) {
                                 $reason = $check->reason;
-                                $status = (int)$check->status;
+                                $status = $check->status;
                                 $lot_no = $check->no_lot;
                                 break;
                             }
                         }
                         $id++;
-                    } while ($reason != null || $status == 1);
+                    } while ($reason != null || $status == "terjual" || $status == "tidak terjual");
 
                     
                     $no = (int)$lot_no;
                     foreach ($stockdata->data as $stock) {
                         $datastatus = false;
                             foreach ($lotdata->data as $lot) {
+
                                 if ($stock->AuctionItemId == (int)$lot->stock_id && $lot->schedule_id == $scheduledata->data[0]->id) {
                                     $datastatus = true;
                                     $lot_no = $lot->no_lot;
