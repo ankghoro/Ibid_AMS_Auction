@@ -137,16 +137,7 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
-<<<<<<< HEAD
-        if (isset($_COOKIE['UserLogon'])) {             
-		$datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
-		$schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
-		// $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local             
-		$scheduledata = json_decode($this->get_curl($schedule_url));
-		$check_schedule = count($scheduledata->data);
-		$arr = array();
-=======
-        if (isset($_COOKIE['UserLogon'])) {
+	if (isset($_COOKIE['UserLogon'])) {
             $datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
             $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
             // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
@@ -154,7 +145,6 @@ class Auction extends CI_Controller {
             $check_schedule = count($scheduledata->data);
             
             $arr = array();
->>>>>>> 9e578b7efdc2535e33163cfedeffb7a3c45d88c0
             if ($check_schedule != 0) {
                 $schedule_id = $scheduledata->data[0]->id;
                 $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
