@@ -2,7 +2,10 @@
     <div class="content-page">
         <div class="content">
             <div class="container" id="body">
-                <div class="row gap-2">
+                <div class="text-center" id="loader">
+    
+                </div>
+                <div class="row gap-2" id="content">
                     <div class="col-md-6 col-lg-3">
                         <div class="card">
 	                        <div class="card-header bid-name">
@@ -100,7 +103,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group clearfix">
                                                             <label class="control-label">Nomor Lot:</label>
-                                                            <input type="text" class="form-control" placeholder="12">
+                                                            <input type="text" class="form-control" id="skip">
                                                              <button class="btn btn-warning btn-sm btn-block" id="btn_skip">SKIP</button>
                                                         </div>
                                                         <div class="form-group clearfix">

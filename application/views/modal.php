@@ -30,7 +30,7 @@
       <div class="modal-footer" id="modal-auction-footer">
         <button type="button" class="btn btn-outline btn-secondary" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-success" id="confirm-start">Mulai</button>
-        <button type="button" class="btn btn-success" id="confirm-skip">Yes</button>
+        <button type="button" class="btn btn-success" id="confirm-skip">Simpan</button>
         <button type="button" class="btn btn-success" id="confirm-next">Yes</button>
       </div>
     </div>
