@@ -21,8 +21,8 @@ var contactsRef = dbRef.ref('3/1/1/log');
 
 // load older conatcts as well as any newly added one...
 contactsRef.on("child_added", function(snap) {
-  console.log("added", snap.key, snap.val());
   $('.bidding-log').prepend(contactHtmlFromObject(snap.val()));
+  $('.bid-topbid').text('Rp. ' + addPeriod(snap.val().bid));
 });
 
 //save contact
@@ -47,7 +47,7 @@ contactsRef.on("child_added", function(snap) {
 // prepare conatct object's HTML
 
 function contactHtmlFromObject(log){
-  console.log(log);
+  // console.log(log);
   var html = '<div class="row line-height">'
                 +'<div class="col-md-6">'+'Rp. ' + addPeriod(log.bid)+'</div>'
                 +'<div class="col-md-6 weight">'+log.type+' Bidder</div>'

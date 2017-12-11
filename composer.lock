@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e3db878d77bf0dd887bd140bd08a7cfa",
+    "content-hash": "9f385a88a5d15536bb0246c4340e2d1d",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -330,16 +330,16 @@
         },
         {
             "name": "kreait/firebase-php",
-            "version": "3.5.0",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kreait/firebase-php.git",
-                "reference": "2feaa025f2896c9a2315f3c326b24cef528d8af9"
+                "reference": "fbcee24d70e0eee6d50118fd39b707aec3e9db4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kreait/firebase-php/zipball/2feaa025f2896c9a2315f3c326b24cef528d8af9",
-                "reference": "2feaa025f2896c9a2315f3c326b24cef528d8af9",
+                "url": "https://api.github.com/repos/kreait/firebase-php/zipball/fbcee24d70e0eee6d50118fd39b707aec3e9db4f",
+                "reference": "fbcee24d70e0eee6d50118fd39b707aec3e9db4f",
                 "shasum": ""
             },
             "require": {
@@ -387,7 +387,7 @@
                 "google",
                 "sdk"
             ],
-            "time": "2017-11-27T09:42:45+00:00"
+            "time": "2017-12-08T16:31:17+00:00"
         },
         {
             "name": "kreait/firebase-tokens",
@@ -657,7 +657,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "7.1.12"
+        "php": "7.1.8"
     },
     "platform-dev": []
 }

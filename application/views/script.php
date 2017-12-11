@@ -22,10 +22,12 @@
     $('<input type="hidden" id="stock_id" val="">').insertAfter('#body');
     $('<input type="hidden" id="va" val="">').insertAfter('#body');
     $('<input type="hidden" id="npl" val="">').insertAfter('#body');
+    $('<input type="hidden" id="date" val="">').insertAfter('#body');
 
     getLotData();
 
     var start = 0;
+    var startProxy = 0;
     '<button type="button" class="btn btn-success btn-submit" id="submit_winner">Lanjutkan</button>'
 
     $('#start').on('click', function(){
@@ -42,7 +44,8 @@
         $('#floor-bid').prop("disabled", false);
         $('#start').prop("disabled",true); 
         $('#btn_count').prop("disabled",false);
-        start = setInterval( getBidLog, 2000 );
+        start = setInterval( getBidLog, 4000 );
+        startProxy = setInterval( getProxyBid, 6000);
     });
 
     $('#btn_next').on('click', function(){
@@ -61,9 +64,42 @@
 
     $('#floor-bid').on('click', function(){
       floorBid();
-      if(start == null){
+      if(start == null && startProxy == null){
         start = setInterval( getBidLog, 2000 );
+        startProxy = setInterval( getProxyBid, 6000);
       }
+    });
+
+    $('#btn_skip').on('click', function(){
+      var valid = true;
+      var description = '<div class="form-group"><label for="textarea">Berikan alasan : </label><textarea class="form-control" id="reason" rows="6"></textarea></div>'
+            $('#skip').removeClass('is-invalid');
+            $('#reason').removeClass('is-invalid');
+            $('.invalid-feedback').remove();
+            if($('#skip').val() == ''){
+                $('#skip').addClass('is-invalid');
+                $('<div class="invalid-feedback">Wajib isi lot.</div>').insertAfter('#skip');
+                valid = false;
+            }
+
+            if(valid == false){
+                return false; //is superfluous, but I put it here as a fallback
+            } else {
+                $('#modal-auction-title').text('Skip lot');
+                $('#modal-auction-body').empty();
+                $('#modal-auction-body').append(description);
+                $('#confirm-start').hide();
+                $('#confirm-next').hide();
+                $('#confirm-skip').show();
+                $('#auction_modal').modal('show');
+              return true;
+            }
+    });
+
+    $('#confirm-skip').on('click', function(){
+        $('#reason').removeClass('is-invalid');
+        $('.invalid-feedback').remove();
+        skipLot();
     });
 
     $('#btn_count').on('click', function(){
@@ -73,7 +109,9 @@
         $('#count').val(count);
         if (count == 2) {
           clearInterval(start);
+          clearInterval(startProxy);
           start = null;
+          startProxy = null;
         }
         if (count == 3) {
           var winner = $('#npl').val();
@@ -191,11 +229,15 @@
     id = parseInt(id);
     id = id + 1;
     $('#lot_id').val(id);
+    $('#loader').append('<i class="fa fa-spinner fa-pulse fa-4x fa-fw new-loader"></i>');
+    $('#content').hide();
     $.ajax({
       type: "GET",
       url: "<?php echo base_url('auction/');?>datalot/"+id,
       dataType: "json",
       success: function(data){
+        $('#loader').empty();
+        $('#content').show();
         if (data.jadwal) {
           if (data.status) {
             $('.data-lot').html('');
@@ -225,6 +267,7 @@
             $('#schedule_id').val(data.data.ScheduleId);
             $('#va').val(data.data.VA);
             $('#floor-bid').append("+"+addPeriod(data.data.Interval));
+            $('#date').val(data.data.Date);
             $('#floor-bid').prop("disabled",true);
             $('#start').prop("disabled",false);
             $('#btn_count').prop("disabled",true);
@@ -264,7 +307,7 @@
     var ScheduleId = $('#schedule_id').val();
     var Va = $('#va').val();
     var Lot = $('#lot_id').val();
-    var Schedule = '2017-12-06';
+    var Schedule = $('#date').val();
     var Type = 0;
     var Price = $('#start-price').val();
       $.ajax({
@@ -282,6 +325,41 @@
             alert('Error get data from ajax');
         },
       });
+  }
+
+  function skipLot(){
+    var Reason = $('#reason').val();
+    if (Reason == '') {
+      $('#reason').addClass('is-invalid');
+      $('<div class="invalid-feedback">Wajib isi alasan skip lot.</div>').insertAfter('#reason');
+    } else {
+        var SkipRange = $('#skip').val();
+        var ScheduleId = $('#schedule_id').val();
+        
+        var Va = $('#va').val();
+        var Lot = $('#lot_id').val();
+            Lot = parseInt(Lot);
+            Lot = Lot + 1;
+          $.ajax({
+            type: "POST",
+            url: "<?php echo base_url('auction/');?>skip",
+            data : {Lot:Lot,ScheduleId:ScheduleId,SkipRange:SkipRange,Reason:Reason},
+            dataType: "json",
+            success: function(data){
+              if (data.status) {
+                $('#auction_modal').modal('hide');
+              }  else {
+                $('#skip').addClass('is-invalid');
+                $('<div class="invalid-feedback">Total lot hanya ada '+data.data.total+'.</div>').insertAfter('#skip');
+                $('#auction_modal').modal('hide');
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error get data from ajax');
+            },
+          });
+    }
+    
   }
 
   function getBidLog(){
@@ -302,9 +380,27 @@
           $('#start-price').val(data.data.Nominal);
         } 
       },
-      error: function (jqXHR, textStatus, errorThrown) {
-          alert('Error get data from ajax');
-      },
+    });
+  }
+
+  function getProxyBid(){
+    var price = $('#start-price').val();
+    var interval = $('#interval').val();
+    $.ajax({
+      type: "GET",
+      url: "<?php echo base_url('auction/');?>proxyBidExample/"+price+"/"+interval,
+      dataType: "json",
+      success: function(data){
+        if (data.status) {
+          // $('#bid-log').empty();
+          $('#npl').val(data.data.No);
+          $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
+          
+                                              
+                                              
+          $('#start-price').val(data.data.Nominal);
+        } 
+      }
     });
   }
 
@@ -328,35 +424,10 @@
           $('#start-price').val(data.data.Nominal);
         } 
       },
-      error: function (jqXHR, textStatus, errorThrown) {
-          alert('Error get data from ajax');
-      },
     });
   }
 
-$('#btn_skip').on('click', function(){
-  var valid = true;
-  var description = '<div class="form-group"><label for="textarea">Description : </label><textarea class="form-control" id="textarea" rows="6"></textarea></div>'
-        $('#skip').removeClass('is-invalid');
-        $('.invalid-feedback').remove();
-        if($('#skip').val() == ''){
-            $('#skip').addClass('is-invalid');
-            $('<div class="invalid-feedback">Wajib isi lot.</div>').insertAfter('#skip');
-            valid = false;
-        }
 
-        if(valid == false){
-            return false; //is superfluous, but I put it here as a fallback
-        } else {
-            $('#modal-auction-title').text('Skip lot');
-            $('#modal-auction-body').empty();
-            $('#modal-auction-body').append(description);
-            $('#confirm-start').hide();
-            $('#confirm-next').hide();
-            $('#auction_modal').modal('show');
-          return true;
-        }
-});
 
 function addPeriod(nStr)
   {
