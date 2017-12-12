@@ -160,7 +160,7 @@
                         +'<h4 id="modal-header">Isi Npl Pemenang</h4>'
                         +'<div class="form-group noLot-edit">'
                           +'<div class="col-md-6" style="padding-left:0">'
-                            +'<input type="text" name="input_npl" class="form-control" id="input_npl">'
+                            +'<input type="text" name="input_npl" class="form-control" id="input_npl" onkeypress="return isNumberKey(event)">'
                           +'</div>'
                         +'</div>';
               $('#modal-body').append(body);
@@ -515,6 +515,13 @@ function addPeriod(nStr)
       }
       return x1 + x2;
   }
+
+  function isNumberKey(evt){
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}  
 
 
 </script>
