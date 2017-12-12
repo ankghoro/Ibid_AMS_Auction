@@ -17,7 +17,7 @@
 
 // create firebase database reference
 var dbRef = firebase.database();
-var contactsRef = dbRef.ref('3/1/1/log');
+var contactsRef = dbRef.ref('company/3/schedule/1/lot/1/log');
 
 // load older conatcts as well as any newly added one...
 contactsRef.on("child_added", function(snap) {

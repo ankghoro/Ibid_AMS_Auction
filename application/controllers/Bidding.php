@@ -22,9 +22,9 @@ class Bidding extends CI_Controller {
 	{
         $interval = (int)$this->input->post('interval');
         $biddertype = $this->input->post('biddertype');
-        $startprice = 1000000;
+        $startprice = 200000000;
         $database = $this->bid->firebase()->getDatabase();
-        $reference = $database->getReference('3/1/1/log');
+        $reference = $database->getReference('company/3/schedule/1/lot/1/log');
         $last = $reference->orderByKey()->limitToLast(1)->getValue();
 
         if (count($last) > 0) {
@@ -41,7 +41,11 @@ class Bidding extends CI_Controller {
         $reference->push($postData);
 
         echo json_encode(["status" => true]);
-	}
+    }
+    
+    public function change(){
+
+    }
 }
 
 ?>
