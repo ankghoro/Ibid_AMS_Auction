@@ -137,31 +137,27 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
-        $userlogon = [
-                    "CompanyId" => "1",
-                ];
-        setcookie('UserLogon', serialize($userlogon));
-	if (isset($_COOKIE['UserLogon'])) {
+        if (isset($_COOKIE['UserLogon'])) {
             $datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
-            // $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
-            $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
+            $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
+            // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
             $scheduledata = json_decode($this->get_curl($schedule_url));
             $check_schedule = count($scheduledata->data);
             
             $arr = array();
             if ($check_schedule != 0) {
                 $schedule_id = $scheduledata->data[0]->id;
-                // $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
-                $lot_url =  "http://ibid-lot.dev/api/getallLot";
+                $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
+                // $lot_url =  "http://ibid-lot.dev/api/getallLot";
                 $lotdata = json_decode($this->get_curl($lot_url));
-                // $lot_url2 = $this->config->item('ibid_lot')."/api/getLotReadyBySchedule/$schedule_id";
-                $lot_url2 = "http://ibid-lot.dev/api/getLotReadyBySchedule/$schedule_id";
+                $lot_url2 = $this->config->item('ibid_lot')."/api/getLotReadyBySchedule/$schedule_id";
+                // $lot_url2 = "http://ibid-lot.dev/api/getLotReadyBySchedule/$schedule_id";
                 $lotReady = json_decode($this->get_curl($lot_url2));
-                // $lot_url3 = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
-                $lot_url3 = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
+                $lot_url3 = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
+                // $lot_url3 = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
                 $lotBySchedule = json_decode($this->get_curl($lot_url3));
-                // $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
-                $stock_url = "http://ibid-stock.dev/api/getallStock";
+                $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
+                // $stock_url = "http://ibid-stock.dev/api/getallStock";
                 $stockdata = json_decode($this->get_curl($stock_url));
                 // var_dump($stockdata); die();
                 $no = 0;
@@ -254,8 +250,8 @@ class Auction extends CI_Controller {
         $schedule_id = $this->input->post('ScheduleId');
         $skiprange = (int)$this->input->post('SkipRange');
         $lot = (int)$this->input->post('Lot');
-        // $lot_url = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
-        $lot_url = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
+        $lot_url = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
+        // $lot_url = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
         $lotBySchedule = json_decode($this->get_curl($lot_url));
         $arr = array();
         $data_json = array();
@@ -274,8 +270,8 @@ class Auction extends CI_Controller {
                 $lot++;
             }
             $data_json = json_encode($data_json);
-            // $url = $this->config->item('ibid_lot')."/api/skipLot";
-            $url = "http://ibid-lot.dev/api/skipLot";
+            $url = $this->config->item('ibid_lot')."/api/skipLot";
+            // $url = "http://ibid-lot.dev/api/skipLot";
             $proceed = $this->jsonPost($url,$data_json);
         }
 
