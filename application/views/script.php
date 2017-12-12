@@ -333,8 +333,8 @@
     var Price = $('#start-price').val();
       $.ajax({
         type: "POST",
-        // url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
-        url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
+        url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
+        // url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
         data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va},
         dataType: "json",
         success: function(data){

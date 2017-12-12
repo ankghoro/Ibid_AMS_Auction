@@ -108,26 +108,26 @@ class Auction extends CI_Controller {
     }
 	public function index()
 	{
-        // $UserLogon = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
-        // if (is_null($UserLogon) || ($this->check_token($UserLogon['access_token']) == false)) {
-        //     if (!is_null($UserLogon) && $this->check_token($UserLogon['access_token']) == false) {
-        //         $refresh_token = $this->refresh_token($UserLogon);
-        //         if(isset($refresh_token->error)){
-        //             delete_cookie('UserLogon', base_domain(base_url()));
-        //             redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
-        //         }else {
-        //             $userlogon = [
-        //                 "access_token" => $refresh_token->access_token,
-        //                 "refresh_token" => $refresh_token->refresh_token,
-        //                 "username" => $UserLogon['username'],
-        //                 "CompanyId" => $UserLogon['CompanyId'],
-        //             ];
-        //             setcookie('UserLogon', serialize($userlogon), time() + (3600 * 4), "/", base_domain(base_url()));
-        //             redirect($this->config->item('ibid_kpl'), 'refresh');
-        //         }
-        //     }
-        //     redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
-        // }
+        $UserLogon = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
+        if (is_null($UserLogon) || ($this->check_token($UserLogon['access_token']) == false)) {
+            if (!is_null($UserLogon) && $this->check_token($UserLogon['access_token']) == false) {
+                $refresh_token = $this->refresh_token($UserLogon);
+                if(isset($refresh_token->error)){
+                    delete_cookie('UserLogon', base_domain(base_url()));
+                    redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
+                }else {
+                    $userlogon = [
+                        "access_token" => $refresh_token->access_token,
+                        "refresh_token" => $refresh_token->refresh_token,
+                        "username" => $UserLogon['username'],
+                        "CompanyId" => $UserLogon['CompanyId'],
+                    ];
+                    setcookie('UserLogon', serialize($userlogon), time() + (3600 * 4), "/", base_domain(base_url()));
+                    redirect($this->config->item('ibid_kpl'), 'refresh');
+                }
+            }
+            redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
+        }
         $data['menu'] = load_menu()['menu'];
         $data['assets_url'] = load_header()['assets_url'];
         $data['content'] = 'content';
