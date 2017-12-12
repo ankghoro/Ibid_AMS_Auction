@@ -108,26 +108,26 @@ class Auction extends CI_Controller {
     }
 	public function index()
 	{
-        $UserLogon = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
-        if (is_null($UserLogon) || ($this->check_token($UserLogon['access_token']) == false)) {
-            if (!is_null($UserLogon) && $this->check_token($UserLogon['access_token']) == false) {
-                $refresh_token = $this->refresh_token($UserLogon);
-                if(isset($refresh_token->error)){
-                    delete_cookie('UserLogon', base_domain(base_url()));
-                    redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
-                }else {
-                    $userlogon = [
-                        "access_token" => $refresh_token->access_token,
-                        "refresh_token" => $refresh_token->refresh_token,
-                        "username" => $UserLogon['username'],
-                        "CompanyId" => $UserLogon['CompanyId'],
-                    ];
-                    setcookie('UserLogon', serialize($userlogon), time() + (3600 * 4), "/", base_domain(base_url()));
-                    redirect($this->config->item('ibid_kpl'), 'refresh');
-                }
-            }
-            redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
-        }
+        // $UserLogon = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
+        // if (is_null($UserLogon) || ($this->check_token($UserLogon['access_token']) == false)) {
+        //     if (!is_null($UserLogon) && $this->check_token($UserLogon['access_token']) == false) {
+        //         $refresh_token = $this->refresh_token($UserLogon);
+        //         if(isset($refresh_token->error)){
+        //             delete_cookie('UserLogon', base_domain(base_url()));
+        //             redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
+        //         }else {
+        //             $userlogon = [
+        //                 "access_token" => $refresh_token->access_token,
+        //                 "refresh_token" => $refresh_token->refresh_token,
+        //                 "username" => $UserLogon['username'],
+        //                 "CompanyId" => $UserLogon['CompanyId'],
+        //             ];
+        //             setcookie('UserLogon', serialize($userlogon), time() + (3600 * 4), "/", base_domain(base_url()));
+        //             redirect($this->config->item('ibid_kpl'), 'refresh');
+        //         }
+        //     }
+        //     redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
+        // }
         $data['menu'] = load_menu()['menu'];
         $data['assets_url'] = load_header()['assets_url'];
         $data['content'] = 'content';
@@ -137,32 +137,35 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
-        if (isset($_COOKIE['UserLogon'])) {
+        $userlogon = [
+                    "CompanyId" => "1",
+                ];
+        setcookie('UserLogon', serialize($userlogon));
+	if (isset($_COOKIE['UserLogon'])) {
             $datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
-            $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
-            // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
+            // $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
+            $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
             $scheduledata = json_decode($this->get_curl($schedule_url));
             $check_schedule = count($scheduledata->data);
             
             $arr = array();
             if ($check_schedule != 0) {
-                $schedule_id = $scheduledata->data[0]->id;
-                $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
-                // $lot_url =  "http://ibid-lot.dev/api/getallLot";
+                $schedule_id = $scheduledata->data->id;
+                // $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
+                $lot_url =  "http://ibid-lot.dev/api/getallLot";
                 $lotdata = json_decode($this->get_curl($lot_url));
-                $lot_url2 = $this->config->item('ibid_lot')."/api/getLotReadyBySchedule/$schedule_id";
-                // $lot_url2 = "http://ibid-lot.dev/api/getLotReadyBySchedule/$schedule_id";
+                // $lot_url2 = $this->config->item('ibid_lot')."/api/getLotReadyBySchedule/$schedule_id";
+                $lot_url2 = "http://ibid-lot.dev/api/getLotReadyBySchedule/$schedule_id";
                 $lotReady = json_decode($this->get_curl($lot_url2));
-                $lot_url3 = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
-                // $lot_url3 = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
+                // $lot_url3 = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
+                $lot_url3 = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
                 $lotBySchedule = json_decode($this->get_curl($lot_url3));
-                $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
-                // $stock_url = "http://ibid-stock.dev/api/getallStock";
+                // $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
+                $stock_url = "http://ibid-stock.dev/api/getallStock";
                 $stockdata = json_decode($this->get_curl($stock_url));
                 // var_dump($stockdata); die();
                 $no = 0;
-                $date = $scheduledata->data[0]->date;
-                // var_dump($lotReady); die();
+                $date = $scheduledata->data->date;
                 $countLotReady = count($lotReady->data);
                 $countLotSchedule = count($lotBySchedule->data);
 
@@ -186,7 +189,8 @@ class Auction extends CI_Controller {
                         $datastatus = false;
                             foreach ($lotdata->data as $lot) {
 
-                                if ($stock->AuctionItemId == (int)$lot->stock_id && $lot->schedule_id == $scheduledata->data[0]->id) {
+                                if ((int)$stock->AuctionItemId == (int)$lot->stock_id && $lot->schedule_id == $scheduledata->data->id)
+                                {
                                     $datastatus = true;
                                     $lot_no = $lot->no_lot;
                                     $schedule_id = $lot->schedule_id;
@@ -214,7 +218,7 @@ class Auction extends CI_Controller {
                                         $arr['Date'] = $date;
                                         $arr['VA'] = $va;
                                         $arr['StartPrice'] = (int)$stock->StartPrice;
-                                        $arr['Interval'] = (int)$scheduledata->data[0]->interval;
+                                        $arr['Interval'] = (int)$scheduledata->data->interval;
                                         break;
                                     }
                                 }
@@ -248,42 +252,48 @@ class Auction extends CI_Controller {
     public function skip(){
         $reason = $this->input->post('Reason');
         $schedule_id = $this->input->post('ScheduleId');
+        $lot = (int)$this->input->post('Lot');
+        $data_json = array();
+        $status = true;
+            $data_json['schedule_id'] = $schedule_id;
+            $data_json['reason'] = $reason;
+            $data_json['lot'] = $lot;
+            $data_json = json_encode($data_json);
+            // var_dump($data_json); die();
+            // $url = $this->config->item('ibid_lot')."/api/skipLot";
+            $url = "http://ibid-lot.dev/api/skipLot";
+            $proceed = $this->jsonPost($url,$data_json);
+
+            $output = [
+                'status' => $status
+            ];
+
+        echo json_encode($output);
+    }
+
+    public function checkLot(){
+        $schedule_id = $this->input->post('ScheduleId');
         $skiprange = (int)$this->input->post('SkipRange');
         $lot = (int)$this->input->post('Lot');
-        $lot_url = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
-        // $lot_url = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
+        // $lot_url = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
+        $lot_url = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
         $lotBySchedule = json_decode($this->get_curl($lot_url));
-        $arr = array();
-        $data_json = array();
-        $no = 0;
         $count = count($lotBySchedule->data);
         $check = $count - $skiprange;
-        $status = true;
+        $arr = array();
         if ($check < 0) {
             $status = false;
         } else {
-            $data_json['schedule_id'] = $schedule_id;
-            $data_json['reason'] = $reason;
-            while ($lot <= $skiprange) {
-                $data_json['data'][$no]['lot'] = $lot;
-                $no++;
-                $lot++;
-            }
-            $data_json = json_encode($data_json);
-            $url = $this->config->item('ibid_lot')."/api/skipLot";
-            // $url = "http://ibid-lot.dev/api/skipLot";
-            $proceed = $this->jsonPost($url,$data_json);
+            $status = true;
         }
 
         $arr['total'] = $count;
-
         $output = [
             'status' => $status,
             'data' => $arr,
         ];
 
         echo json_encode($output);
-        // var_dump($check); die();
     }
 
     public function bidLogExample($price,$interval){
