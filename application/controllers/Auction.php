@@ -137,11 +137,7 @@ class Auction extends CI_Controller {
 	}
 
     public function datalot($id){
-        $userlogon = [
-                    "CompanyId" => "1",
-                ];
-        setcookie('UserLogon', serialize($userlogon));
-	if (isset($_COOKIE['UserLogon'])) {
+        if (isset($_COOKIE['UserLogon'])) {
             $datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
             $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
             // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
