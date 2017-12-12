@@ -28,6 +28,7 @@ $config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
 $config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 
 // ADMS Auth
+$config['adms_auth']['login'] = "http://ibidadmsdevserviceaccount.azurewebsites.net/index.php/auth/oauth2";
 $config['adms_auth']['check'] = "http://ibidadmsdevserviceaccount.azurewebsites.net/index.php/auth/oauth2/check";
 
 // Auth
