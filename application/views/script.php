@@ -6,6 +6,7 @@
 <script type="text/javascript">
   var start = 0;
   var startProxy = 0;
+  var skipLotNo = 0;
   $(document).ready(function(e) {
     $('a#logout').click(function(){
       if(confirm('Are you sure to logout')) {
@@ -34,6 +35,7 @@
 
     $('#start').on('click', function(){
         $('#modal-auction-title').text('Mulai lelang untuk lot ini?');
+        $('#modal-auction-title').css("padding-left",'');
         $('#modal-auction-body').empty();
         $('#confirm-skip').hide();
         $('#confirm-next').hide();
@@ -53,6 +55,7 @@
 
     $('#btn_next').on('click', function(){
         $('#modal-auction-title').text('Melanjutkan ke lot selanjutnya ?');
+        $('#modal-auction-title').css("padding-left","15%");
         $('#modal-auction-body').empty();
         $('#confirm-start').hide();
         $('#confirm-skip').hide();
@@ -78,7 +81,6 @@
 
     $('#btn_skip').on('click', function(){
       var valid = true;
-      var description = '<div class="form-group"><label for="textarea">Berikan alasan : </label><textarea class="form-control" id="reason" rows="6"></textarea></div>'
             $('#skip').removeClass('is-invalid');
             $('#reason').removeClass('is-invalid');
             $('.invalid-feedback').remove();
@@ -91,13 +93,15 @@
             if(valid == false){
                 return false; //is superfluous, but I put it here as a fallback
             } else {
-                $('#modal-auction-title').text('Skip lot');
-                $('#modal-auction-body').empty();
-                $('#modal-auction-body').append(description);
-                $('#confirm-start').hide();
-                $('#confirm-next').hide();
-                $('#confirm-skip').show();
-                $('#auction_modal').modal('show');
+                // $('#modal-auction-title').text('Skip lot');
+                // $('#modal-auction-title').css("padding-left",'');
+                // $('#modal-auction-body').empty();
+                // $('#modal-auction-body').append(description);
+                // $('#confirm-start').hide();
+                // $('#confirm-next').hide();
+                // $('#confirm-skip').show();
+                // $('#auction_modal').modal('show');
+                checkLot();
               return true;
             }
     });
@@ -290,6 +294,7 @@
             $('#modal-body').empty();
             $('#modal-body').append(body);
             $('#proceed-winner').hide();
+            $('#image').attr("src","assets/img/noimage.png");
             $('#modal').modal('show');
           }
         } else {
@@ -302,6 +307,7 @@
             $('#modal-body').empty();
             $('#modal-body').append(body);
             $('#proceed-winner').hide();
+            $('#image').attr("src","assets/img/noimage.png");
             $('#modal').modal('show');
         }
 
@@ -350,16 +356,22 @@
   }
 
   function skipLot(){
+    var description = '<div class="form-group"><label for="textarea">Berikan alasan : </label><textarea class="form-control" id="reason" rows="6"></textarea></div>'
+    var loader = '<i class="fa fa-spinner fa-pulse fa-1x fa-fw" id="btn_loader"></i>';
+    $('#confirm-skip').prepend(loader);
+    $('#confirm-skip').prop("disabled",true);
     var Reason = $('#reason').val();
     if (Reason == '') {
       $('#reason').addClass('is-invalid');
       $('<div class="invalid-feedback">Wajib isi alasan skip lot.</div>').insertAfter('#reason');
+      $('#btn_loader').remove();
+      $('#confirm-skip').prop("disabled",false);
     } else {
         var SkipRange = $('#skip').val();
         var ScheduleId = $('#schedule_id').val();
         
         var Va = $('#va').val();
-        var Lot = $('#lot_id').val();
+        var Lot = skipLotNo;
             Lot = parseInt(Lot);
             Lot = Lot + 1;
           $.ajax({
@@ -368,20 +380,60 @@
             data : {Lot:Lot,ScheduleId:ScheduleId,SkipRange:SkipRange,Reason:Reason},
             dataType: "json",
             success: function(data){
-              if (data.status) {
-                $('#auction_modal').modal('hide');
+            if (data.status) {
+              if (Lot < SkipRange) {
+                skipLotNo = Lot;
+                Lot = Lot+1;
+                $('#modal-auction-title').text('Skip lot '+Lot+' ?');
+                $('#modal-auction-title').css("padding-left",'');
+                $('#modal-auction-body').empty();
+                $('#modal-auction-body').append(description);
+                $('#btn_loader').remove();
+                $('#confirm-skip').prop("disabled",false);
               }  else {
-                $('#skip').addClass('is-invalid');
-                $('<div class="invalid-feedback">Total lot hanya ada '+data.data.total+'.</div>').insertAfter('#skip');
                 $('#auction_modal').modal('hide');
+                skipLotNo = 0;
               }
-            },
+            }
+          },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert('Error get data from ajax');
             },
           });
     }
-    
+  }
+
+  function checkLot(){
+      var description = '<div class="form-group"><label for="textarea">Berikan alasan : </label><textarea class="form-control" id="reason" rows="6"></textarea></div>'
+      var SkipRange = $('#skip').val();
+        var ScheduleId = $('#schedule_id').val();
+        var Va = $('#va').val();
+        var Lot = $('#lot_id').val();
+            skipLotNo = Lot;
+            Lot = parseInt(Lot);
+            Lot = Lot + 1;
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url('auction/');?>checkLot",
+            data : {Lot:Lot,ScheduleId:ScheduleId,SkipRange:SkipRange},
+            dataType: "json",
+            success: function(data){
+              if (data.status) {
+                console.log(skipLotNo);
+                $('#modal-auction-title').text('Skip lot '+Lot+' ?');
+                $('#modal-auction-title').css("padding-left",'');
+                $('#modal-auction-body').empty();
+                $('#modal-auction-body').append(description);
+                $('#confirm-start').hide();
+                $('#confirm-next').hide();
+                $('#confirm-skip').show();
+                $('#auction_modal').modal('show');
+              }  else {
+                $('#skip').addClass('is-invalid');
+                $('<div class="invalid-feedback">Total lot hanya ada '+data.data.total+'.</div>').insertAfter('#skip');
+              }
+            }
+        });
   }
 
   function getBidLog(){

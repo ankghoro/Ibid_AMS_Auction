@@ -146,7 +146,7 @@ class Auction extends CI_Controller {
             
             $arr = array();
             if ($check_schedule != 0) {
-                $schedule_id = $scheduledata->data[0]->id;
+                $schedule_id = $scheduledata->data->id;
                 $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
                 // $lot_url =  "http://ibid-lot.dev/api/getallLot";
                 $lotdata = json_decode($this->get_curl($lot_url));
@@ -161,8 +161,7 @@ class Auction extends CI_Controller {
                 $stockdata = json_decode($this->get_curl($stock_url));
                 // var_dump($stockdata); die();
                 $no = 0;
-                $date = $scheduledata->data[0]->date;
-                // var_dump($lotReady); die();
+                $date = $scheduledata->data->date;
                 $countLotReady = count($lotReady->data);
                 $countLotSchedule = count($lotBySchedule->data);
 
@@ -186,7 +185,8 @@ class Auction extends CI_Controller {
                         $datastatus = false;
                             foreach ($lotdata->data as $lot) {
 
-                                if ($stock->AuctionItemId == (int)$lot->stock_id && $lot->schedule_id == $scheduledata->data[0]->id) {
+                                if ((int)$stock->AuctionItemId == (int)$lot->stock_id && $lot->schedule_id == $scheduledata->data->id)
+                                {
                                     $datastatus = true;
                                     $lot_no = $lot->no_lot;
                                     $schedule_id = $lot->schedule_id;
@@ -214,7 +214,7 @@ class Auction extends CI_Controller {
                                         $arr['Date'] = $date;
                                         $arr['VA'] = $va;
                                         $arr['StartPrice'] = (int)$stock->StartPrice;
-                                        $arr['Interval'] = (int)$scheduledata->data[0]->interval;
+                                        $arr['Interval'] = (int)$scheduledata->data->interval;
                                         break;
                                     }
                                 }
@@ -248,42 +248,48 @@ class Auction extends CI_Controller {
     public function skip(){
         $reason = $this->input->post('Reason');
         $schedule_id = $this->input->post('ScheduleId');
+        $lot = (int)$this->input->post('Lot');
+        $data_json = array();
+        $status = true;
+            $data_json['schedule_id'] = $schedule_id;
+            $data_json['reason'] = $reason;
+            $data_json['lot'] = $lot;
+            $data_json = json_encode($data_json);
+            // var_dump($data_json); die();
+            $url = $this->config->item('ibid_lot')."/api/skipLot";
+            // $url = "http://ibid-lot.dev/api/skipLot";
+            $proceed = $this->jsonPost($url,$data_json);
+
+            $output = [
+                'status' => $status
+            ];
+
+        echo json_encode($output);
+    }
+
+    public function checkLot(){
+        $schedule_id = $this->input->post('ScheduleId');
         $skiprange = (int)$this->input->post('SkipRange');
         $lot = (int)$this->input->post('Lot');
         $lot_url = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
         // $lot_url = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
         $lotBySchedule = json_decode($this->get_curl($lot_url));
-        $arr = array();
-        $data_json = array();
-        $no = 0;
         $count = count($lotBySchedule->data);
         $check = $count - $skiprange;
-        $status = true;
+        $arr = array();
         if ($check < 0) {
             $status = false;
         } else {
-            $data_json['schedule_id'] = $schedule_id;
-            $data_json['reason'] = $reason;
-            while ($lot <= $skiprange) {
-                $data_json['data'][$no]['lot'] = $lot;
-                $no++;
-                $lot++;
-            }
-            $data_json = json_encode($data_json);
-            $url = $this->config->item('ibid_lot')."/api/skipLot";
-            // $url = "http://ibid-lot.dev/api/skipLot";
-            $proceed = $this->jsonPost($url,$data_json);
+            $status = true;
         }
 
         $arr['total'] = $count;
-
         $output = [
             'status' => $status,
             'data' => $arr,
         ];
 
         echo json_encode($output);
-        // var_dump($check); die();
     }
 
     public function bidLogExample($price,$interval){

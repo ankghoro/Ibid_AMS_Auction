@@ -23,7 +23,7 @@
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="modal-auction-title" style="padding-left: 15%;"></h4>
+        <h4 class="modal-title" id="modal-auction-title"></h4>
       </div>
       <div class="modal-body" id="modal-auction-body">
         
