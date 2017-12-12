@@ -61,7 +61,7 @@
     });
 
     $('#confirm-next').on('click', function(){
-        // getLotData();
+        getLotData();
         $('#auction_modal').modal('hide');
     });
 
