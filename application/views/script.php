@@ -4,6 +4,8 @@
 <script src="<?php echo base_url('assets/js/jquery.maskMoney.min.js'); ?>"></script>
 <!-- <script src="<?php echo base_url('assets/js/menu.js')?>"></script> -->
 <script type="text/javascript">
+  var start = 0;
+  var startProxy = 0;
   $(document).ready(function(e) {
     $('a#logout').click(function(){
       if(confirm('Are you sure to logout')) {
@@ -22,12 +24,12 @@
     $('<input type="hidden" id="stock_id" val="">').insertAfter('#body');
     $('<input type="hidden" id="va" val="">').insertAfter('#body');
     $('<input type="hidden" id="npl" val="">').insertAfter('#body');
+    $('<input type="hidden" id="state">').insertAfter('#body');
     $('<input type="hidden" id="date" val="">').insertAfter('#body');
+    $('<input type="hidden" id="auction_start" value="0">').insertAfter('#body');
 
     getLotData();
-
-    var start = 0;
-    var startProxy = 0;
+    
     '<button type="button" class="btn btn-success btn-submit" id="submit_winner">Lanjutkan</button>'
 
     $('#start').on('click', function(){
@@ -46,10 +48,11 @@
         $('#btn_count').prop("disabled",false);
         start = setInterval( getBidLog, 4000 );
         startProxy = setInterval( getProxyBid, 6000);
+        $('#auction_start').val(1)
     });
 
     $('#btn_next').on('click', function(){
-        $('#modal-auction-title').text('Jump into next lot?');
+        $('#modal-auction-title').text('Melanjutkan ke lot selanjutnya ?');
         $('#modal-auction-body').empty();
         $('#confirm-start').hide();
         $('#confirm-skip').hide();
@@ -62,10 +65,13 @@
         $('#auction_modal').modal('hide');
     });
 
+
+    
+
     $('#floor-bid').on('click', function(){
       floorBid();
       if(start == null && startProxy == null){
-        start = setInterval( getBidLog, 2000 );
+        start = setInterval( getBidLog, 4000 );
         startProxy = setInterval( getProxyBid, 6000);
       }
     });
@@ -115,17 +121,18 @@
         }
         if (count == 3) {
           var winner = $('#npl').val();
-          $('#floor-bid').prop("disabled", true);
+          var state = $('#state').val();
           $('#modal').modal({
             backdrop: 'static',
             keyboard: false
           })
+          $('#modal-body').empty();
           var lot = $('#lot_id').val();
           var name = $('#unit_name').val();
           var grade = $('#unit_grade').val();
           var price = $('#start-price').val();
-          if (winner == '') {
-            $('#modal-title').text('Selamat, Pemenang Floor Bidder');
+          if (state == "Floor Bidder") {
+            $('#modal-title').text('Selamat, Pemenang '+state);
             var body ='<h4 id="modal-header">Detail Unit</h4>'
                       +'<div class="row">'
                           +'<div class="col-md-12">'
@@ -153,9 +160,11 @@
                           +'</div>'
                         +'</div>';
               $('#modal-body').append(body);
+              $('#close').hide();
               $('#modal').modal('show');
           } else {
-              $('#modal-title').text('Selamat, Pemenang Online Bidder');
+              $('#modal-title').text('Selamat, Pemenang '+state);
+              $('#modal-body').empty();
               var body ='<h4 id="modal-header">Detail Unit</h4>'
                         +'<div class="row">'
                           +'<div class="col-md-12">'
@@ -183,7 +192,7 @@
                               +'<div class="card-body">'
                                 +'<div class="row">'
                                   +'<div class="col-md-3"><b class="pull-left">Peserta</b></div>'
-                                  +'<div class="col-md-9" id="show_date"> : Online Bidder</div>'
+                                  +'<div class="col-md-9" id="show_date"> : '+state+'</div>'
                                   +'<div class="col-md-3"><b class="pull-left">Npl</b></div>'
                                   +'<div class="col-md-9" id="show_company"> : '+winner+'</div>'
                                 +'</div>'
@@ -193,6 +202,7 @@
                           +'</div>';
                           +'<hr class="custom">'
               $('#modal-body').append(body);
+              $('#close').hide();
               $('#modal').modal('show');
           }
         }
@@ -225,6 +235,7 @@
   });
 
   function getLotData() {
+    getLotData.called = true;
     var id = $('#lot_id').val();
     id = parseInt(id);
     id = id + 1;
@@ -268,16 +279,16 @@
             $('#va').val(data.data.VA);
             $('#floor-bid').append("+"+addPeriod(data.data.Interval));
             $('#date').val(data.data.Date);
-            $('#floor-bid').prop("disabled",true);
-            $('#start').prop("disabled",false);
-            $('#btn_count').prop("disabled",true);
             
           } else {
             $('#modal').modal({
               backdrop: 'static',
               keyboard: false
             })
+            var body ='<h5 id="modal-header">Semua data lot telah terjual atau dilewati, harap cek kembali.</h5>'
             $('#modal-title').text('Data lot tidak tersedia..');
+            $('#modal-body').empty();
+            $('#modal-body').append(body);
             $('#proceed-winner').hide();
             $('#modal').modal('show');
           }
@@ -286,14 +297,24 @@
               backdrop: 'static',
               keyboard: false
             })
+            var body ='<h5 id="modal-header">Pastikan anda telah mengatur jadwal lelang dengan benar.</h5>'
             $('#modal-title').text('Tidak ada jadwal yang tersedia..');
+            $('#modal-body').empty();
+            $('#modal-body').append(body);
             $('#proceed-winner').hide();
             $('#modal').modal('show');
         }
 
         if (data.disable) {
             $('#btn_next').prop("disabled",true);
-        } 
+        }
+        
+          if ($('#auction_start').val() == 1) {
+            start = setInterval( getBidLog, 4000 );
+            startProxy = setInterval( getProxyBid, 6000);
+          }
+
+        $('#count').val(0); 
       },
       error: function (jqXHR, textStatus, errorThrown) {
           alert('Error get data from ajax');
@@ -319,6 +340,7 @@
         success: function(data){
           if (data.status) {
             $('#modal').modal('hide');
+            getLotData();
           } 
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -373,6 +395,7 @@
         if (data.status) {
           // $('#bid-log').empty();
           $('#npl').val(data.data.No);
+          $('#state').val("Online Bidder");
           $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
           
                                               
@@ -394,10 +417,8 @@
         if (data.status) {
           // $('#bid-log').empty();
           $('#npl').val(data.data.No);
+          $('#state').val("Proxy Bidder");
           $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
-          
-                                              
-                                              
           $('#start-price').val(data.data.Nominal);
         } 
       }
@@ -420,6 +441,7 @@
         if (data.status) {
           // $('#bid-log').empty();
           $('#npl').val('');
+          $('#state').val("Floor Bidder");
           $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">....</div>');
           $('#start-price').val(data.data.Nominal);
         } 
