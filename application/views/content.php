@@ -19,7 +19,7 @@
 	                            </div>
 	                        </div>
                         	<div class="card-block">
-                            	<img class="card-img-top" src="assets/img/ford.jpg" style="max-width: 100%;">
+                            	<img class="card-img-top" src="assets/img/ford.jpg" id="image" style="max-width: 100%;">
                             	<div class="row">
                                 	<div class=" col-sm-4 col-lg-4 center-align">
                                 		<div class="car-grade">
