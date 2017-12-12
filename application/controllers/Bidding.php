@@ -24,7 +24,7 @@ class Bidding extends CI_Controller {
         $biddertype = $this->input->post('biddertype');
         $startprice = 200000000;
         $database = $this->bid->firebase()->getDatabase();
-        $reference = $database->getReference('company/3/schedule/1/lot/1/log');
+        $reference = $database->getReference('company/3/schedule/1/lot|stock/1321/log');
         $last = $reference->orderByKey()->limitToLast(1)->getValue();
 
         if (count($last) > 0) {
