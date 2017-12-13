@@ -124,6 +124,11 @@
 	                                                    </div>
                                                     </div>
                                                 </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <a target="_blank" href="<?php echo base_url('current/bidding');?>" class="btn btn-primary btn-sm btn-block">Current Bidding</a>
+                                                    </div>
+                                                </div>
                                               </div>
                                             </div>
                                           </div>
