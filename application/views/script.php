@@ -289,6 +289,7 @@
             $('#modal-body').append(body);
             $('#proceed-winner').hide();
             $('#image').attr("src","assets/img/noimage.png");
+            $('#close').show();
             $('#modal').modal('show');
           }
         } else {
@@ -302,6 +303,7 @@
             $('#modal-body').append(body);
             $('#proceed-winner').hide();
             $('#image').attr("src","assets/img/noimage.png");
+            $('#close').show();
             $('#modal').modal('show');
         }
 
