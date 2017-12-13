@@ -41,6 +41,9 @@
 			<div class="main-content">
 				<?php $this->load->view($content); ?>
 			</div>
+
+            <?php $this->load->view('partials/theadmin/footer'); ?>
+            
 		</main>
 	<!-- END Main container -->
 

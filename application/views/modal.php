@@ -38,3 +38,23 @@
     
   </div>
 </div>
+
+<div class="modal fade" id="logout-modal" role="dialog">
+  <div class="modal-dialog modal-md">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Logout</h3>
+      </div>
+      <div class="modal-body" id="logout-modal-body">
+      Are you sure to logout ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <a id="submit-logout" class="btn btn-success" href="<?php echo $this->config->item('ibid_auth').'/logout';?>">Confirm</a>
+      </div>
+    </div>
+    
+  </div>
+</div>
