@@ -3,8 +3,8 @@
   
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="modal-title"></h3>
+      <div class="modal-header background-alert" id="modal-header">
+        <h3 class="modal-title" id="modal-title" style="color: #f7f7f7;"></h3>
       </div>
       <div class="modal-body" id="modal-body">
       </div>
@@ -22,17 +22,17 @@
   
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal-auction-title"></h4>
+      <div class="modal-header background-alert"  id="modal-auction-header">
+        <h3 class="modal-title" id="modal-auction-title" style="color: #f7f7f7;"></h3>
       </div>
       <div class="modal-body" id="modal-auction-body">
         
       </div>
       <div class="modal-footer" id="modal-auction-footer">
-        <button type="button" class="btn btn-outline btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-success" id="confirm-start">Mulai</button>
+        <button type="button" class="btn btn-outline btn-secondary" data-dismiss="modal">Tidak</button>
+        <button type="button" class="btn btn-success" id="confirm-start">Ya</button>
         <button type="button" class="btn btn-success" id="confirm-skip">Simpan</button>
-        <button type="button" class="btn btn-success" id="confirm-next">Yes</button>
+        <button type="button" class="btn btn-success" id="confirm-next">Ya</button>
       </div>
     </div>
     

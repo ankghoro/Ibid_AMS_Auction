@@ -38,6 +38,14 @@ li.menu-category:after {
 	color: #41B8DF;
 }
 
+.new-alert {
+	color: #e1e42b;
+}
+
+.background-alert {
+	background-color: #15c377;
+}
+
 html, body{
 	background-color: #f7f7f7;
 	font-family: open sans;
