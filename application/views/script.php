@@ -33,14 +33,16 @@
     '<button type="button" class="btn btn-success btn-submit" id="submit_winner">Lanjutkan</button>'
 
     $('#start').on('click', function(){
-        $('#modal-auction-title').text('Mulai lelang untuk lot ini?');
+      var body = '<h4>Apakah anda yakin akan memulai lelang ini?</h4>';
+        $('#modal-auction-title').html('<i class="fa fa-warning new-alert" style="margin-right: 5px;"></i>Konfirmasi');
         $('#modal-auction-title').css("padding-left",'');
         $('#modal-auction-body').empty();
+        $('#modal-auction-body').append(body);
         $('#confirm-skip').hide();
         $('#confirm-next').hide();
         $('#confirm-start').show();
         $('#auction_modal').modal('show');
-    });
+    }); 
 
     $('#confirm-start').on('click', function(){
         $('#auction_modal').modal('hide');
@@ -53,9 +55,10 @@
     });
 
     $('#btn_next').on('click', function(){
-        $('#modal-auction-title').text('Melanjutkan ke lot selanjutnya ?');
-        $('#modal-auction-title').css("padding-left","15%");
+      var body = '<h4>Melanjutkan ke lot selanjutnya ?</h4>';
+        $('#modal-auction-title').html('<i class="fa fa-warning new-alert" style="margin-right: 5px;"></i>Konfirmasi');
         $('#modal-auction-body').empty();
+        $('#modal-auction-body').append(body);
         $('#confirm-start').hide();
         $('#confirm-skip').hide();
         $('#confirm-next').show();
@@ -92,14 +95,6 @@
             if(valid == false){
                 return false; //is superfluous, but I put it here as a fallback
             } else {
-                // $('#modal-auction-title').text('Skip lot');
-                // $('#modal-auction-title').css("padding-left",'');
-                // $('#modal-auction-body').empty();
-                // $('#modal-auction-body').append(description);
-                // $('#confirm-start').hide();
-                // $('#confirm-next').hide();
-                // $('#confirm-skip').show();
-                // $('#auction_modal').modal('show');
                 checkLot();
               return true;
             }
@@ -136,7 +131,7 @@
           var price = $('#start-price').val();
           if (state == "Floor Bidder") {
             $('#modal-title').text('Selamat, Pemenang '+state);
-            var body ='<h4 id="modal-header">Detail Unit</h4>'
+            var body ='<h4>Detail Unit</h4>'
                       +'<div class="row">'
                           +'<div class="col-md-12">'
                           +'<div class="card>'
@@ -156,7 +151,7 @@
                           +'</div>'
                         +'</div>'
                         +'<hr class="custom">'
-                        +'<h4 id="modal-header">Isi Npl Pemenang</h4>'
+                        +'<h4>Isi Npl Pemenang</h4>'
                         +'<div class="form-group noLot-edit">'
                           +'<div class="col-md-6" style="padding-left:0">'
                             +'<input type="text" name="input_npl" class="form-control" id="input_npl" onkeypress="return isNumberKey(event)">'
@@ -168,7 +163,7 @@
           } else {
               $('#modal-title').text('Selamat, Pemenang '+state);
               $('#modal-body').empty();
-              var body ='<h4 id="modal-header">Detail Unit</h4>'
+              var body ='<h4>Detail Unit</h4>'
                         +'<div class="row">'
                           +'<div class="col-md-12">'
                           +'<div class="card>'
@@ -188,7 +183,7 @@
                           +'</div>'
                         +'</div>'
                         +'<hr class="custom">'
-                        +'<h4 id="modal-header">Detail Pemenang</h4>'
+                        +'<h4>Detail Pemenang</h4>'
                           +'<div class="row">'
                             +'<div class="col-md-12">'
                             +'<div class="card>'
@@ -288,7 +283,7 @@
               backdrop: 'static',
               keyboard: false
             })
-            var body ='<h5 id="modal-header">Semua data lot telah terjual atau dilewati, harap cek kembali.</h5>'
+            var body ='<h5>Semua data lot telah terjual atau dilewati, harap cek kembali.</h5>'
             $('#modal-title').text('Data lot tidak tersedia..');
             $('#modal-body').empty();
             $('#modal-body').append(body);
@@ -301,7 +296,7 @@
               backdrop: 'static',
               keyboard: false
             })
-            var body ='<h5 id="modal-header">Pastikan anda telah mengatur jadwal lelang dengan benar.</h5>'
+            var body ='<h5>Pastikan anda telah mengatur jadwal lelang dengan benar.</h5>'
             $('#modal-title').text('Tidak ada jadwal yang tersedia..');
             $('#modal-body').empty();
             $('#modal-body').append(body);
@@ -383,10 +378,11 @@
               if (Lot < SkipRange) {
                 skipLotNo = Lot;
                 Lot = Lot+1;
-                $('#modal-auction-title').text('Skip lot '+Lot+' ?');
+                $('#modal-auction-title').text('Konfirmasi');
                 $('#modal-auction-title').css("padding-left",'');
                 $('#modal-auction-body').empty();
                 $('#modal-auction-body').append(description);
+                $('#modal-auction-body').prepend('<h4>Apakah anda yakin akan melewati lot '+Lot+'</h4>');
                 $('#btn_loader').remove();
                 $('#confirm-skip').prop("disabled",false);
               }  else {
@@ -419,10 +415,11 @@
             success: function(data){
               if (data.status) {
                 console.log(skipLotNo);
-                $('#modal-auction-title').text('Skip lot '+Lot+' ?');
+                $('#modal-auction-title').text('Konfirmasi');
                 $('#modal-auction-title').css("padding-left",'');
                 $('#modal-auction-body').empty();
                 $('#modal-auction-body').append(description);
+                $('#modal-auction-body').prepend('<h4>Apakah anda yakin akan melewati lot '+Lot+'</h4>');
                 $('#confirm-start').hide();
                 $('#confirm-next').hide();
                 $('#confirm-skip').show();
