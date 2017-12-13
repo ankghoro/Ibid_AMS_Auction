@@ -1,9 +1,8 @@
 <!-- Sidebar -->
 <aside class="sidebar sidebar-icons-right sidebar-icons-boxed sidebar-expand-lg">
 <header class="sidebar-header">
-  <a class="logo-icon" href="../index.html"><img src="<?php echo $assets_url; ?>img/logo-icon-light.png" alt="logo icon"></a>
   <span class="logo">
-    <a href="../index.html"><img src="<?php echo $assets_url; ?>img/logo-light.png" alt="logo"></a>
+    <a href="javascript:void(0)"><img src="<?php echo $assets_url; ?>img/logo-light.png" alt="logo"></a>
   </span>
   <span class="sidebar-toggle-fold"></span>
 </header>
