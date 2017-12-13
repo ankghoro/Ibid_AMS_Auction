@@ -32,7 +32,7 @@
         <button type="button" class="btn btn-outline btn-secondary" data-dismiss="modal">Tidak</button>
         <button type="button" class="btn btn-success" id="confirm-start">Ya</button>
         <button type="button" class="btn btn-success" id="confirm-skip">Simpan</button>
-        <button type="button" class="btn btn-success" id="confirm-next">Yes</button>
+        <button type="button" class="btn btn-success" id="confirm-next">Ya</button>
       </div>
     </div>
     

@@ -55,7 +55,7 @@
     });
 
     $('#btn_next').on('click', function(){
-      var body = '<h4>Melanjutkan ke lot selanjutnya ?</h4>';
+      var body = '<h4>Apakah anda yakin akan melanjutkan ke lot selanjutnya ?</h4>';
         $('#modal-auction-title').html('<i class="fa fa-warning new-alert" style="margin-right: 5px;"></i>Konfirmasi');
         $('#modal-auction-body').empty();
         $('#modal-auction-body').append(body);
