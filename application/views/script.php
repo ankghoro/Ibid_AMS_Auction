@@ -8,12 +8,11 @@
   var startProxy = 0;
   var skipLotNo = 0;
   $(document).ready(function(e) {
+    var date = new Date();
+    var year = date.getFullYear();
+    $('.site-footer').find('p').prepend('Copyright © '+year);
     $('a#logout').click(function(){
-      if(confirm('Are you sure to logout')) {
-          return true;
-      }
-
-      return false;
+      $('#logout-modal').modal('show');
     });
 
     $('<input type="hidden" id="lot_id" value="0"></input').insertAfter('#body');

@@ -7,7 +7,7 @@
 <div class="topbar-right">
   <ul class="topbar-btns">
     <li>
-      <a class="nav-link" id="logout" href="<?php echo $this->config->item('ibid_auth').'/logout';?>"><i class="ti-power-off"></i> Logout</a>
+      <a class="nav-link" id="logout" href="#"><i class="ti-power-off"></i> Logout</a>
     </li>
   </ul>
 
