@@ -2,7 +2,7 @@
   <footer class="site-footer">
     <div class="row">
       <div class="col-md-6">
-        <p class="text-center text-md-left">Copyright © 2017 <a href="http://thetheme.io/theadmin">TheAdmin</a>. All rights reserved.</p>
+        <p class="text-center text-md-left"> <a href="<?php echo $this->config->item('ibid_auth');?>">IBID AMS</a>. All rights reserved.</p>
       </div>
     </div>
   </footer>
