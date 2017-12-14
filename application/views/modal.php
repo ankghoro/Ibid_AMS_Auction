@@ -10,7 +10,7 @@
       </div>
       <div class="modal-footer" id="modal-footer">
       	<button type="button" class="btn btn-outline btn-primary" id="proceed-winner">Lanjutkan</button>
-        <button type="button" class="btn btn-outline btn-secondary" id="close" autofocus="">Keluar</button>
+        <button type="button" class="btn btn-outline btn-secondary" id="close" autofocus="">Tutup</button>
       </div>
     </div>
     
