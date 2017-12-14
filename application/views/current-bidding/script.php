@@ -20,7 +20,7 @@ var dbRef = firebase.database();
 var auctionLog = dbRef.ref('company/3/schedule/1/lot|stock/1321/log');
 
 // load older conatcts as well as any newly added one...
-contactsRef.on("child_added", function(snap) {
+auctionLog.on("child_added", function(snap) {
   $('.bidding-log').prepend(contactHtmlFromObject(snap.val()));
   $('.bid-topbid').text('Rp. ' + addPeriod(snap.val().bid));
 });
@@ -29,7 +29,7 @@ contactsRef.on("child_added", function(snap) {
 // $('.addValue').on("click", function( event ) {  
 // event.preventDefault();
 //     if( $('#name').val() != '' || $('#email').val() != '' ){
-//         contactsRef.push({
+//         auctionLog.push({
 //         name: $('#name').val(),
 //         email: $('#email').val(),
 //         location: {
