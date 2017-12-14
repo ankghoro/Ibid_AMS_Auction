@@ -10,7 +10,7 @@
       </div>
       <div class="modal-footer" id="modal-footer">
       	<button type="button" class="btn btn-outline btn-primary" id="proceed-winner">Lanjutkan</button>
-        <button type="button" class="btn btn-outline btn-secondary" data-dismiss="modal" id="close">Close</button>
+        <button type="button" class="btn btn-outline btn-secondary" id="close" autofocus="">Keluar</button>
       </div>
     </div>
     
@@ -29,7 +29,7 @@
         
       </div>
       <div class="modal-footer" id="modal-auction-footer">
-        <button type="button" class="btn btn-outline btn-secondary" data-dismiss="modal">Tidak</button>
+        <button type="button" class="btn btn-outline btn-secondary" id="no" autofocus="">Tidak</button>
         <button type="button" class="btn btn-success" id="confirm-start">Ya</button>
         <button type="button" class="btn btn-success" id="confirm-skip">Simpan</button>
         <button type="button" class="btn btn-success" id="confirm-next">Ya</button>
