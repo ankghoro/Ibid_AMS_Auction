@@ -24,6 +24,8 @@
 
     $('.site-footer').find('p').prepend('Copyright © '+year);
     $('a#logout').click(function(){
+      $('#another-modal-header').removeClass('background-danger');
+      $('#another-modal-title').css('color','');
       $('#another-modal-title').html('Konfirmasi Logout');
       $('#another-modal-body').html('Apakah anda yakin ingin keluar ?');
       $('#modal-no').show();
@@ -417,6 +419,7 @@
   }
 
   function checkLot(){
+    $('#another-modal-header').removeClass('background-danger');
       var description = '<div class="form-group"><label for="textarea">Berikan alasan : </label><textarea class="form-control" id="reason" rows="6"></textarea></div>'
       var SkipRange = $('#skip').val();
       var CurrentLot = $('#lot_id').val()
@@ -427,8 +430,10 @@
             Lot = parseInt(Lot);
             Lot = Lot + 1;
             if (SkipRange == CurrentLot) {
-              $('#another-modal-title').html('Perhatian');
-              $('#another-modal-body').html('TIdak dapat melakukan skip pada lot yang sedang berjalan, silahkan klik tombol Next untuk melewati lot ini.');
+              $('#another-modal-header').addClass('background-danger');
+              $('#another-modal-title').html('<i class="fa fa-warning new-danger" style="margin-right: 5px;"></i>Perhatian');
+              $('#another-modal-title').css('color','#f7f7f7');
+              $('#another-modal-body').html('Mohon maaf anda tidak dapat melakukan skip pada lot yang sedang berjalan, silahkan klik tombol Next untuk melewati lot ini.');
               $('#modal-no').hide();
               $('#submit-logout').hide();
               $('#modal-close').show();

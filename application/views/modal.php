@@ -44,7 +44,7 @@
   
     <!-- Modal content-->
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header" id="another-modal-header">
         <h3 class="modal-title" id="another-modal-title"></h3>
       </div>
       <div class="modal-body" id="another-modal-body">
