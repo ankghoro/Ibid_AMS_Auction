@@ -10,7 +10,7 @@
       </div>
       <div class="modal-footer" id="modal-footer">
       	<button type="button" class="btn btn-outline btn-primary" id="proceed-winner">Lanjutkan</button>
-        <button type="button" class="btn btn-outline btn-secondary" id="close" autofocus="">Tutup</button>
+        <button type="button" class="btn btn-outline btn-secondary" id="close" data-dismiss="modal" autofocus="">Tutup</button>
       </div>
     </div>
     
@@ -29,7 +29,7 @@
         
       </div>
       <div class="modal-footer" id="modal-auction-footer">
-        <button type="button" class="btn btn-outline btn-secondary" id="no" autofocus="">Tidak</button>
+        <button type="button" class="btn btn-outline btn-secondary" id="no" data-dismiss="modal" autofocus="">Tidak</button>
         <button type="button" class="btn btn-success" id="confirm-start">Ya</button>
         <button type="button" class="btn btn-success" id="confirm-skip">Simpan</button>
         <button type="button" class="btn btn-success" id="confirm-next">Ya</button>
@@ -39,20 +39,21 @@
   </div>
 </div>
 
-<div class="modal fade" id="logout-modal" role="dialog">
+<div class="modal fade" id="another-modal" role="dialog">
   <div class="modal-dialog modal-md">
   
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">Confirm Logout</h3>
+        <h3 class="modal-title" id="another-modal-title"></h3>
       </div>
-      <div class="modal-body" id="logout-modal-body">
-      Are you sure to logout ?
+      <div class="modal-body" id="another-modal-body">
+      
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-        <a id="submit-logout" class="btn btn-success" href="<?php echo $this->config->item('ibid_auth').'/logout';?>">Confirm</a>
+        <button type="button" class="btn btn-default" data-dismiss="modal" autofocus="" id="modal-no">Tidak</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" autofocus="" id="modal-close">Tutup</button>
+        <a id="submit-logout" class="btn btn-success" href="<?php echo $this->config->item('ibid_auth').'/logout';?>">Ya</a>
       </div>
     </div>
     
