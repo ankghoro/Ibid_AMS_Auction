@@ -12,7 +12,12 @@
     var year = date.getFullYear();
     $('.site-footer').find('p').prepend('Copyright © '+year);
     $('a#logout').click(function(){
-      $('#logout-modal').modal('show');
+      $('#another-modal-title').html('Konfirmasi Logout');
+      $('#another-modal-body').html('Apakah anda yakin ingin keluar ?');
+      $('#modal-no').show();
+      $('#submit-logout').show();
+      $('#modal-close').hide();
+      $('#another-modal').modal('show');
     });
 
     $('<input type="hidden" id="lot_id" value="0"></input').insertAfter('#body');
@@ -375,73 +380,82 @@
     } else {
         var SkipRange = $('#skip').val();
         var ScheduleId = $('#schedule_id').val();
-        
         var Va = $('#va').val();
         var Lot = skipLotNo;
             Lot = parseInt(Lot);
             Lot = Lot + 1;
-          $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('auction/');?>skip",
-            data : {Lot:Lot,ScheduleId:ScheduleId,SkipRange:SkipRange,Reason:Reason},
-            dataType: "json",
-            success: function(data){
-            if (data.status) {
-              if (Lot < SkipRange) {
-                skipLotNo = Lot;
-                Lot = Lot+1;
-                $('#modal-auction-title').text('Konfirmasi');
-                $('#modal-auction-title').css("padding-left",'');
-                $('#modal-auction-body').empty();
-                $('#modal-auction-body').append(description);
-                $('#modal-auction-body').prepend('<h4>Apakah anda yakin akan melewati lot '+Lot+'</h4>');
-                $('#btn_loader').remove();
-                $('#confirm-skip').prop("disabled",false);
-              }  else {
-                $('#auction_modal').modal('hide');
-                skipLotNo = 0;
-              }
-            }
-          },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
-            },
-          });
+              $.ajax({
+                type: "POST",
+                url: "<?php echo base_url('auction/');?>skip",
+                data : {Lot:Lot,ScheduleId:ScheduleId,SkipRange:SkipRange,Reason:Reason},
+                dataType: "json",
+                success: function(data){
+                if (data.status) {
+                  if (Lot < SkipRange) {
+                    skipLotNo = Lot;
+                    Lot = Lot+1;
+                    $('#modal-auction-title').text('Konfirmasi');
+                    $('#modal-auction-title').css("padding-left",'');
+                    $('#modal-auction-body').empty();
+                    $('#modal-auction-body').append(description);
+                    $('#modal-auction-body').prepend('<h4>Apakah anda yakin akan melewati lot '+Lot+' ?</h4>');
+                    $('#btn_loader').remove();
+                    $('#confirm-skip').prop("disabled",false);
+                  }  else {
+                    $('#auction_modal').modal('hide');
+                    skipLotNo = 0;
+                  }
+                }
+              },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error get data from ajax');
+                },
+              });
     }
   }
 
   function checkLot(){
       var description = '<div class="form-group"><label for="textarea">Berikan alasan : </label><textarea class="form-control" id="reason" rows="6"></textarea></div>'
       var SkipRange = $('#skip').val();
+      var CurrentLot = $('#lot_id').val()
         var ScheduleId = $('#schedule_id').val();
         var Va = $('#va').val();
         var Lot = $('#lot_id').val();
             skipLotNo = Lot;
             Lot = parseInt(Lot);
             Lot = Lot + 1;
-        $.ajax({
-            type: "POST",
-            url: "<?php echo base_url('auction/');?>checkLot",
-            data : {Lot:Lot,ScheduleId:ScheduleId,SkipRange:SkipRange},
-            dataType: "json",
-            success: function(data){
-              if (data.status) {
-                console.log(skipLotNo);
-                $('#modal-auction-title').text('Konfirmasi');
-                $('#modal-auction-title').css("padding-left",'');
-                $('#modal-auction-body').empty();
-                $('#modal-auction-body').append(description);
-                $('#modal-auction-body').prepend('<h4>Apakah anda yakin akan melewati lot '+Lot+'</h4>');
-                $('#confirm-start').hide();
-                $('#confirm-next').hide();
-                $('#confirm-skip').show();
-                $('#auction_modal').modal('show');
-              }  else {
-                $('#skip').addClass('is-invalid');
-                $('<div class="invalid-feedback">Total lot hanya ada '+data.data.total+'.</div>').insertAfter('#skip');
-              }
+            if (SkipRange == CurrentLot) {
+              $('#another-modal-title').html('Perhatian');
+              $('#another-modal-body').html('TIdak dapat melakukan skip pada lot yang sedang berjalan, silahkan klik tombol Next untuk melewati lot ini.');
+              $('#modal-no').hide();
+              $('#submit-logout').hide();
+              $('#modal-close').show();
+              $('#another-modal').modal('show');
+            } else {
+              $.ajax({
+                  type: "POST",
+                  url: "<?php echo base_url('auction/');?>checkLot",
+                  data : {Lot:Lot,ScheduleId:ScheduleId,SkipRange:SkipRange},
+                  dataType: "json",
+                  success: function(data){
+                    if (data.status) {
+                      console.log(skipLotNo);
+                      $('#modal-auction-title').text('Konfirmasi');
+                      $('#modal-auction-title').css("padding-left",'');
+                      $('#modal-auction-body').empty();
+                      $('#modal-auction-body').append(description);
+                      $('#modal-auction-body').prepend('<h4>Apakah anda yakin akan melewati lot '+Lot+' ?</h4>');
+                      $('#confirm-start').hide();
+                      $('#confirm-next').hide();
+                      $('#confirm-skip').show();
+                      $('#auction_modal').modal('show');
+                    }  else {
+                      $('#skip').addClass('is-invalid');
+                      $('<div class="invalid-feedback">Total lot hanya ada '+data.data.total+'.</div>').insertAfter('#skip');
+                    }
+                  }
+              });
             }
-        });
   }
 
   function getBidLog(){
