@@ -246,17 +246,6 @@
       
       
     });
-
-    // $('#no').on('click',function (e) {
-    //   e.preventDefault();
-    //   console.log("masuk");
-    //   $('#auction_modal').modal('hide');
-    // }); 
-
-    $('#close').on('click',function (e) {
-      e.preventDefault();
-      $('#modal').modal('hide');
-    }); 
     
   });
 
