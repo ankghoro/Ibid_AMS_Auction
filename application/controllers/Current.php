@@ -86,7 +86,6 @@ class Current extends CI_Controller {
 	public function bidding()
 	{
         $this->check_auth();
-        $data['menu'] = load_menu()['menu'];
         $data['content'] = 'current-bidding/index';
         $data['content_script'] = 'current-bidding/script';
         $data['content_modal'] = 'modal';

@@ -23,6 +23,7 @@ var auctionLog = dbRef.ref('company/3/schedule/1/lot|stock/1321/log');
 auctionLog.on("child_added", function(snap) {
   $('.bidding-log').prepend(contactHtmlFromObject(snap.val()));
   $('.bid-topbid').text('Rp. ' + addPeriod(snap.val().bid));
+  $('.pull-right').text(snap.val().type + " Bidder");
 });
 
 //save contact
