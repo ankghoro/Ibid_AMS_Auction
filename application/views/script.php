@@ -7,9 +7,21 @@
   var start = 0;
   var startProxy = 0;
   var skipLotNo = 0;
+
   $(document).ready(function(e) {
     var date = new Date();
     var year = date.getFullYear();
+
+    $('#auction_modal').on('shown.bs.modal', function () {
+      $('#no').trigger('focus')
+    })
+
+    $('#another-modal').on('shown.bs.modal', function () {
+      $('#modal-close').trigger('focus')
+    })
+
+    
+
     $('.site-footer').find('p').prepend('Copyright © '+year);
     $('a#logout').click(function(){
       $('#another-modal-title').html('Konfirmasi Logout');
@@ -17,7 +29,7 @@
       $('#modal-no').show();
       $('#submit-logout').show();
       $('#modal-close').hide();
-      $('#another-modal').modal('show');
+      $('#another-modal').modal('toggle');
     });
 
     $('<input type="hidden" id="lot_id" value="0"></input').insertAfter('#body');
@@ -234,16 +246,6 @@
       
       
     });
-
-    $('#no').on('click',function (e) {
-      e.preventDefault();
-      $('#auction_modal').modal('hide');
-    }); 
-
-    $('#close').on('click',function (e) {
-      e.preventDefault();
-      $('#modal').modal('hide');
-    }); 
     
   });
 

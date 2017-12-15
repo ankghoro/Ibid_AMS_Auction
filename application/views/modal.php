@@ -29,7 +29,7 @@
         
       </div>
       <div class="modal-footer" id="modal-auction-footer">
-        <button type="button" class="btn btn-outline btn-secondary" id="no" data-dismiss="modal" autofocus="">Tidak</button>
+        <button type="button" class="btn btn-outline btn-secondary" id="no" data-dismiss="modal">Tidak</button>
         <button type="button" class="btn btn-success" id="confirm-start">Ya</button>
         <button type="button" class="btn btn-success" id="confirm-skip">Simpan</button>
         <button type="button" class="btn btn-success" id="confirm-next">Ya</button>
@@ -51,8 +51,8 @@
       
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" autofocus="" id="modal-no">Tidak</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal" autofocus="" id="modal-close">Tutup</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="modal-no">Tidak</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="modal-close">Tutup</button>
         <a id="submit-logout" class="btn btn-success" href="<?php echo $this->config->item('ibid_auth').'/logout';?>">Ya</a>
       </div>
     </div>
