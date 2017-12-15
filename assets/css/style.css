@@ -42,8 +42,16 @@ li.menu-category:after {
 	color: #e1e42b;
 }
 
+.new-danger {
+	color: #f7f7f7;
+}
+
 .background-alert {
 	background-color: #15c377;
+}
+
+.background-danger {
+	background-color: #f96868;
 }
 
 html, body{
