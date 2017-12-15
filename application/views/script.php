@@ -229,6 +229,16 @@
       
       
     });
+
+    $('#no').on('click',function (e) {
+      e.preventDefault();
+      $('#auction_modal').modal('hide');
+    }); 
+
+    $('#close').on('click',function (e) {
+      e.preventDefault();
+      $('#modal').modal('hide');
+    }); 
     
   });
 
