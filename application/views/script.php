@@ -317,6 +317,7 @@
             activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+id);
             onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+id+'/log');
             
+            $('#bid-log').empty();
             onLog.on("child_added", function(snap) {
               $('#bid-log').prepend(logHtmlFromObject(snap.val()));
               $('#start-price').val(snap.val().bid);
