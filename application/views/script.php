@@ -165,8 +165,8 @@
           var name = $('#unit_name').val();
           var grade = $('#unit_grade').val();
           var price = $('#start-price').val();
-          if (state == "Floor Bidder") {
-            $('#modal-title').text('Selamat, Pemenang '+state);
+          if (state == "Floor") {
+            $('#modal-title').text('Selamat, Pemenang '+state+' Bidder');
             var body ='<h4>Detail Unit</h4>'
                       +'<div class="row">'
                           +'<div class="col-md-12">'
@@ -319,6 +319,9 @@
             
             onLog.on("child_added", function(snap) {
               $('#bid-log').prepend(logHtmlFromObject(snap.val()));
+              $('#start-price').val(snap.val().bid);
+              $('#state').val(snap.val().type);
+              $('#npl').val(snap.val().npl ? snap.val().npl : '');
             });
           } else {
             $('#modal').modal({
@@ -489,25 +492,38 @@
   }
 
   function getBidLog(){
-    // var price = $('#start-price').val();
-    // var interval = $('#interval').val();
-    // $.ajax({
-    //   type: "GET",
-    //   url: "<?php echo base_url('auction/');?>bidLogExample/"+price+"/"+interval,
-    //   dataType: "json",
-    //   success: function(data){
-    //     if (data.status) {
-    //       // $('#bid-log').empty();
-    //       $('#npl').val(data.data.No);
-    //       $('#state').val("Online Bidder");
-    //       $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
-          
-                                              
-                                              
-    //       $('#start-price').val(data.data.Nominal);
-    //     } 
-    //   },
-    // });
+    var price = $('#start-price').val();
+    var interval = $('#interval').val();
+    $.ajax({
+      type: "GET",
+      url: "<?php echo base_url('auction/');?>bidLogExample/"+price+"/"+interval,
+      dataType: "json",
+      success: function(data){
+        if (data.status) {
+          // $('#bid-log').empty();
+          // $('#npl').val(data.data.No);
+          // $('#state').val("Online Bidder");
+          // $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');                                        
+          // $('#start-price').val(data.data.Nominal);
+          var last = onLog.orderByKey().limitToLast(1);
+          // var newbid;
+          last.once('value', function(snapshot) {
+            // if (!snapshot.val()) {
+            //   newbid = parseInt(price) + parseInt(interval);
+            // } else{
+              // snapshot.forEach(function(child) {
+                // newbid = child.val().bid + parseInt(interval);
+              // });
+            // }
+            onLog.push({
+              bid: data.data.Nominal,
+              type: 'Online',
+              npl: data.data.No
+            });
+          });
+        } 
+      },
+    });
   }
 
   function getProxyBid(){
@@ -520,10 +536,26 @@
     //   success: function(data){
     //     if (data.status) {
     //       // $('#bid-log').empty();
-    //       $('#npl').val(data.data.No);
-    //       $('#state').val("Proxy Bidder");
-    //       $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
-    //       $('#start-price').val(data.data.Nominal);
+    //       // $('#npl').val(data.data.No);
+    //       // $('#state').val("Proxy Bidder");
+    //       // $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
+    //       // $('#start-price').val(data.data.Nominal);
+    //       var last = onLog.orderByKey().limitToLast(1);
+    //       // var newbid;
+    //       last.once('value', function(snapshot) {
+    //         // if (!snapshot.val()) {
+    //         //   newbid = parseInt(price) + parseInt(interval);
+    //         // } else{
+    //           // snapshot.forEach(function(child) {
+    //             // newbid = child.val().bid + parseInt(interval);
+    //           // });
+    //         // }
+    //         onLog.push({
+    //           bid: data.data.Nominal,
+    //           type: data.data.State,
+    //           npl: data.data.No,
+    //         });
+    //       });
     //     } 
     //   }
     // });
@@ -531,8 +563,8 @@
 
   function logHtmlFromObject(log){
     var html = '<div class="col-xs-4 col-md-4">'+addPeriod(log.bid)+'</div>'
-                +'<div class="col-xs-5 col-md-5 weight">'+log.type+'</div>'
-                +'<div class="col-xs-3 col-md-3 weight">'+(log.npl != 'undefined' ? '....' : log.npl)  + '</div>'
+                +'<div class="col-xs-5 col-md-5 weight">'+log.type+' Bid</div>'
+                +'<div class="col-xs-3 col-md-3 weight">'+(log.npl ? log.npl : '....')  + '</div>'
     return html;
   }
 

@@ -32,9 +32,7 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
       dataType: "json",
       success: function(data){
         val = data.data;
-
         $('#exterior').text(val.Exterior);
-        console.log(val);
       }
     });
     onLog.on("child_added", function(snap) {
