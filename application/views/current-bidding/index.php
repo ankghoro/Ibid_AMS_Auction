@@ -91,7 +91,7 @@
                                         <div class="row padding10">
                                             <div class="col-12 item">
                                                 <h6 class="title-caption">Exterior</h6>
-                                                <h5 class="main-caption weight">A</h5>
+                                                <h5 id="exterior" class="main-caption weight">-</h5>
                                             </div>
                                             <div class="col-12 item">
                                                 <h6 class="title-caption">Interior</h6>

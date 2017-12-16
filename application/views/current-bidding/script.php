@@ -18,13 +18,42 @@
 // create firebase database reference
 var dbRef = firebase.database();
 var auctionLog = dbRef.ref('company/3/schedule/1/lot|stock/1321/log');
+var activeCompany = dbRef.ref('company/<?php echo $CompanyId; ?>');
+var onLog;
+activeCompany.child('liveOn').on('value', function(snapshot) {
+  if (snapshot.exists()) {
+    $('.bidding-log').empty();
+    var liveOn = snapshot.val();
+    liveOn = liveOn.split('|');
+    onLog = activeCompany.child('schedule/'+liveOn[0]+'/lot|stock/'+liveOn[1]+'/log');
+    $.ajax({
+      type: "GET",
+      url: "<?php echo base_url('auction/');?>datalot/"+liveOn[1],
+      dataType: "json",
+      success: function(data){
+        val = data.data;
+
+        $('#exterior').text(val.Exterior);
+        console.log(val);
+      }
+    });
+    onLog.on("child_added", function(snap) {
+      $('.bidding-log').prepend(contactHtmlFromObject(snap.val()));
+      $('.bid-topbid').text('Rp. ' + addPeriod(snap.val().bid));
+      $('.pull-right').text(snap.val().type + " Bidder");
+    });
+  }
+});
+// activeCompany.child('liveOn').set(data.data.ScheduleId);
+// activeCompany.child('lotOn').set(id);
+// onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+id+'/log');
 
 // load older conatcts as well as any newly added one...
-auctionLog.on("child_added", function(snap) {
-  $('.bidding-log').prepend(contactHtmlFromObject(snap.val()));
-  $('.bid-topbid').text('Rp. ' + addPeriod(snap.val().bid));
-  $('.pull-right').text(snap.val().type + " Bidder");
-});
+// auctionLog.on("child_added", function(snap) {
+//   $('.bidding-log').prepend(contactHtmlFromObject(snap.val()));
+//   $('.bid-topbid').text('Rp. ' + addPeriod(snap.val().bid));
+//   $('.pull-right').text(snap.val().type + " Bidder");
+// });
 
 //save contact
 // $('.addValue').on("click", function( event ) {  

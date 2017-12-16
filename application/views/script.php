@@ -314,8 +314,7 @@
             $('#floor-bid').append("+"+addPeriod(data.data.Interval));
             $('#date').val(data.data.Date);
 
-            activeCompany.child('scheduleOn').set(data.data.ScheduleId);
-            activeCompany.child('lotOn').set(id);
+            activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+id);
             onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+id+'/log');
             
             onLog.on("child_added", function(snap) {
