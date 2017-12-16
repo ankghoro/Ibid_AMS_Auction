@@ -86,9 +86,12 @@ class Current extends CI_Controller {
 	public function bidding()
 	{
         $this->check_auth();
+        $UserLogon = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
+        $data['CompanyId'] = $UserLogon['CompanyId'];
         $data['content'] = 'current-bidding/index';
         $data['content_script'] = 'current-bidding/script';
         $data['content_modal'] = 'modal';
+        $data['CompanyId'] = $UserLogon['CompanyId'];
         $this->load->view('/templates/current-bid', $data);
     }
     

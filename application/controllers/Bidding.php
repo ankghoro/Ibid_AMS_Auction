@@ -20,9 +20,10 @@ class Bidding extends CI_Controller {
 
 	public function bid()
 	{
+        print_r($this->input->post('biddertype'));die();
         $interval = (int)$this->input->post('interval');
         $biddertype = $this->input->post('biddertype');
-        $startprice = 200000000;
+        $startprice = (int)$this->input->post('startprice');
         $database = $this->bid->firebase()->getDatabase();
         $reference = $database->getReference('company/3/schedule/1/lot|stock/1321/log');
         $last = $reference->orderByKey()->limitToLast(1)->getValue();

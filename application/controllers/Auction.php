@@ -133,6 +133,7 @@ class Auction extends CI_Controller {
         $data['content'] = 'content';
         $data['content_script'] = 'script';
         $data['content_modal'] = 'modal';
+        $data['CompanyId'] = $UserLogon['CompanyId'];
         $this->load->view('/templates/theadmin', $data);
 	}
 

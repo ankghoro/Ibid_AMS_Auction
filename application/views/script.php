@@ -2,8 +2,25 @@
 <script src="<?php echo base_url('assets/datatables/dataTables.bootstrap4.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/bootstrap-duration-picker-debug.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/jquery.maskMoney.min.js'); ?>"></script>
-<!-- <script src="<?php echo base_url('assets/js/menu.js')?>"></script> -->
+<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script type="text/javascript">
+  // file: script.js
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC-ZoZ16SiFPoz76W0yJbqhlLOYpPrMU7I",
+    authDomain: "ibid-ams-sample.firebaseapp.com",
+    databaseURL: "https://ibid-ams-sample.firebaseio.com",
+    projectId: "ibid-ams-sample",
+    storageBucket: "",
+    messagingSenderId: "493210877814"
+  };
+  firebase.initializeApp(config);
+
+  // create firebase database reference
+  var dbRef = firebase.database();
+  var activeCompany = dbRef.ref('company/<?php echo $CompanyId; ?>');
+  var onLog ;
+
   var start = 0;
   var startProxy = 0;
   var skipLotNo = 0;
@@ -296,7 +313,14 @@
             $('#va').val(data.data.VA);
             $('#floor-bid').append("+"+addPeriod(data.data.Interval));
             $('#date').val(data.data.Date);
+
+            activeCompany.child('scheduleOn').set(data.data.ScheduleId);
+            activeCompany.child('lotOn').set(id);
+            onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+id+'/log');
             
+            onLog.on("child_added", function(snap) {
+              $('#bid-log').prepend(logHtmlFromObject(snap.val()));
+            });
           } else {
             $('#modal').modal({
               backdrop: 'static',
@@ -466,68 +490,104 @@
   }
 
   function getBidLog(){
-    var price = $('#start-price').val();
-    var interval = $('#interval').val();
-    $.ajax({
-      type: "GET",
-      url: "<?php echo base_url('auction/');?>bidLogExample/"+price+"/"+interval,
-      dataType: "json",
-      success: function(data){
-        if (data.status) {
-          // $('#bid-log').empty();
-          $('#npl').val(data.data.No);
-          $('#state').val("Online Bidder");
-          $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
+    // var price = $('#start-price').val();
+    // var interval = $('#interval').val();
+    // $.ajax({
+    //   type: "GET",
+    //   url: "<?php echo base_url('auction/');?>bidLogExample/"+price+"/"+interval,
+    //   dataType: "json",
+    //   success: function(data){
+    //     if (data.status) {
+    //       // $('#bid-log').empty();
+    //       $('#npl').val(data.data.No);
+    //       $('#state').val("Online Bidder");
+    //       $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
           
                                               
                                               
-          $('#start-price').val(data.data.Nominal);
-        } 
-      },
-    });
+    //       $('#start-price').val(data.data.Nominal);
+    //     } 
+    //   },
+    // });
   }
 
   function getProxyBid(){
-    var price = $('#start-price').val();
-    var interval = $('#interval').val();
-    $.ajax({
-      type: "GET",
-      url: "<?php echo base_url('auction/');?>proxyBidExample/"+price+"/"+interval,
-      dataType: "json",
-      success: function(data){
-        if (data.status) {
-          // $('#bid-log').empty();
-          $('#npl').val(data.data.No);
-          $('#state').val("Proxy Bidder");
-          $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
-          $('#start-price').val(data.data.Nominal);
-        } 
-      }
-    });
+    // var price = $('#start-price').val();
+    // var interval = $('#interval').val();
+    // $.ajax({
+    //   type: "GET",
+    //   url: "<?php echo base_url('auction/');?>proxyBidExample/"+price+"/"+interval,
+    //   dataType: "json",
+    //   success: function(data){
+    //     if (data.status) {
+    //       // $('#bid-log').empty();
+    //       $('#npl').val(data.data.No);
+    //       $('#state').val("Proxy Bidder");
+    //       $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
+    //       $('#start-price').val(data.data.Nominal);
+    //     } 
+    //   }
+    // });
+  }
+
+  function logHtmlFromObject(log){
+    var html = '<div class="col-xs-4 col-md-4">'+addPeriod(log.bid)+'</div>'
+                +'<div class="col-xs-5 col-md-5 weight">'+log.type+'</div>'
+                +'<div class="col-xs-3 col-md-3 weight">'+(log.npl != 'undefined' ? '....' : log.npl)  + '</div>'
+    return html;
   }
 
   function floorBid(){
     var count = $('#count').val();
     var price = $('#start-price').val();
     var interval = $('#interval').val();
+    var last = onLog.orderByKey().limitToLast(1);
+    var newbid;
       if (count == 2) {
         count = 1;
         $('#count').val(count);
       }
-    $.ajax({
-      type: "GET",
-      url: "<?php echo base_url('auction/');?>floorBidExample/"+price+"/"+interval,
-      dataType: "json",
-      success: function(data){
-        if (data.status) {
-          // $('#bid-log').empty();
-          $('#npl').val('');
-          $('#state').val("Floor Bidder");
-          $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">....</div>');
-          $('#start-price').val(data.data.Nominal);
-        } 
-      },
+    last.once('value', function(snapshot) {
+      if (!snapshot.val()) {
+        newbid = parseInt(price) + parseInt(interval);
+      } else{
+        snapshot.forEach(function(child) {
+          newbid = child.val().bid + parseInt(interval);
+        });
+      }
+      onLog.push({
+        bid: newbid,
+        type: 'Floor'
+      });
     });
+    // var postData = new FormData();
+    // postData.append('startprice', price);
+    // postData.append('interval', interval);
+    // postData.append('biddertype', 'Floor');
+    // $.ajax({
+    //   url: 'http://ibid-ams-auction.development.net/bidding/bid',
+    //   data: postData,
+    //   processData: false,
+    //   contentType: false,
+    //   type: 'POST',
+    //   success: function(data){
+    //     alert(data);
+    //   }
+    // });
+    // $.ajax({
+    //   type: "GET",
+    //   url: "<?php //echo base_url('auction/');?>floorBidExample/"+price+"/"+interval,
+    //   dataType: "json",
+    //   success: function(data){
+    //     if (data.status) {
+    //       // $('#bid-log').empty();
+    //       $('#npl').val('');
+    //       $('#state').val("Floor Bidder");
+    //       $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">....</div>');
+    //       $('#start-price').val(data.data.Nominal);
+    //     } 
+    //   },
+    // });
   }
 
 
