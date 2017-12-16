@@ -10,6 +10,16 @@ html, body{
 		 url('../fonts/regular.woff') format('woff');
 }
 
+.margin0{
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+	margin-bottom: 10px;
+}
+.separator1{
+	border-right: 1px solid rgba(255, 255, 255, 0.2);
+	border-right-style: height: 10px;
+}
+
 .main-title{
 	font-family: open sans;
 	font-weight: bold;
@@ -18,11 +28,15 @@ html, body{
 	text-transform: uppercase;
 	margin: 20px 20px 20px 0;
 }
+.margin11{
+	margin: -11px;
+}
 .side-lot{
 	background-color: #231f42;
 	width: 100%;
 	height: 100%;
 	padding-top: 10px;
+	border-top-left-radius: 10px;
 }
 .lot-number{
 	font-size: 2.5em;
@@ -59,10 +73,25 @@ hr {
 	width: 100%;
 	min-height: 70px;
 	z-index: 9;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+.color-right{
+	background: linear-gradient(to top, #933b9a , #b725a6);
+}
+.border-bottom{
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px; 
 }
 .young-purple{
 	background: linear-gradient(to top, #933b9a , #b725a6);
 	text-align: left;
+	height: 100%;
+	width: 100%;
+	padding-right: 40px;
+	padding-left: 10px;
+	border-top-right-radius: 10px;
+	padding-top: 10px;
 }
 .purple-bold{
 	background-color: #1b1837;
@@ -73,14 +102,27 @@ hr {
 .rounded-iden{
 	border-radius: 20px;
 	background-color: #36aeac;
-	width: 90%;	
+	width: 95%;	
 	margin-left: auto;
 	margin-right: auto;
+	padding: 2px;
+	margin-bottom: 10px;
 }
 .card-block{
 	padding: 0;
 }
-
+.bold{
+	font-weight: bold;
+}
+.card-img-top{
+	background-image: url(../img/ford.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	width:100%;
+	height: 50vh;
+}
 .margin30{
 	padding-top:20px;
 }
@@ -153,10 +195,9 @@ hr {
 	margin-bottom: 10px !important;
 }
 .bid-topbid{
-	font-size: 2em;
+	font-size: 2vw;
 	font-weight: bold;
 	color: white;
-	margin: 0px 20px;
 }
 .left-content{
 	border-radius: 10px;
@@ -173,17 +214,26 @@ hr {
 }
 
 .bid-count{
-	background: linear-gradient(to top, #3eca24, #52f332);
-	color: #231f42;
-	font-size: 45pt;
+	border: 3px solid #ce505b;
+	color: #ce505b;
+	/*
+	Hijau
+	border: 3px solid #52f332; 
+	color: #52f332; */
+	/*
+	Kuning
+	border: 3px solid yellow; 
+	color: yellow; */
+	font-size: 3vw;
 	font-weight: bold;
 	border-radius: 50%;
-	height:120px;
-	width: 120px;
+	height:8vw;
+	width: 8vw;
 	margin-left: auto;
 	margin-right: auto;
+	margin-top: 10px;
 	padding-top: 20px;
-	line-height: 45px;
+	line-height: 2vw;
 }
 
 .count-wrap{
@@ -191,19 +241,22 @@ hr {
 }
 
 .top-bidder{
-	font-size: 10pt;
+	font-size: 1.5vw;
 	line-height: 35px;
 	color: #231f42;
 }
 
 .img-top{
-	bottom: 10px;
+	margin-bottom: 5px;
+	width: 2vw;
 }
 
 .fold-price{
 	color: #36aeac;
 	padding: 5px;
 	margin-bottom: 10px;
+	font-size: 1.5vw;
+}
 }
 
 .right-bottom-content{
@@ -216,31 +269,21 @@ hr {
 	font-weight: bold;
 }
 
-.item1{
-	
-	border-right: 1px solid #cccccc;
-	border-bottom: 1px solid #cccccc;
-}
-
-.item2{
-	border-bottom: 1px solid #cccccc;
-}
-
-.item3{
-	border-right: 1px solid #cccccc;
-}
-
 .item{
 	padding: 10px;
 	border: 1px solid rgba(255, 255, 255, 0.2);
-	margin: 0px 10px;
 }
 .padding10{
 	padding-top: 20px;
 }
 .padding11{
-	margin-top: -11px;
 	border-top-right-radius: 10px;
+}
+.padding12{
+	padding: 10px;
+}
+.padding13{
+	padding: 0px 10px 0px 20px;
 }
 .pull-right{
 	float: right;
@@ -277,6 +320,9 @@ and (max-device-width : 480px) {
 @media only screen
 and (max-device-width : 768px)
  {
+	.card{
+		margin-bottom: 10px;
+	}
     .car-grade{
 		display:block;margin-left:auto;margin-right:auto;
 	}
@@ -295,32 +341,50 @@ and (max-device-width : 768px)
 	.card{
 		max-height: 100%;
 	}
-}
-
-@media only screen
-and (max-device-width : 640px)
- {
+	.car-grade{
+		right: 6vw;
+	}
 	.bid-topbid{
-		font-size: 15pt;
+		font-size: 5vw !important;
+		text-align: center;
+	}
+	.padding11{
+		border-top-right-radius: 0;
+	}
+	.padding13{
+		padding: 0px 20px;
+	}
+	.bid-count{
+		height: 15vw;
+		width: 15vw;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		padding-top: 3vw;
+		font-size: 6vw;
+	}
+	.count-right{
+		font-size: 3vw;
+	}
+	.top-bidder{
+		font-size:
+	}
+	.fold-price{
+		font-size: 3vw;
+	}
+	.img-top{
+		width: 5vw;
+	}
+	.top-bidder{
+		font-size: 4vw;
+	}
+	.center-content{
+		margin-left: 20vw;
 	}
 }
 
-@media only screen
-and (max-device-width : 480px)
-{
-    .top-bidder{
-		font-size: 15pt;
-	}
-}
 
-@media only screen
-and (max-device-width : 1144px)
-{
-    .bid-topbid{
-		font-size: 15pt !important;
-	}
-    
-}
 
 @media only screen
 and (max-device-width : 1199px)
@@ -339,8 +403,9 @@ and (max-device-width : 1199px)
 	}
 
 	.title-caption{
-		font-size: 11pt !important;
-	}
+		
+			font-size: 8pt !important;
+		
 	.main-caption{
 		font-size: 11pt !important;
 	}
@@ -351,24 +416,65 @@ and (max-device-width : 1199px)
 and (min-device-width : 768px)
 and (max-device-width : 992px)
 {
-	.bid-topbid{
-		font-size: 15pt !important;
+	
+	.bold{
+		font-size: 1.5vw;
 	}
+	.young-purple{
+		padding-right: 0;
+		padding-left: 0;
+	}
+	.bid-count{
+		font-size: 3vw;
+		font-weight: bold;
+		border-radius: 50%;
+		height: 6vw;
+		width: 6vw;
+		margin-top: 15px;
+		padding-top: 10px;
+		line-height: 1vw;
+	}
+	.count-right{
+		font-size: 1vw;
+	}
+	.padding13{
+		padding: 0px 0px 0px 10px;
+	}
+	
+	
 }
 
 @media only screen
 and (min-device-width : 640px)
 and (max-device-width : 1199px)
 {
-	.bid-topbid{
-		font-size: 25pt;
-	}
 	.bid-name{
 		font-size: 10pt;
 	}
 	.bid-topbid{
 		margin-left: 10%;
 	}
+}
+
+
+@media only screen
+and (max-device-width : 577px){
+	.main-title{
+		font-size: 4vw;
+	}
+	.sub-title{
+		font-size: 3vw;
+	}
+	.lot-number{
+		font-size: 5vw;
+	}
+	.car-grade{
+		right: 6vw;
+	}
+	.bold{
+		font-size: 4vw;
+	}
+	
 }
 
 @media only screen
