@@ -30,54 +30,38 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
     onLog = activeCompany.child('schedule/'+liveOn[0]+'/lot|stock/'+liveOn[1]+'/log');
     $.ajax({
       type: "GET",
-      url: "<?php echo base_url('auction/');?>datalot/"+liveOn[1],
+      url: "<?php echo base_url('auction/');?>datalot",
       dataType: "json",
       success: function(data){
         val = data.data;
+        var name = val.Merk+" "+val.Tipe;
+        $('.main-title').text(name+" "+data.data.Silinder+" "+val.Model);
+        $('.lot-number').text(val.NoLot);
+        $('.separator1').find('h5').text(val.Tahun);
+        $('#startprice').text(addPeriod(val.StartPrice));
+        $('#policenumber').text(val.NoPolisi);
+        $('#kilometers').text(val.Kilometer);
+        $('#color').text(val.Warna);
+        $('#transmission').text(addPeriod(val.Transmisi));
         $('#exterior').text(val.Exterior);
+        $('#interior').text(val.Interior);
+        $('#mechanical').text(val.Mesin);
+        $('#frame').text(val.Rangka);
+        $('.grade-alpha').text(val.Grade);
+        $('.fold-price').text("Harga Kelipatan: Rp. "+addPeriod(val.StartPrice));
       }
     });
     onLog.on("child_added", function(snap) {
-      $('.bidding-log').prepend(contactHtmlFromObject(snap.val()));
+      $('.bidding-log').prepend(logHtmlFromObject(snap.val()));
       $('.bid-topbid').text('Rp. ' + addPeriod(snap.val().bid));
       $('.pull-right').text(snap.val().type + " Bidder");
     });
+  }else{
+    reset()
   }
 });
-// activeCompany.child('liveOn').set(data.data.ScheduleId);
-// activeCompany.child('lotOn').set(id);
-// onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+id+'/log');
-
-// load older conatcts as well as any newly added one...
-// auctionLog.on("child_added", function(snap) {
-//   $('.bidding-log').prepend(contactHtmlFromObject(snap.val()));
-//   $('.bid-topbid').text('Rp. ' + addPeriod(snap.val().bid));
-//   $('.pull-right').text(snap.val().type + " Bidder");
-// });
-
-//save contact
-// $('.addValue').on("click", function( event ) {  
-// event.preventDefault();
-//     if( $('#name').val() != '' || $('#email').val() != '' ){
-//         auctionLog.push({
-//         name: $('#name').val(),
-//         email: $('#email').val(),
-//         location: {
-//             city: $('#city').val(),
-//             state: $('#state').val(),
-//             zip: $('#zip').val()
-//         }
-//         })
-//         contactForm.reset();
-//     } else {
-//         alert('Please fill atlease name or email!');
-//     }
-// });
-
-// prepare conatct object's HTML
-
-function contactHtmlFromObject(log){
-  // console.log(log);
+// prepare log object's HTML
+function logHtmlFromObject(log){
   var html = '<div class="row line-height">'
                 +'<div class="col-md-6">'+'Rp. ' + addPeriod(log.bid)+'</div>'
                 +'<div class="col-md-6 weight">'+log.type+' Bidder</div>'
@@ -85,18 +69,33 @@ function contactHtmlFromObject(log){
   return html;
 }
 
-function addPeriod(nStr)
-  {
-      nStr += '';
-      x = nStr.split('.');
-      x1 = x[0];
-      x2 = x.length > 1 ? '.' + x[1] : '';
-      var rgx = /(\d+)(\d{3})/;
-      while (rgx.test(x1)) {
-          x1 = x1.replace(rgx, '$1' + '.' + '$2');
-      }
-      return x1 + x2;
-  }
+function addPeriod(nStr){
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + '.' + '$2');
+    }
+    return x1 + x2;
+}
 
+function reset(){
+  $('.main-title').text("-");
+  $('.lot-number').text("-");
+  $('.separator1').find('h5').text("-");
+  $('#startprice').text("-");
+  $('#policenumber').text("-");
+  $('#kilometers').text("-");
+  $('#color').text("-");
+  $('#transmission').text("-");
+  $('#exterior').text("-");
+  $('#interior').text("-");
+  $('#mechanical').text("-");
+  $('#frame').text("-");
+  $('.grade-alpha').text("-");
+  $('.fold-price').text("Harga Kelipatan: Rp. -");
+}
 
 </script>

@@ -162,8 +162,11 @@ class Auction extends CI_Controller {
                     $arr['Merk'] = $stockDatarow->Merk;
                     $arr['Tipe'] = $stockDatarow->Tipe;
                     $arr['Silinder'] = $stockDatarow->Silinder;
+                    $arr['Model'] = $stockDatarow->Model;
+                    $arr['Tahun'] = $stockDatarow->Tahun;
                     $arr['Warna'] = $stockDatarow->Warna;
                     $arr['Transmisi'] = $stockDatarow->Transmisi;
+                    $arr['NoPolisi'] = $stockDatarow->NoPolisi;
                     $arr['Kilometer'] = $stockDatarow->Kilometer;
                     $arr['BahanBakar'] = $stockDatarow->BahanBakar;
                     $arr['Exterior'] = $stockDatarow->Exterior;

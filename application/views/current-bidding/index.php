@@ -10,11 +10,11 @@
                                     <div class="col-3">
                                         <div class="side-lot">
                                             <h6 class="sub-title">LOT</h6>
-                                            <h4 class="lot-number">80</h4>
+                                            <h4 class="lot-number">-</h4>
                                         </div>
                                     </div>
                                     <div class="col-9">
-                                        <h6 class="main-title">Ford Escort 1,5 Titanium Mini Bus</h6>
+                                        <h6 class="main-title">-</h6>
                                     </div>
                                 </div>
                             </div>
@@ -23,7 +23,7 @@
                                     <div class="col-md-12">
                                         <div class="car-grade">
                                             <span class="grade-text">Grade</span> <br>
-                                            <span class="grade-alpha">A</span>
+                                            <span class="grade-alpha">-</span>
                                         </div>
                                         <div class="card-img-top"></div>
                                     </div>
@@ -32,36 +32,36 @@
                                     <div class="row margin0 purple-bold padding12">
                                         <div class="col-6 separator1">
                                             <h6>Tahun</h6>
-                                            <h5 class="bold">2011</h5>
+                                            <h5 class="bold">-</h5>
                                         </div>
                                         <div class="col-6">
                                             <h6>Harga Awal</h6>
-                                            <h5 class="bold">Rp. 339,000,000</h5>
+                                            <h5 id="startprice" class="bold">Rp. -</h5>
                                         </div>
                                     </div>
                                     <div class="row">  
                                         <div class="col-md-6">
                                             <div class="rounded-iden">
                                             Nomor Polisi
-                                            <h6>B 1401 MJ</h6>
+                                            <h6 id="policenumber">-</h6>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="rounded-iden">
-                                            Nomor Polisi
-                                            <h6>B 1401 MJ</h6>
+                                            Kilometer
+                                            <h6 id="kilometers">-</h6>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="rounded-iden">
                                                 Warna
-                                                <h6>Abu Tua</h6>
+                                                <h6 id="color">-</h6>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="rounded-iden">
                                             Transmisi
-                                            <h6>AT</h6>
+                                            <h6 id="transmission">-</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -101,17 +101,17 @@
                                                 </div> 
                                                 <div class="col-6 col-md-12 item">
                                                     <h6 class="title-caption">Interior</h6>
-                                                    <h5 class="main-caption weight">A</h5>
+                                                    <h5 id="interior" class="main-caption weight">-</h5>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-6 col-md-12 item">
                                                     <h6 class="title-caption">Mechanical</h6>
-                                                    <h5 class="main-caption weight">B</h5>
+                                                    <h5 id="mechanical" class="main-caption weight">-</h5>
                                                 </div>
                                                 <div class="col-6 col-md-12 item">
                                                     <h6 class="title-caption">Frame</h6>
-                                                    <h5 class="main-caption weight">A</h5>
+                                                    <h5 id="frame" class="main-caption weight">-</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -120,7 +120,7 @@
                                         <div class="bidding-log">
                                         </div>
                                         <div class="fold-price">
-                                            Harga Kelipatan: Rp. 500,000
+                                            Harga Kelipatan: Rp. -
                                         </div>
                                     </div>
                                 </div>                   
