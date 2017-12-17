@@ -314,8 +314,8 @@
             $('#floor-bid').append("+"+addPeriod(data.data.Interval));
             $('#date').val(data.data.Date);
 
-            activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+id);
-            onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+id+'/log');
+            activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
+            onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot+'/log');
             
             $('#bid-log').empty();
             onLog.on("child_added", function(snap) {
