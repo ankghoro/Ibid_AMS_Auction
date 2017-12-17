@@ -23,6 +23,8 @@ var onLog;
 activeCompany.child('liveOn').on('value', function(snapshot) {
   if (snapshot.exists()) {
     $('.bidding-log').empty();
+    $('.bid-topbid').text('Rp. -');
+    $('.pull-right').text('-');
     var liveOn = snapshot.val();
     liveOn = liveOn.split('|');
     onLog = activeCompany.child('schedule/'+liveOn[0]+'/lot|stock/'+liveOn[1]+'/log');
