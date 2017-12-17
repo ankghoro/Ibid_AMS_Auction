@@ -102,12 +102,9 @@
     });
 
     $('#confirm-next').on('click', function(){
-        getLotData();
-        $('#auction_modal').modal('hide');
+      console.log('blah');
+      nextLot();
     });
-
-
-    
 
     $('#floor-bid').on('click', function(){
       floorBid();
@@ -642,7 +639,24 @@
     // });
   }
 
-
+function nextLot() {
+  var ScheduleId = $('#schedule_id').val();
+  var Lot = $('#lot_id').val();
+  var postData = new FormData();
+  $.ajax({
+    url: "<?php echo $this->config->item('ibid_lot');?>/api/lotUnSold",
+    type: "POST",
+    data : {no_lot:Lot,schedule_id:ScheduleId},
+    dataType: "json",
+    success: function(data){
+        console.log(data.status);
+      if (data.status) {
+        getLotData();
+        $('#auction_modal').modal('hide');
+      } 
+    },
+  });
+}
 
 function addPeriod(nStr){
     nStr += '';
