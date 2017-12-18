@@ -133,98 +133,57 @@ class Auction extends CI_Controller {
         $data['content'] = 'content';
         $data['content_script'] = 'script';
         $data['content_modal'] = 'modal';
+        $data['CompanyId'] = $UserLogon['CompanyId'];
         $this->load->view('/templates/theadmin', $data);
 	}
 
-    public function datalot($id){
+    public function datalot(){
         if (isset($_COOKIE['UserLogon'])) {
             $datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
             $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
-            // $schedule_url = "http://ibid-ams-schedule.dev/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
+            // $schedule_url = "localhost/ibid-ams-schedule/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
             $scheduledata = json_decode($this->get_curl($schedule_url));
             $check_schedule = count($scheduledata->data);
-            
             $arr = array();
             if ($check_schedule != 0) {
-                $schedule_id = $scheduledata->data->id;
-                $lot_url =  $this->config->item('ibid_lot')."/api/getallLot";
-                // $lot_url =  "http://ibid-lot.dev/api/getallLot";
-                $lotdata = json_decode($this->get_curl($lot_url));
-                $lot_url2 = $this->config->item('ibid_lot')."/api/getLotReadyBySchedule/$schedule_id";
-                // $lot_url2 = "http://ibid-lot.dev/api/getLotReadyBySchedule/$schedule_id";
-                $lotReady = json_decode($this->get_curl($lot_url2));
-                $lot_url3 = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
-                // $lot_url3 = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
-                $lotBySchedule = json_decode($this->get_curl($lot_url3));
-                $stock_url = $this->config->item('ibid_stock')."/api/getallStock";
-                // $stock_url = "http://ibid-stock.dev/api/getallStock";
-                $stockdata = json_decode($this->get_curl($stock_url));
-                // var_dump($stockdata); die();
-                $no = 0;
+                $schedule_id    = $scheduledata->data->id;
+                $getLotUrl      = $this->config->item('ibid_lot')."/api/getLot/$schedule_id";
+                $lotReady       = json_decode($this->get_curl($getLotUrl));
+                $getLastLotUrl  = $this->config->item('ibid_lot')."/api/getLastLot/$schedule_id";
+                $lastLot        = json_decode($this->get_curl($getLastLotUrl));
                 $date = $scheduledata->data->date;
-                $countLotReady = count($lotReady->data);
-                $countLotSchedule = count($lotBySchedule->data);
+                if ($lotReady->status && $lastLot->status) {
+                    $stock_id = $lotReady->data->stock_id;
+                    $currentLot = $lotReady->data->no_lot;
+                    $lastLot = $lastLot->data->no_lot;
+                    $getStockUrl = $this->config->item('ibid_stock')."/api/stockData/".$stock_id;
+                    $stockDatarow = json_decode($this->get_curl($getStockUrl));
+                    $arr['AuctionItemId'] = $stockDatarow->AuctionItemId; 
+                    $arr['Merk'] = $stockDatarow->Merk;
+                    $arr['Tipe'] = $stockDatarow->Tipe;
+                    $arr['Silinder'] = $stockDatarow->Silinder;
+                    $arr['Model'] = $stockDatarow->Model;
+                    $arr['Tahun'] = $stockDatarow->Tahun;
+                    $arr['Warna'] = $stockDatarow->Warna;
+                    $arr['Transmisi'] = $stockDatarow->Transmisi;
+                    $arr['NoPolisi'] = $stockDatarow->NoPolisi;
+                    $arr['Kilometer'] = $stockDatarow->Kilometer;
+                    $arr['BahanBakar'] = $stockDatarow->BahanBakar;
+                    $arr['Exterior'] = $stockDatarow->Exterior;
+                    $arr['Interior'] = $stockDatarow->Interior;
+                    $arr['Mesin'] = $stockDatarow->Mesin;
+                    $arr['Rangka'] = $stockDatarow->Rangka;
+                    $arr['Grade'] = $stockDatarow->Grade;
+                    $arr['ItemId'] = $stockDatarow->ItemId;
+                    $arr['NoLot'] = (int)$currentLot;
+                    $arr['ScheduleId'] = $schedule_id;
+                    $arr['Date'] = $date;
+                    $arr['StartPrice'] = (int)$stockDatarow->StartPrice;
+                    $arr['Interval'] = (int)$scheduledata->data->interval;
 
-                if ($countLotReady != 0) {
-                    do {
-                        
-                        foreach ($lotdata->data as $check) {
-                            if ($schedule_id == $check->schedule_id && (int)$id == (int)$check->no_lot) {
-                                $reason = $check->reason;
-                                $status = $check->status;
-                                $lot_no = $check->no_lot;
-                                break;
-                            }
-                        }
-                        $id++;
-                    } while ($reason != null || $status == "terjual" || $status == "tidak terjual");
-
-                    
-                    $no = (int)$lot_no;
-                    foreach ($stockdata->data as $stock) {
-                        $datastatus = false;
-                            foreach ($lotdata->data as $lot) {
-
-                                if ((int)$stock->AuctionItemId == (int)$lot->stock_id && $lot->schedule_id == $scheduledata->data->id)
-                                {
-                                    $datastatus = true;
-                                    $lot_no = $lot->no_lot;
-                                    $schedule_id = $lot->schedule_id;
-                                    $va = $lot->no_va;
-                                }
-
-                                if ($datastatus == true) {
-                                    if ($lot_no == $no) {
-                                        $arr['AuctionItemId'] = $stock->AuctionItemId; 
-                                        $arr['Merk'] = $stock->Merk;
-                                        $arr['Tipe'] = $stock->Tipe;
-                                        $arr['Silinder'] = $stock->Silinder;
-                                        $arr['Warna'] = $stock->Warna;
-                                        $arr['Transmisi'] = $stock->Transmisi;
-                                        $arr['Kilometer'] = $stock->Kilometer;
-                                        $arr['BahanBakar'] = $stock->BahanBakar;
-                                        $arr['Exterior'] = $stock->Exterior;
-                                        $arr['Interior'] = $stock->Interior;
-                                        $arr['Mesin'] = $stock->Mesin;
-                                        $arr['Rangka'] = $stock->Rangka;
-                                        $arr['Grade'] = $stock->Grade;
-                                        $arr['ItemId'] = $stock->ItemId;
-                                        $arr['NoLot'] = (int)$lot_no;
-                                        $arr['ScheduleId'] = $schedule_id;
-                                        $arr['Date'] = $date;
-                                        $arr['VA'] = $va;
-                                        $arr['StartPrice'] = (int)$stock->StartPrice;
-                                        $arr['Interval'] = (int)$scheduledata->data->interval;
-                                        break;
-                                    }
-                                }
-                            }
-                    }
-                    // var_dump($arr); die();
                     $jadwal = true; 
-                    count($arr) > 0 ? $status = true : $status = false;
-                    $no == $countLotSchedule ? $disable = true : $disable = false; 
-
+                    $status = true;
+                    $currentLot == $lastLot ? $disable = true : $disable = false; 
                 } else {
                     $jadwal = true; 
                     $status = false;
@@ -238,6 +197,7 @@ class Auction extends CI_Controller {
         }
         $newData = [
             'jadwal' => $jadwal,
+            'schedule_id' => isset($schedule_id) ? $schedule_id : null,
             'status' => $status,
             'data' => $arr,
             'disable' => $disable
@@ -257,7 +217,7 @@ class Auction extends CI_Controller {
             $data_json = json_encode($data_json);
             // var_dump($data_json); die();
             $url = $this->config->item('ibid_lot')."/api/skipLot";
-            // $url = "http://ibid-lot.dev/api/skipLot";
+            // $url = "localhost/ibid-lot/api/skipLot";
             $proceed = $this->jsonPost($url,$data_json);
 
             $output = [
@@ -272,7 +232,7 @@ class Auction extends CI_Controller {
         $skiprange = (int)$this->input->post('SkipRange');
         $lot = (int)$this->input->post('Lot');
         $lot_url = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
-        // $lot_url = "http://ibid-lot.dev/api/getLotBySchedule/$schedule_id";
+        // $lot_url = "localhost/ibid-lot/api/getLotBySchedule/$schedule_id";
         $lotBySchedule = json_decode($this->get_curl($lot_url));
         $count = count($lotBySchedule->data);
         $check = $count - $skiprange;

@@ -2,8 +2,25 @@
 <script src="<?php echo base_url('assets/datatables/dataTables.bootstrap4.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/bootstrap-duration-picker-debug.js'); ?>"></script>
 <script src="<?php echo base_url('assets/js/jquery.maskMoney.min.js'); ?>"></script>
-<!-- <script src="<?php echo base_url('assets/js/menu.js')?>"></script> -->
+<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script type="text/javascript">
+  // file: script.js
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyC-ZoZ16SiFPoz76W0yJbqhlLOYpPrMU7I",
+    authDomain: "ibid-ams-sample.firebaseapp.com",
+    databaseURL: "https://ibid-ams-sample.firebaseio.com",
+    projectId: "ibid-ams-sample",
+    storageBucket: "",
+    messagingSenderId: "493210877814"
+  };
+  firebase.initializeApp(config);
+
+  // create firebase database reference
+  var dbRef = firebase.database();
+  var activeCompany = dbRef.ref('company/<?php echo $CompanyId; ?>');
+  var onLog ;
+
   var start = 0;
   var startProxy = 0;
   var skipLotNo = 0;
@@ -69,7 +86,7 @@
         $('#start').prop("disabled",true); 
         $('#btn_count').prop("disabled",false);
         start = setInterval( getBidLog, 4000 );
-        startProxy = setInterval( getProxyBid, 6000);
+        // startProxy = setInterval( getProxyBid, 6000);
         $('#auction_start').val(1)
     });
 
@@ -85,18 +102,15 @@
     });
 
     $('#confirm-next').on('click', function(){
-        getLotData();
-        $('#auction_modal').modal('hide');
+      console.log('blah');
+      nextLot();
     });
-
-
-    
 
     $('#floor-bid').on('click', function(){
       floorBid();
-      if(start == null && startProxy == null){
+      if(start == null){
         start = setInterval( getBidLog, 4000 );
-        startProxy = setInterval( getProxyBid, 6000);
+        // startProxy = setInterval( getProxyBid, 6000);
       }
     });
 
@@ -132,9 +146,9 @@
         $('#count').val(count);
         if (count == 2) {
           clearInterval(start);
-          clearInterval(startProxy);
+          // clearInterval(startProxy);
           start = null;
-          startProxy = null;
+          // startProxy = null;
         }
         if (count == 3) {
           var winner = $('#npl').val();
@@ -148,8 +162,8 @@
           var name = $('#unit_name').val();
           var grade = $('#unit_grade').val();
           var price = $('#start-price').val();
-          if (state == "Floor Bidder") {
-            $('#modal-title').text('Selamat, Pemenang '+state);
+          if (state == "Floor") {
+            $('#modal-title').text('Selamat, Pemenang '+state+' Bidder');
             var body ='<h4>Detail Unit</h4>'
                       +'<div class="row">'
                           +'<div class="col-md-12">'
@@ -261,11 +275,12 @@
     $('#content').hide();
     $.ajax({
       type: "GET",
-      url: "<?php echo base_url('auction/');?>datalot/"+id,
+      url: "<?php echo base_url('auction/');?>datalot",
       dataType: "json",
       success: function(data){
         $('#loader').empty();
         $('#content').show();
+        console.log(data);
         if (data.jadwal) {
           if (data.status) {
             $('.data-lot').html('');
@@ -296,28 +311,57 @@
             $('#va').val(data.data.VA);
             $('#floor-bid').append("+"+addPeriod(data.data.Interval));
             $('#date').val(data.data.Date);
+
+            activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
+            onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot+'/log');
             
+            pause();
+            $('#bid-log').empty();
+            onLog.on("child_added", function(snap) {
+              $('#bid-log').prepend(logHtmlFromObject(snap.val()));
+              $('#start-price').val(snap.val().bid);
+              $('#state').val(snap.val().type);
+              $('#npl').val(snap.val().npl ? snap.val().npl : '');
+            });
           } else {
-            $('#modal').modal({
-              backdrop: 'static',
-              keyboard: false
-            })
-            var body ='<h5>Semua data lot telah terjual atau dilewati, harap cek kembali.</h5>'
-            $('#modal-title').text('Data lot tidak tersedia..');
-            $('#modal-body').empty();
-            $('#modal-body').append(body);
-            $('#proceed-winner').hide();
-            $('#image').attr("src","assets/img/noimage.png");
-            $('#close').show();
-            $('#modal').modal('show');
+            activeCompany.child('liveOn').set(null);
+            // $('#modal').modal({
+            //   backdrop: 'static',
+            //   keyboard: false
+            // })
+            // var body ='<h5>Semua data lot telah terjual atau dilewati, harap cek kembali.</h5>'
+            // $('#modal-title').text('Data lot tidak tersedia..');
+            // $('#modal-body').empty();
+            // $('#modal-body').append(body);
+            // $('#proceed-winner').hide();
+            // $('#image').attr("src","assets/img/noimage.png");
+            // $('#close').show();
+            // $('#modal').modal('show');
+            $.ajax({
+              type: "POST",
+              url: "<?php echo $this->config->item('ibid_schedule');?>/api/updateStatus/"+data.schedule_id, // Used for Staging
+              // url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
+              data : {},
+              dataType: "json",
+              success: function(data){
+                if (data.status) {
+                  $('#modal').modal('hide');
+                  getLotData();
+                } 
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                  alert('Error get data from ajax');
+              },
+            });
           }
         } else {
+          activeCompany.child('liveOn').set(null);
           $('#modal').modal({
               backdrop: 'static',
               keyboard: false
             })
-            var body ='<h5>Pastikan anda telah mengatur jadwal lelang dengan benar.</h5>'
-            $('#modal-title').text('Tidak ada jadwal yang tersedia..');
+            var body ='<h5>Semua jadwal hari ini telah selesai dilaksanakan.</h5>'
+            $('#modal-title').html('<i class="fa fa-send-o"></i> Pesan');
             $('#modal-body').empty();
             $('#modal-body').append(body);
             $('#proceed-winner').hide();
@@ -332,7 +376,7 @@
         
           if ($('#auction_start').val() == 1) {
             start = setInterval( getBidLog, 4000 );
-            startProxy = setInterval( getProxyBid, 6000);
+            // startProxy = setInterval( getProxyBid, 6000);
           }
 
         $('#count').val(0); 
@@ -475,83 +519,172 @@
       success: function(data){
         if (data.status) {
           // $('#bid-log').empty();
-          $('#npl').val(data.data.No);
-          $('#state').val("Online Bidder");
-          $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
-          
-                                              
-                                              
-          $('#start-price').val(data.data.Nominal);
+          // $('#npl').val(data.data.No);
+          // $('#state').val("Online Bidder");
+          // $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');                                        
+          // $('#start-price').val(data.data.Nominal);
+          var last = onLog.orderByKey().limitToLast(1);
+          // var newbid;
+          last.once('value', function(snapshot) {
+            // if (!snapshot.val()) {
+            //   newbid = parseInt(price) + parseInt(interval);
+            // } else{
+              // snapshot.forEach(function(child) {
+                // newbid = child.val().bid + parseInt(interval);
+              // });
+            // }
+            onLog.push({
+              bid: data.data.Nominal,
+              type: 'Online',
+              npl: data.data.No
+            });
+          });
         } 
       },
     });
   }
 
   function getProxyBid(){
-    var price = $('#start-price').val();
-    var interval = $('#interval').val();
-    $.ajax({
-      type: "GET",
-      url: "<?php echo base_url('auction/');?>proxyBidExample/"+price+"/"+interval,
-      dataType: "json",
-      success: function(data){
-        if (data.status) {
-          // $('#bid-log').empty();
-          $('#npl').val(data.data.No);
-          $('#state').val("Proxy Bidder");
-          $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
-          $('#start-price').val(data.data.Nominal);
-        } 
-      }
-    });
+    // var price = $('#start-price').val();
+    // var interval = $('#interval').val();
+    // $.ajax({
+    //   type: "GET",
+    //   url: "<?php echo base_url('auction/');?>proxyBidExample/"+price+"/"+interval,
+    //   dataType: "json",
+    //   success: function(data){
+    //     if (data.status) {
+    //       // $('#bid-log').empty();
+    //       // $('#npl').val(data.data.No);
+    //       // $('#state').val("Proxy Bidder");
+    //       // $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
+    //       // $('#start-price').val(data.data.Nominal);
+    //       var last = onLog.orderByKey().limitToLast(1);
+    //       // var newbid;
+    //       last.once('value', function(snapshot) {
+    //         // if (!snapshot.val()) {
+    //         //   newbid = parseInt(price) + parseInt(interval);
+    //         // } else{
+    //           // snapshot.forEach(function(child) {
+    //             // newbid = child.val().bid + parseInt(interval);
+    //           // });
+    //         // }
+    //         onLog.push({
+    //           bid: data.data.Nominal,
+    //           type: data.data.State,
+    //           npl: data.data.No,
+    //         });
+    //       });
+    //     } 
+    //   }
+    // });
+  }
+
+  function logHtmlFromObject(log){
+    var html = '<div class="col-xs-4 col-md-4">'+addPeriod(log.bid)+'</div>'
+                +'<div class="col-xs-5 col-md-5 weight">'+log.type+' Bid</div>'
+                +'<div class="col-xs-3 col-md-3 weight">'+(log.npl ? log.npl : '....')  + '</div>'
+    return html;
   }
 
   function floorBid(){
     var count = $('#count').val();
     var price = $('#start-price').val();
     var interval = $('#interval').val();
+    var last = onLog.orderByKey().limitToLast(1);
+    var newbid;
       if (count == 2) {
         count = 1;
         $('#count').val(count);
       }
-    $.ajax({
-      type: "GET",
-      url: "<?php echo base_url('auction/');?>floorBidExample/"+price+"/"+interval,
-      dataType: "json",
-      success: function(data){
-        if (data.status) {
-          // $('#bid-log').empty();
-          $('#npl').val('');
-          $('#state').val("Floor Bidder");
-          $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">....</div>');
-          $('#start-price').val(data.data.Nominal);
-        } 
-      },
-    });
-  }
-
-
-
-function addPeriod(nStr)
-  {
-      nStr += '';
-      x = nStr.split('.');
-      x1 = x[0];
-      x2 = x.length > 1 ? '.' + x[1] : '';
-      var rgx = /(\d+)(\d{3})/;
-      while (rgx.test(x1)) {
-          x1 = x1.replace(rgx, '$1' + '.' + '$2');
+    last.once('value', function(snapshot) {
+      if (!snapshot.val()) {
+        newbid = parseInt(price) + parseInt(interval);
+      } else{
+        snapshot.forEach(function(child) {
+          newbid = child.val().bid + parseInt(interval);
+        });
       }
-      return x1 + x2;
+      onLog.push({
+        bid: newbid,
+        type: 'Floor'
+      });
+    });
+    // var postData = new FormData();
+    // postData.append('startprice', price);
+    // postData.append('interval', interval);
+    // postData.append('biddertype', 'Floor');
+    // $.ajax({
+    //   url: 'http://ibid-ams-auction.development.net/bidding/bid',
+    //   data: postData,
+    //   processData: false,
+    //   contentType: false,
+    //   type: 'POST',
+    //   success: function(data){
+    //     alert(data);
+    //   }
+    // });
+    // $.ajax({
+    //   type: "GET",
+    //   url: "<?php //echo base_url('auction/');?>floorBidExample/"+price+"/"+interval,
+    //   dataType: "json",
+    //   success: function(data){
+    //     if (data.status) {
+    //       // $('#bid-log').empty();
+    //       $('#npl').val('');
+    //       $('#state').val("Floor Bidder");
+    //       $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">....</div>');
+    //       $('#start-price').val(data.data.Nominal);
+    //     } 
+    //   },
+    // });
   }
 
-  function isNumberKey(evt){
+function nextLot() {
+  var ScheduleId = $('#schedule_id').val();
+  var Lot = $('#lot_id').val();
+  var postData = new FormData();
+  $.ajax({
+    url: "<?php echo $this->config->item('ibid_lot');?>/api/lotUnSold",
+    type: "POST",
+    data : {no_lot:Lot,schedule_id:ScheduleId},
+    dataType: "json",
+    success: function(data){
+        console.log(data.status);
+      if (data.status) {
+        getLotData();
+        $('#auction_modal').modal('hide');
+      } 
+    },
+  });
+}
+
+function addPeriod(nStr){
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + '.' + '$2');
+    }
+    return x1 + x2;
+}
+
+function isNumberKey(evt){
     var charCode = (evt.which) ? evt.which : event.keyCode
     if (charCode > 31 && (charCode < 48 || charCode > 57))
         return false;
     return true;
 }  
 
+function pause(){
+  $('#floor-bid').prop("disabled", true);
+  $('#start').prop("disabled",false); 
+  $('#btn_count').prop("disabled",true);
+  clearInterval(start);
+  // startProxy = setInterval( getProxyBid, 6000);
+  $('#auction_start').val(0)
+}
 
 </script>
 <?php $this->load->view($content_modal); ?>
