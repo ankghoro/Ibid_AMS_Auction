@@ -325,18 +325,6 @@
             });
           } else {
             activeCompany.child('liveOn').set(null);
-            // $('#modal').modal({
-            //   backdrop: 'static',
-            //   keyboard: false
-            // })
-            // var body ='<h5>Semua data lot telah terjual atau dilewati, harap cek kembali.</h5>'
-            // $('#modal-title').text('Data lot tidak tersedia..');
-            // $('#modal-body').empty();
-            // $('#modal-body').append(body);
-            // $('#proceed-winner').hide();
-            // $('#image').attr("src","assets/img/noimage.png");
-            // $('#close').show();
-            // $('#modal').modal('show');
             $.ajax({
               type: "POST",
               url: "<?php echo $this->config->item('ibid_schedule');?>/api/updateStatus/"+data.schedule_id, // Used for Staging
@@ -426,7 +414,7 @@
       $('#btn_loader').remove();
       $('#confirm-skip').prop("disabled",false);
     } else {
-        var SkipRange = $('#skip').val();
+        var SkipRange = $('#skip').val() - 1;
         var ScheduleId = $('#schedule_id').val();
         var Va = $('#va').val();
         var Lot = skipLotNo;
@@ -518,11 +506,6 @@
       dataType: "json",
       success: function(data){
         if (data.status) {
-          // $('#bid-log').empty();
-          // $('#npl').val(data.data.No);
-          // $('#state').val("Online Bidder");
-          // $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');                                        
-          // $('#start-price').val(data.data.Nominal);
           var last = onLog.orderByKey().limitToLast(1);
           // var newbid;
           last.once('value', function(snapshot) {
