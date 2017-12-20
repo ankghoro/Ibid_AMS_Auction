@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('auction/assets/css/bootstrap.min.css'); ?>">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('auction/assets/css/font-awesome.min.css'); ?>">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('auction/assets/css/style.css'); ?>">
-  
+
 </head>
 <body class="fixed-left">
     <div id="wrapper">  
@@ -21,13 +21,13 @@
                             <div class="card">
                                 <div class="bid-name">
                                     <div class="row">
-                                        <div class="col-3">
+                                        <div class="col-3 col-sm-4">
                                             <div class="side-lot">
                                                 <h6 class="sub-title">LOT</h6>
                                                 <h4 class="lot-number data-lot" id="item_lot">-</h4>
                                             </div>
                                         </div>
-                                        <div class="col-9">
+                                        <div class="col-9 col-sm-8">
                                             <h6 class="main-title data-lot" id="item_name">Tidak ada data</h6>
                                         </div>
                                     </div>
@@ -39,21 +39,21 @@
                                                 <span class="grade-text">Grade</span> <br>
                                                 <span class="grade-alpha data-lot" id="item_grade">-</span>
                                             </div>
-                                            <div class="card-img-top" id="image" style="background-image: url(<?php echo base_url('auction/assets/')?>img/ford.jpg);"></div>
+                                            <div class="card-img-top" style="background-image: url(<?php echo base_url('auction/assets/')?>img/ford.jpg);"></div>
                                         </div>
                                     </div>
                                     <div class="border-bottom">
                                         <div class="row margin0 padding12 orange-bg">
                                             <div class="col-6 separator1 center-align">
-                                                <h6>Tahun</h6>
-                                                <h5 class="bold data-lot" id="item_tahun">-</h5>
+                                                <h6 class="spec-title">Tahun</h6>
+                                                <h5 class="bold spec-content data-lot" id="item_tahun">-</h5>
                                             </div>
                                             <div class="col-6 center-align">
-                                                <h6>Harga Awal</h6>
-                                                <h5 class="bold data-lot" id="item_startprice">-</h5>
+                                                <h6 class="spec-title ">Harga Awal</h6>
+                                                <h5 class="bold spec-content data-lot" id="item_startprice">-</h5>
                                             </div>
                                         </div>
-                                        <div class="row">  
+                                        <div class="row padding20">  
                                             <div class="col-md-12">
                                                 <div class="rounded-iden center-align">
                                                     Nomor Polisi
@@ -105,39 +105,38 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4">
+                                      
+                                        <div class="col-12 padding10">
+                                            <div class="fold-price center-align">Bidding Log</div>
+                                            <div class="bidding-log" style="border: 1px solid #cccccc !important">
+                                                <div class="row line-height center-align" id="bid-log"></div>  
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-12">
                                             <div class="stock-detail padding13">
                                                 <div class="row padding10">
-                                                    <div class="col-6 col-md-12 item center-align">
+                                                    <div class="col-3 item center-align">
                                                         <h6 class="title-caption">Exterior</h6>
                                                         <h5 class="main-caption weight data-lot" id="item_exterior">-</h5>
                                                     </div> 
-                                                    <div class="col-6 col-md-12 item center-align">
+                                                    <div class="col-3 item center-align">
                                                         <h6 class="title-caption">Interior</h6>
                                                         <h5 class="main-caption weight data-lot" id="item_interior">-</h5>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-6 col-md-12 item center-align">
+                                                
+                                                    <div class="col-3 item center-align">
                                                         <h6 class="title-caption">Mechanical</h6>
                                                         <h5 class="main-caption weight data-lot" id="item_mechanical">-</h5>
                                                     </div>
-                                                    <div class="col-6 col-md-12 item center-align">
+                                                    <div class="col-3 item center-align">
                                                         <h6 class="title-caption">Frame</h6>
                                                         <h5 class="main-caption weight data-lot" id="item_frame">-</h5>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-8 padding10 center-align">
-                                            <div class="fold-price ">Bidding Log</div>
-                                            <div class="bidding-log" style="border: 1px solid #cccccc !important">
-                                                    <div class="row line-height" id="bid-log">
-                                                    </div>
-                                            </div>
-                                            
-                                        </div>
-                                        <div class="col-12 ">
+                                        <div class="col-12">
                                             <div class="fold-price center-align" id="harga_kelipatan">
                                                 Harga Kelipatan: -
                                             </div>
@@ -161,20 +160,23 @@
                                                     </div>
                                                     <div class="form-group clearfix">
                                                             <label class="control-label">Bidding Control</label>
-                                                            <button class="btn btn-success btn-sm btn-block" style="height:100px;" id="floor-bid" disabled="disabled">+</button>
+                                                            <button class="btn btn-success btn-sm btn-block" style="height:70px;" id="floor-bid" disabled="disabled">+</button>
                                             
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                         <div class="form-group clearfix">
                                                                 <button class="btn btn-info btn-sm btn-block" id="start">START</button>
-                                                            </div>
+                                                        </div>
                                                             <div class="form-group clearfix">
                                                                     <label class="control-label">Count</label>
-                                                                    <input type="text" class="form-control" value="(-)" style="height: 100px; background-color: #a965af; color: white; text-align: center;" id="count" disabled>
+                                                                    <input type="text" class="form-control" value="(-)" style="height: 70px; background-color: #a965af; color: white; text-align: center;" id="count" disabled>
                                                                     <button class="btn btn-success btn-sm btn-block" id="btn_count" disabled="disabled">COUNT</button>
                                                                     <button class="btn btn-warning btn-sm btn-block" id="btn_next">NEXT</button>
-                                                                </div>
+                                                            </div>
+                                                </div>
+                                                <div class="col-12 margin10">
+                                                        <a target="_blank" href="<?php echo base_url('current/bidding');?>" class="btn btn-info btn-sm btn-block" style="width: 100%;">CURRENT BIDDING</a>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -216,5 +218,4 @@
             </div>
         </div>
     </div>
-
 <?php $this->load->view($content_script); ?>

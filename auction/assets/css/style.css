@@ -44,14 +44,16 @@ html, body{
 	margin-right: 0 !important;
 	margin-bottom: 10px;
 }
-.separator1{
-	border-right: 1px solid rgba(255, 255, 255, 0.2);
-	border-right-style: height: 10px;
+.spec-title{
+	font-size: 1.5vw;
+}
+.spec-content{
+	font-size: 1.2vw;
 }
 
 .main-title{
 	font-family: openbold;
-	font-size: 1.5em;
+	font-size: 1.5vw;
 	text-align: left;
 	text-transform: uppercase;
 	margin: 20px 20px 20px 0;
@@ -142,27 +144,29 @@ hr {
 .rounded-iden{
 	border-radius: 100px;
 	background-color: #ffc107;
-	width: 48%;	
-	margin-left: auto;
+	width: 45%;	
+	margin-left: 2px;
 	margin-right: auto;
 	padding: 2px;
 	margin-bottom: 10px;
 	color: white;
 	float: left;
+	font-size: 1.2vw;
 }
 .card-block{
 	padding: 0;
 }
 .title-caption{
-	font-size: 1vw;
+	font-size: 0.8vw;
 }
 .title-caption2{
-	font-size: 1vw;
+	font-size: 0.8vw;
 }
 .bold{
 	font-family: openbold;
 }
 .card-img-top{
+	background-image: url(../img/ford.jpg);
 	background-repeat: no-repeat;
 	background-size: cover;
 	border-top-left-radius: 10px;
@@ -244,9 +248,10 @@ hr {
 	text-align: left;
 	margin-top: 25px;
 	padding-left: 39px;
-	
 }
-
+.padding20{
+	padding-left: 15px;
+}
 .margin20{
 	margin-bottom: 10px !important;
 }
@@ -330,18 +335,19 @@ hr {
 	margin-bottom: 10px;
 	font-size: 1vw;
 }
+.btn:hover{
+	cursor: pointer;
 }
-
+.margin10{
+	margin-bottom: 10px;
+}
 .right-bottom-content{
 	margin-top: 20px;
 	padding-bottom: 35px;
 }
-
-
 .weight{
-	font-weight: bold;
+	font-family: openbold;
 }
-
 .item{
 	padding: 10px;
 	border: 1px solid rgba(0, 0, 0, 0.1);
@@ -356,7 +362,7 @@ hr {
 	padding: 10px;
 }
 .padding13{
-	padding: 0px 10px 0px 20px;
+	padding: 0px 20px 15px 20px;
 }
 .pull-right{
 	float: right;
@@ -369,9 +375,8 @@ hr {
 	margin-top: -20px;
 }
 .bidding-log{
-	max-height: 350px;
-	min-height: 350px;
-	margin-bottom: 20px;
+	max-height: 230px;
+	min-height: 230px;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	background-color: #fff;
@@ -410,6 +415,15 @@ and (max-device-width : 768px)
 	}
     .car-grade{
 		display:block;margin-left:auto;margin-right:auto;
+	}
+	.rounded-iden{
+		font-size: 3vw;
+	}
+	.spec-title{
+		font-size: 3vw;
+	}
+	.spec-content{
+		font-size: 3vw;
 	}
 	.first-bid{
 		text-align: center;
@@ -453,9 +467,7 @@ and (max-device-width : 768px)
 	.count-right{
 		font-size: 3vw;
 	}
-	.top-bidder{
-		font-size:
-	}
+
 	.fold-price{
 		font-size: 3vw;
 	}
@@ -467,6 +479,9 @@ and (max-device-width : 768px)
 	}
 	.center-content{
 		margin-left: 20vw;
+	}
+	.card-img-top{
+		height: 55vh;
 	}
 }
 
