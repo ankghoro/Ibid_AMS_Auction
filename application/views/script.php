@@ -439,8 +439,13 @@
     var NoPolisi = $('#nopol').val();
     $.ajax({
       type: "POST",
+<<<<<<< HEAD
       url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
       // url: "http://localhost/ibid-kpl/api/submitWinner", //Used on local
+=======
+      // url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
+      url: "http://localhost/ibid-kpl/api/submitWinner", //Used on local
+>>>>>>> 873828b1528b25fdccb3192dd82cdf39d8f52659
       data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va,Model:Model,Merk:Merk,Tipe:Tipe,Silinder:Silinder,Tahun:Tahun,NoPolisi:NoPolisi},
       dataType: "json",
       success: function(data){
