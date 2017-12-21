@@ -41,35 +41,35 @@
                                 </div>
                                 <div class="stock-detail">
                                     <div class="row spec">
-                                        <div class="col-md-6 col-lg-6 item item1">
+                                        <div class="col-md-6 col-lg-6 item item1 center-align">
                                             <h6 class="title-caption">Warna</h6>
                                             <h5 class="main-caption weight data-lot" id="item_color">-</h5>
                                         </div>
-                                        <div class=" col-md-6 col-lg-6 item item2">
+                                        <div class=" col-md-6 col-lg-6 item item2 center-align">
                                             <h6 class="title-caption">Transmisi</h6>
                                             <h5 class="main-caption weight data-lot" id="item_transmisi">-</h5>
                                         </div>
-                                    	<div class="col-md-6 col-lg-6 item item3 item2">
+                                    	<div class="col-md-6 col-lg-6 item item3 item2 center-align">
                                             <h6 class="title-caption">Kilometer</h6>
                                             <h5 class="main-caption weight data-lot" id="item_km">-</h5>
                                         </div>
-                                        <div class="col-md-6 col-lg-6 item item2">
+                                        <div class="col-md-6 col-lg-6 item item2 center-align">
                                             <h6 class="title-caption">Bahan Bakar</h6>
                                             <h5 class="main-caption weight data-lot" id="item_bahanbakar">-</h5>
                                         </div>
-                                        <div class="col-md-6 col-lg-6 item item1">
+                                        <div class="col-md-6 col-lg-6 item item1 center-align">
                                             <h6 class="title-caption">Exterior</h6>
                                             <h5 class="main-caption weight data-lot" id="item_exterior">-</h5>
                                         </div>
-                                        <div class=" col-md-6 col-lg-6 item item2">
+                                        <div class=" col-md-6 col-lg-6 item item2 center-align">
                                             <h6 class="title-caption">Interior</h6>
                                             <h5 class="main-caption weight data-lot" id="item_interior">-</h5>
                                         </div>
-                                        <div class="col-md-6 col-lg-6 item item3">
+                                        <div class="col-md-6 col-lg-6 item item3 center-align">
                                             <h6 class="title-caption">Mechanical</h6>
                                             <h5 class="main-caption weight data-lot" id="item_mechanical">-</h5>
                                         </div>
-                                        <div class="col-md-6 col-lg-6 item">
+                                        <div class="col-md-6 col-lg-6 item center-align">
                                             <h6 class="title-caption">Frame</h6>
                                             <h5 class="main-caption weight data-lot" id="item_frame">-</h5>
                                         </div>
@@ -106,7 +106,7 @@
                                     </div>
                                     <div class="form-group clearfix">
                                         <label class="control-label">Bidding Control</label>
-                                        <button class="btn btn-success btn-sm btn-block" style="height:100px;" id="floor-bid" disabled="disabled">+
+                                        <button class="btn btn-success btn-sm btn-block" style="height:100px;" id="floor-bid" disabled="disabled">
                                         </button>
                                     </div>
                                 </div>

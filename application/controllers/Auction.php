@@ -130,11 +130,11 @@ class Auction extends CI_Controller {
         }
         $data['menu'] = load_menu()['menu'];
         $data['assets_url'] = load_header()['assets_url'];
-        $data['content'] = 'content';
+        // $data['content'] = 'content';
         $data['content_script'] = 'script';
         $data['content_modal'] = 'modal';
         $data['CompanyId'] = $UserLogon['CompanyId'];
-        $this->load->view('/templates/theadmin', $data);
+        $this->load->view('/templates/auction', $data);
 	}
 
     public function datalot(){
@@ -151,7 +151,18 @@ class Auction extends CI_Controller {
                 $lotReady       = json_decode($this->get_curl($getLotUrl));
                 $getLastLotUrl  = $this->config->item('ibid_lot')."/api/getLastLot/$schedule_id";
                 $lastLot        = json_decode($this->get_curl($getLastLotUrl));
+                $getLotBySchedule  = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
+                $lotBySchedule     = json_decode($this->get_curl($getLotBySchedule));
+                $lotBySchedule     = count($lotBySchedule->data);
                 $date = $scheduledata->data->date;
+                $schedule_date = $scheduledata->data->date;
+                $schedule_date = date_create($schedule_date);
+                $schedule_date = date_format($schedule_date, "j F Y");
+                $company = $scheduledata->data->CompanyName;
+                $waktu = $scheduledata->data->waktu;
+                $waktu = date_create($waktu);
+                $waktu = date_format($waktu, "H:i");
+                $jenis = $scheduledata->data->ItemName;
                 if ($lotReady->status && $lastLot->status) {
                     $stock_id = $lotReady->data->stock_id;
                     $currentLot = $lotReady->data->no_lot;
@@ -178,6 +189,11 @@ class Auction extends CI_Controller {
                     $arr['NoLot'] = (int)$currentLot;
                     $arr['ScheduleId'] = $schedule_id;
                     $arr['Date'] = $date;
+                    $arr['ScheduleDate'] = $schedule_date;
+                    $arr['Company'] = $company;
+                    $arr['Waktu'] = $waktu;
+                    $arr['Jenis'] = $jenis;
+                    $arr['LotTotal'] = $lotBySchedule;
                     $arr['StartPrice'] = (int)$stockDatarow->StartPrice;
                     $arr['Interval'] = (int)$scheduledata->data->interval;
 
