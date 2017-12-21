@@ -157,20 +157,19 @@ class Api extends CI_Controller
                         $arr[$key]['ScheduleId'] = $schedule_id;
                         $arr[$key]['CompanyId'] = $company_id;
                         $arr[$key]['Desc'] = "Lot tersedia";
-                        $arr[$key]['Desc'] = "Lot tersedia";
                         $PrevLot = $lotReady->prevLot;
                         if (!is_null($PrevLot)){
                             $arr[$key]['PrevLot']['Desc'] = $PrevLot->stock_name.' '.$PrevLot->stock_seri.' '.$PrevLot->stock_year;
                             $arr[$key]['PrevLot']['Price'] = (int)$PrevLot->stock_startprice;
                         }else{
-                            $arr[$key]['PrevLot'] = null;
+                            $arr[$key]['PrevLot'] = [];
                         }
                         $NextLot = $lotReady->nextLot;
                         if (!is_null($NextLot)){
                             $arr[$key]['NextLot']['Desc'] = $NextLot->stock_name.' '.$NextLot->stock_seri.' '.$NextLot->stock_year;
                             $arr[$key]['NextLot']['Price'] = (int)$NextLot->stock_startprice;
                         }else{
-                            $arr[$key]['NextLot'] = null;
+                            $arr[$key]['NextLot'] = [];
                         }
                         $arr[$key]['Stock']['AuctionItemId'] = $stockDatarow->AuctionItemId; 
                         $arr[$key]['Stock']['Merk'] = $stockDatarow->Merk;
@@ -202,7 +201,7 @@ class Api extends CI_Controller
                         $arr[$key]['ScheduleId'] = $schedule_id;
                         $arr[$key]['CompanyId'] = $company_id;
                         $arr[$key]['Desc'] = "Lot sudah tidak tersedia";
-                        $arr[$key]['Stock'] = null; 
+                        $arr[$key]['Stock'] = []; 
                     }
                 }
             } else {
