@@ -127,7 +127,11 @@ class Api extends CI_Controller
     }
 
     public function multicurrentlot(){
-        if(isset($_POST['schedules']) && ($_POST['schedules'] != '')) {
+        if(isset($_POST['schedules']) && (count($_POST['schedules']) > 4)){
+            $jadwal = false;
+            $status = false;
+            $desc = "Tidak boleh memilih jadwal lebih dari 4";
+        } else if(isset($_POST['schedules']) && ($_POST['schedules'] != '')) {
             $schedule_url =  $this->config->item('ibid_schedule')."/api/multiLiveSchedule"; //Used for Staging
             $schedules = json_encode($_POST['schedules']);
             $schedules = json_decode($this->postCURL($schedule_url, ["schedules" => $schedules]));
