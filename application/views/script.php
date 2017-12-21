@@ -65,6 +65,12 @@
     $('<input type="hidden" id="auction_start" value="0">').insertAfter('#body');
     $('<input type="hidden" id="lot_status" value="">').insertAfter('#body');
     $('<input type="hidden" id="next_lot" value="next">').insertAfter('#body');
+    $('<input type="hidden" id="model" value="">').insertAfter('#body');
+    $('<input type="hidden" id="merk" value="">').insertAfter('#body');
+    $('<input type="hidden" id="tipe" value="">').insertAfter('#body');
+    $('<input type="hidden" id="silinder" value="">').insertAfter('#body');
+    $('<input type="hidden" id="tahun" value="">').insertAfter('#body');
+    $('<input type="hidden" id="nopol" value="">').insertAfter('#body');
 
     getLotData();
     
@@ -328,6 +334,12 @@
             $('#unit_grade').val(data.data.Grade);
             $('#stock_id').val(data.data.AuctionItemId);
             $('#schedule_id').val(data.data.ScheduleId);
+            $('#model').val(data.data.Model);
+            $('#merk').val(data.data.Merk);
+            $('#tipe').val(data.data.Tipe);
+            $('#silinder').val(data.data.Silinder);
+            $('#tahun').val(data.data.Tahun);
+            $('#nopol').val(data.data.NoPolisi);
             $('#va').val(data.data.VA);
             $('#floor-bid').append("+"+addPeriod(data.data.Interval));
             $('#harga_kelipatan').append("Harga Kelipatan: Rp. "+addPeriod(data.data.Interval));
@@ -419,11 +431,17 @@
     var Schedule = $('#date').val();
     var Type = 0;
     var Price = $('#start-price').val();
+    var Model = $('#model').val();
+    var Merk = $('#merk').val();
+    var Tipe = $('#tipe').val();
+    var Silinder = $('#silinder').val();
+    var Tahun = $('#tahun').val();
+    var NoPolisi = $('#nopol').val();
     $.ajax({
       type: "POST",
       url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
-      // url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
-      data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va},
+      // url: "http://localhost/ibid-kpl/api/submitWinner", //Used on local
+      data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va,Model:Model,Merk:Merk,Tipe:Tipe,Silinder:Silinder,Tahun:Tahun,NoPolisi:NoPolisi},
       dataType: "json",
       success: function(data){
         if (data.status) {
@@ -596,8 +614,8 @@
 
   function logHtmlFromObject(log){
     var html = '<div class="col-xs-4 col-md-4">'+addPeriod(log.bid)+'</div>'
-                +'<div class="col-xs-5 col-md-5 weight">'+log.type+' Bid</div>'
-                +'<div class="col-xs-3 col-md-3 weight">'+(log.npl ? log.npl : '....')  + '</div>'
+                +'<div class="col-xs-4 col-md-4 weight">'+log.type+' Bid</div>'
+                +'<div class="col-xs-4 col-md-4 weight">'+(log.npl ? log.npl : '....')  + '</div>'
     return html;
   }
 
