@@ -10,6 +10,12 @@ html, body{
 		 url('../fonts/regular.woff') format('woff');
 }
 
+@font-face {
+    font-family: openbold;
+	src: url('../fonts/bold.ttf') format('ttf'),
+		 url('../fonts/bold.woff') format('woff');
+}
+
 .margin0{
 	margin-left: 0 !important;
 	margin-right: 0 !important;
@@ -21,12 +27,14 @@ html, body{
 }
 
 .main-title{
-	font-family: open sans;
-	font-weight: bold;
+	font-family: openbold;
 	font-size: 1.5em;
 	text-align: left;
 	text-transform: uppercase;
 	margin: 20px 20px 20px 0;
+}
+.sub-title{
+	font-size: 2.5vw;
 }
 .margin11{
 	margin: -11px;
@@ -39,8 +47,8 @@ html, body{
 	border-top-left-radius: 10px;
 }
 .lot-number{
-	font-size: 2.5em;
-	font-weight: bold;
+	font-size: 2em;
+	font-family: openbold;
 	line-height: 0.8em;
 }
 hr {
@@ -92,6 +100,7 @@ hr {
 	padding-left: 10px;
 	border-top-right-radius: 10px;
 	padding-top: 10px;
+	padding-bottom: 40px;
 }
 .purple-bold{
 	background-color: #1b1837;
@@ -100,19 +109,24 @@ hr {
 	background-color: #231f42;
 }
 .rounded-iden{
-	border-radius: 20px;
+	border-radius: 100px;
 	background-color: #36aeac;
-	width: 95%;	
-	margin-left: auto;
+	width: 47%;	
+	margin-left: 2px;
 	margin-right: auto;
 	padding: 2px;
 	margin-bottom: 10px;
+	color: #231f42;
+	float: left;
 }
 .card-block{
 	padding: 0;
 }
+.title-caption{
+	font-size: 1.5vw;
+}
 .bold{
-	font-weight: bold;
+	font-family: openbold;
 }
 .card-img-top{
 	background-image: url(../img/ford.jpg);
@@ -121,20 +135,24 @@ hr {
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 	width:100%;
-	height: 45vh;
+	height: 55vh;
 }
 .margin30{
 	padding-top:20px;
 }
 .card{
-	min-height: 580px;
-	max-height: 580px;
+	min-height: 90vh;
+	max-height: 90vh;
 	border-radius: 10px;
 }
 .block-content{
 	padding: 10px !important;
 }
-
+.main-caption{
+	font-family: openbold;
+	font-size: 2.5vw;
+	line-height: 8vh;
+}
 .car-thumbnail{
 	min-width: 100px;
 	min-height: 30vh;
@@ -183,6 +201,7 @@ hr {
 .grade-alpha{
 	font-size: 28pt;
 	line-height: 25pt;
+	font-family: openbold;
 }
 .first-bid{
 	text-align: left;
@@ -195,8 +214,8 @@ hr {
 	margin-bottom: 10px !important;
 }
 .bid-topbid{
-	font-size: 3vw;
-	font-weight: bold;
+	font-size: 2.7vw;
+	font-family: openbold;
 	color: white;
 }
 .left-content{
@@ -212,7 +231,21 @@ hr {
 	margin-left: 0px;
 	margin-top: 10px;
 }
-
+.openbold{
+	font-family: openbold;
+}
+.red-wrap{
+	border: 3px solid #ce505b;
+	color: #ce505b;
+}
+.yellow-wrap{
+	border: 3px solid yellow; 
+	color: yellow;
+}
+.green-wrap{
+	border: 3px solid #52f332; 
+	color: #52f332;
+}
 .bid-count{
 	border: 3px solid #ce505b;
 	color: #ce505b;
@@ -225,7 +258,7 @@ hr {
 	border: 3px solid yellow; 
 	color: yellow; */
 	font-size: 3vw;
-	font-weight: bold;
+	font-family: openbold;
 	border-radius: 50%;
 	height:8vw;
 	width: 8vw;
@@ -272,6 +305,7 @@ hr {
 .item{
 	padding: 10px;
 	border: 1px solid rgba(255, 255, 255, 0.2);
+	height: 16vh;
 }
 .padding10{
 	padding-top: 20px;
@@ -288,18 +322,29 @@ hr {
 .pull-right{
 	float: right;
 }
+.dot-separator{
+	color:#36aeac;
+	font-family: openbold;
+	font-size: 3rem;
+	float: left;
+	margin-top: -20px;
+}
 .bidding-log{
-	max-height: 300px;
-	min-height: 300px;
+	max-height: 52vh;
+	min-height: 52vh;
 	margin-bottom: 20px;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	background-color: #1b1837;
+	padding-top: 10px;
+}
+.padding20{
+	padding-left: 1.5vw;
 }
 
 .line-height{
-	line-height: 20pt;
-	font-size: 8pt;
+	line-height: 32pt;
+	font-size: 1.4vw;
 }
 
 @media only screen
@@ -405,7 +450,7 @@ and (max-device-width : 1199px)
 	.title-caption{
 		
 			font-size: 8pt !important;
-		
+	}
 	.main-caption{
 		font-size: 11pt !important;
 	}

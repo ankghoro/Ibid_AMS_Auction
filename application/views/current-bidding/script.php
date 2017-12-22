@@ -48,7 +48,7 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
         $('#mechanical').text(val.Mesin);
         $('#frame').text(val.Rangka);
         $('.grade-alpha').text(val.Grade);
-        $('.fold-price').text("Harga Kelipatan: Rp. "+addPeriod(val.StartPrice));
+        $('.fold-price').text("Harga Kelipatan: Rp. "+addPeriod(val.Interval));
       }
     });
     onLog.on("child_added", function(snap) {
