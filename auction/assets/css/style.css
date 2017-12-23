@@ -64,6 +64,11 @@ html, body{
 .margin11{
 	margin: -11px;
 }
+.back-button{
+	    position: absolute;
+	    top: 10px;
+	    left: 35px
+}
 .side-lot{
 	background-color: #231f42;
 	width: 100%;
@@ -125,8 +130,8 @@ hr {
 	text-align: left;
 	height: 100%;
 	width: 100%;
-	padding-right: 40px;
-	padding-left: 10px;
+	padding-right: 0;
+	padding-left: 0;
 	border-top-right-radius: 10px;
 	border-top-left-radius: 10px;
 	padding-top: 10px;
