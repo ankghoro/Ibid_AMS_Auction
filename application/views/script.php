@@ -627,7 +627,7 @@
     var newbid;
       if (count_value == 2) {
         count_value = 0;
-        count = "(-)"
+        count = "-"
         $('#count').val(count);
         $('#count_value').val(count_value);
       }
