@@ -11,8 +11,8 @@ class Online_bid extends CI_Model {
     }
 
     public function firebase(){
-        // $serviceAccount = ServiceAccount::fromJsonFile($_SERVER['DOCUMENT_ROOT'].'/ams-online-sample-firebase-adminsdk-v8jdt-667909a461.json'); // for staging uses
-        $serviceAccount = ServiceAccount::fromJsonFile($_SERVER['DOCUMENT_ROOT'].'/ibid-auction/ams-online-sample-firebase-adminsdk-v8jdt-667909a461.json'); //for local uses
+        $serviceAccount = ServiceAccount::fromJsonFile($_SERVER['DOCUMENT_ROOT'].'/ams-online-sample-firebase-adminsdk-v8jdt-667909a461.json'); // for staging uses
+        // $serviceAccount = ServiceAccount::fromJsonFile($_SERVER['DOCUMENT_ROOT'].'/ibid-auction/ams-online-sample-firebase-adminsdk-v8jdt-667909a461.json'); //for local uses
         $apiKey = 'AIzaSyAE2B_NT9aHHAH1rIyclU-ELw-haAmOcU4';
         return $firebase = (new Factory)
         ->withServiceAccountAndApiKey($serviceAccount,$apiKey)
