@@ -245,7 +245,9 @@ class Auction extends CI_Controller {
                 'status' => $status
             ];
 
-        echo json_encode($output);
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 
     public function checkLot(){
@@ -270,7 +272,9 @@ class Auction extends CI_Controller {
             'data' => $arr,
         ];
 
-        echo json_encode($output);
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 
     public function bidLogExample($price,$interval){
@@ -286,7 +290,9 @@ class Auction extends CI_Controller {
             'status' => $status,
             'data' => $bidlog
         ];
-        echo json_encode($output);
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 
     public function floorBidExample($price,$interval){
@@ -301,7 +307,10 @@ class Auction extends CI_Controller {
             'status' => $status,
             'data' => $bidlog
         ];
-        echo json_encode($output);
+
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 
     public function proxyBidExample($price,$interval){
@@ -317,7 +326,10 @@ class Auction extends CI_Controller {
             'status' => $status,
             'data' => $bidlog
         ];
-        echo json_encode($output);
+
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 }
 
