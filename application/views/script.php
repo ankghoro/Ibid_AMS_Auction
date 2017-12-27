@@ -18,6 +18,7 @@
   // create firebase database reference
   var dbRef = firebase.database();
   var activeCompany = dbRef.ref('company/<?php echo $CompanyId; ?>');
+  var liveCount = activeCompany.child('liveCount');
   var onLog ;
 
   var start = 0;
@@ -36,7 +37,6 @@
       $('#modal-close').trigger('focus')
     })
 
-    
 
     $('.site-footer').find('p').prepend('Copyright © '+year);
     $('a#logout').click(function(){
@@ -166,8 +166,7 @@
       var count = $('#count').val();
       if (count_value < 3) {
         count_value = parseInt(count_value) + 1;
-        $('#count_value').val(count_value);
-        $('#count').val(count_value);
+        liveCount.set(count_value);
         if (count_value == 2) {
           clearInterval(start);
           // clearInterval(startProxy);
@@ -286,7 +285,16 @@
       
       
     });
-    
+
+    liveCount.on("value", function(snapshot) {
+      if (snapshot.exists()) {
+        $('#count').val(snapshot.val());
+        $('#count_value').val(snapshot.val());
+      }else{
+        $('#count').val("-");
+        $('#count_value').val(0);
+      }
+    });
   });
 
   function getLotData() {
@@ -384,8 +392,10 @@
               start = setInterval( getBidLog, 4000 );
               // startProxy = setInterval( getProxyBid, 6000);
             }
+            // reset_count();
           } else {
             activeCompany.child('liveOn').set(null);
+            liveCount.set(null);
             $.ajax({
               type: "POST",
               url: "<?php echo $this->config->item('ibid_schedule');?>/api/updateStatus/"+data.schedule_id, // Used for Staging
@@ -405,6 +415,7 @@
           }
         } else {
           activeCompany.child('liveOn').set(null);
+          liveCount.set(null);
           $('#modal').modal({
               backdrop: 'static',
               keyboard: false
@@ -725,8 +736,7 @@ function isNumberKey(evt){
 }  
 
 function reset_count(){
-  $('#count').val("-");
-  $('#count_value').val(0);
+  liveCount.set(null);
 }
 function pause(){
   $('#floor-bid').prop("disabled", true);
