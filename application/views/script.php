@@ -296,7 +296,6 @@
       success: function(data){
         $('#loader').empty();
         $('#content').show();
-        console.log(data);
         if (data.jadwal) {
           if (data.status) {
             $('.data-lot').html('');
@@ -344,6 +343,8 @@
             $('#floor-bid').append("+"+addPeriod(data.data.Interval));
             $('#harga_kelipatan').append("Harga Kelipatan: Rp. "+addPeriod(data.data.Interval));
             $('#date').val(data.data.Date);
+            firstImage = "url("+data.data.Image[Object.keys(data.data.Image)[0]]+")";
+            $('.card-img-top').css("background-image",firstImage );
 
             activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
             onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot+'/log');
@@ -532,7 +533,6 @@
               dataType: "json",
               success: function(data){
                 if (data.status) {
-                  console.log(skipLotNo);
                   $('#modal-auction-title').text('Konfirmasi');
                   $('#modal-auction-title').css("padding-left",'');
                   $('#modal-auction-body').empty();
@@ -661,7 +661,6 @@ function nextLot() {
     data : {no_lot:Lot,schedule_id:ScheduleId},
     dataType: "json",
     success: function(data){
-        console.log(data.status);
       if (data.status) {
         getLotData();
         // $('#auction_modal').modal('hide');

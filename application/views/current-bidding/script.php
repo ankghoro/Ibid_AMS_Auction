@@ -49,6 +49,8 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
         $('#frame').text(val.Rangka);
         $('.grade-alpha').text(val.Grade);
         $('.fold-price').text("Harga Kelipatan: Rp. "+addPeriod(val.Interval));
+        firstImage = "url("+val.Image[Object.keys(val.Image)[0]]+")";
+        $('.card-img-top').css("background-image",firstImage );
       }
     });
     onLog.on("child_added", function(snap) {

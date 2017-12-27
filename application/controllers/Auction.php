@@ -146,7 +146,8 @@ class Auction extends CI_Controller {
             $check_schedule = count($scheduledata->data);
             $arr = array();
             if ($check_schedule != 0) {
-                $schedule_id    = $scheduledata->data->id;
+                $scheduleData = $scheduledata->data;
+                $schedule_id    = $scheduleData->id;
                 $getLotUrl      = $this->config->item('ibid_lot')."/api/getLot/$schedule_id";
                 $lotReady       = json_decode($this->get_curl($getLotUrl));
                 $getLastLotUrl  = $this->config->item('ibid_lot')."/api/getLastLot/$schedule_id";
@@ -154,38 +155,39 @@ class Auction extends CI_Controller {
                 $getLotBySchedule  = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
                 $lotBySchedule     = json_decode($this->get_curl($getLotBySchedule));
                 $lotBySchedule     = count($lotBySchedule->data);
-                $date = $scheduledata->data->date;
-                $schedule_date = $scheduledata->data->date;
+                $date = $scheduleData->date;
+                $schedule_date = $scheduleData->date;
                 $schedule_date = date_create($schedule_date);
                 $schedule_date = date_format($schedule_date, "j F Y");
-                $company = $scheduledata->data->CompanyName;
-                $waktu = $scheduledata->data->waktu;
+                $company = $scheduleData->CompanyName;
+                $waktu = $scheduleData->waktu;
                 $waktu = date_create($waktu);
                 $waktu = date_format($waktu, "H:i");
-                $jenis = $scheduledata->data->ItemName;
+                $jenis = $scheduleData->ItemName;
                 if ($lotReady->status && $lastLot->status) {
                     $stock_id = $lotReady->data->stock_id;
                     $currentLot = $lotReady->data->no_lot;
                     $lastLot = $lastLot->data->no_lot;
                     $getStockUrl = $this->config->item('ibid_stock')."/api/stockData/".$stock_id;
                     $stockDatarow = json_decode($this->get_curl($getStockUrl));
-                    $arr['AuctionItemId'] = $stockDatarow->data->AuctionItemId; 
-                    $arr['Merk'] = $stockDatarow->data->Merk;
-                    $arr['Tipe'] = $stockDatarow->data->Tipe;
-                    $arr['Silinder'] = $stockDatarow->data->Silinder;
-                    $arr['Model'] = $stockDatarow->data->Model;
-                    $arr['Tahun'] = $stockDatarow->data->Tahun;
-                    $arr['Warna'] = $stockDatarow->data->Warna;
-                    $arr['Transmisi'] = $stockDatarow->data->Transmisi;
-                    $arr['NoPolisi'] = $stockDatarow->data->NoPolisi;
-                    $arr['Kilometer'] = $stockDatarow->data->Kilometer;
-                    $arr['BahanBakar'] = $stockDatarow->data->BahanBakar;
-                    $arr['Exterior'] = $stockDatarow->data->Exterior;
-                    $arr['Interior'] = $stockDatarow->data->Interior;
-                    $arr['Mesin'] = $stockDatarow->data->Mesin;
-                    $arr['Rangka'] = $stockDatarow->data->Rangka;
-                    $arr['Grade'] = $stockDatarow->data->Grade;
-                    $arr['ItemId'] = $stockDatarow->data->ItemId;
+                    $stockData = $stockDatarow->data;
+                    $arr['AuctionItemId'] = $stockData->AuctionItemId; 
+                    $arr['Merk'] = $stockData->Merk;
+                    $arr['Tipe'] = $stockData->Tipe;
+                    $arr['Silinder'] = $stockData->Silinder;
+                    $arr['Model'] = $stockData->Model;
+                    $arr['Tahun'] = $stockData->Tahun;
+                    $arr['Warna'] = $stockData->Warna;
+                    $arr['Transmisi'] = $stockData->Transmisi;
+                    $arr['NoPolisi'] = $stockData->NoPolisi;
+                    $arr['Kilometer'] = $stockData->Kilometer;
+                    $arr['BahanBakar'] = $stockData->BahanBakar;
+                    $arr['Exterior'] = $stockData->Exterior;
+                    $arr['Interior'] = $stockData->Interior;
+                    $arr['Mesin'] = $stockData->Mesin;
+                    $arr['Rangka'] = $stockData->Rangka;
+                    $arr['Grade'] = $stockData->Grade;
+                    $arr['ItemId'] = $stockData->ItemId;
                     $arr['NoLot'] = (int)$currentLot;
                     $arr['ScheduleId'] = $schedule_id;
                     $arr['Date'] = $date;
@@ -194,8 +196,9 @@ class Auction extends CI_Controller {
                     $arr['Waktu'] = $waktu;
                     $arr['Jenis'] = $jenis;
                     $arr['LotTotal'] = $lotBySchedule;
-                    $arr['StartPrice'] = (int)$stockDatarow->data->StartPrice;
-                    $arr['Interval'] = (int)$scheduledata->data->interval;
+                    $arr['StartPrice'] = (int)$stockData->StartPrice;
+                    $arr['Interval'] = (int)$scheduleData->interval;
+                    $arr['Image'] = json_decode($stockData->ImgUrl);
 
                     $jadwal = true; 
                     $status = true;
@@ -218,7 +221,9 @@ class Auction extends CI_Controller {
             'data' => $arr,
             'disable' => $disable
         ];
-        echo json_encode($newData);
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($newData));
     }
 
     public function skip(){
@@ -240,7 +245,9 @@ class Auction extends CI_Controller {
                 'status' => $status
             ];
 
-        echo json_encode($output);
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 
     public function checkLot(){
@@ -265,7 +272,9 @@ class Auction extends CI_Controller {
             'data' => $arr,
         ];
 
-        echo json_encode($output);
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 
     public function bidLogExample($price,$interval){
@@ -281,7 +290,9 @@ class Auction extends CI_Controller {
             'status' => $status,
             'data' => $bidlog
         ];
-        echo json_encode($output);
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 
     public function floorBidExample($price,$interval){
@@ -296,7 +307,10 @@ class Auction extends CI_Controller {
             'status' => $status,
             'data' => $bidlog
         ];
-        echo json_encode($output);
+
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 
     public function proxyBidExample($price,$interval){
@@ -312,7 +326,10 @@ class Auction extends CI_Controller {
             'status' => $status,
             'data' => $bidlog
         ];
-        echo json_encode($output);
+
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($output));
     }
 }
 
