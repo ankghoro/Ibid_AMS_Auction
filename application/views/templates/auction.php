@@ -160,7 +160,7 @@
                                                 <div class="col-md-6 center-align">
                                                     <div class="form-group clearfix">
                                                         <label class="control-label">Nomor Lot :</label>
-                                                        <input type="text" class="form-control" id="skip">
+                                                        <input type="text" class="form-control" id="skip" onkeypress="return isNumberKey(event)">
                                                         <button class="btn btn-warning btn-sm btn-block" id="btn_skip">SKIP</button>
                                                     </div>
                                                     <div class="form-group clearfix">
