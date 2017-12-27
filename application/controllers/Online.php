@@ -17,16 +17,14 @@ class Online extends CI_Controller {
 	public function bid()
 	{
         $interval = (int)$this->input->post('interval');
-        $biddertype = "Online Bidder";
         $company = $this->input->post('company');
         $schedule = $this->input->post('schedule');
         $lotStock = $this->input->post('stock');
         $database = $this->bid->firebase()->getDatabase();
-        $reference = $database->getReference("company/$company/schedule/$schedule/mode|ON/lot|stock/$lotStock/log");
+        $reference = $database->getReference("company/$company/schedule|online/$schedule/mode|ON/lot|stock/$lotStock/log");
         // var_dump($reference);die();
         $postData = [
-            "bid" => $interval,
-            "type" => $biddertype
+            "bid" => $interval
         ];
         $reference->push($postData);
 
