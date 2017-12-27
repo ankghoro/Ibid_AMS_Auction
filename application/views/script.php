@@ -99,7 +99,13 @@
     });
 
     $('#btn_next').on('click', function(){
-      var body = 'Apakah anda yakin akan melanjutkan ke lot selanjutnya ?';
+      var data_button = $(this).attr('data-button');
+      var body = "-";
+      if(data_button == 'lot'){
+        body = 'Apakah anda yakin akan melanjutkan ke lot selanjutnya ?';
+      }else{
+        body = 'Apakah anda yakin akan melanjutkan ke jadwal selanjutnya ?';
+      }
         $('#modal-auction-title').html('<i class="fa fa-warning new-alert" style="margin-right: 5px;"></i>Konfirmasi');
         $('#modal-auction-body').empty();
         $('#modal-auction-body').append(body);
@@ -118,6 +124,7 @@
         getLotData();
         $('#auction_modal').modal('hide');
       }
+      reset_count();
     });
 
     $('#floor-bid').on('click', function(){
@@ -349,7 +356,7 @@
             activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
             onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot+'/log');
             
-            pause();
+            // pause();
             $('#bid-log').empty();
             onLog.on("child_added", function(snap) {
               var state;
@@ -399,21 +406,44 @@
             $('#modal-body').empty();
             $('#modal-body').append(body);
             $('#proceed-winner').hide();
-            $('#image').css("background-image","url(assets/img/noimage.png");
+            $('.card-img-top').css("background-image","url(<?php echo base_url('assets/img/noimage.png')?>)");
             $('#close').show();
+
+            $('#item_name').text("Tidak ada data");
+            $('#item_lot').text("-");
+            $('#item_color').text("-");
+            $('#item_transmisi').text("-");
+            $('#item_km').text("-");
+            $('#item_tahun').text("-");
+            $('#item_nopol').text("-");
+            $('#item_bahanbakar').text("-");
+            $('#item_exterior').text("-");
+            $('#item_interior').text("-");
+            $('#item_mechanical').text("-");
+            $('#item_frame').text("-");
+            $('#item_grade').text("-");
+            $('#item_startprice').text("Rp. "+'-');
+            $('#harga_kelipatan').text("Harga Kelipatan: Rp. -");
+            $('#bid-log').empty();
+
+            clearInterval(start);
             $('#modal').modal('show');
         }
 
         if (data.disable) {
-            $('#btn_next').prop("disabled",true);
+            $('#btn_next').text("Next Schedule");
+            $('#btn_next').attr("data-button",'schedule');
+            $('#auction_modal').find('#modal-auction-body').text("Apakah anda yakin akan melanjutkan ke schedule selanjutnya ?");
+        }else{
+            $('#btn_next').text("Next Lot");
+            $('#btn_next').attr("data-button",'lot');
+            $('#auction_modal').find('#modal-auction-body').text("Apakah anda yakin akan melanjutkan ke lot selanjutnya ?");
         }
         
-          if ($('#auction_start').val() == 1) {
-            start = setInterval( getBidLog, 4000 );
-            // startProxy = setInterval( getProxyBid, 6000);
-          }
-
-        $('#count_value').val(0); 
+        if ($('#auction_start').val() == 1) {
+          start = setInterval( getBidLog, 4000 );
+          // startProxy = setInterval( getProxyBid, 6000);
+        }
       },
       error: function (jqXHR, textStatus, errorThrown) {
           $('#loader').empty();
@@ -626,10 +656,7 @@
     var last = onLog.orderByKey().limitToLast(1);
     var newbid;
       if (count_value == 2) {
-        count_value = 0;
-        count = "-"
-        $('#count').val(count);
-        $('#count_value').val(count_value);
+        reset_count();
       }
     
     last.once('value', function(snapshot) {
@@ -688,6 +715,10 @@ function isNumberKey(evt){
     return true;
 }  
 
+function reset_count(){
+  $('#count').val("-");
+  $('#count_value').val(0);
+}
 function pause(){
   $('#floor-bid').prop("disabled", true);
   $('#start').prop("disabled",false); 
