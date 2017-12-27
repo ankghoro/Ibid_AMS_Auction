@@ -49,8 +49,8 @@ class Online extends CI_Controller {
         $database = $this->bid->firebase()->getDatabase();
         date_default_timezone_set("Asia/Jakarta");
         $currentDateTime = date("d-m-y H:i:s");
-        $url = $this->config->item('ibid_schedule')."/api/scheduleOnline/"; //for staging uses
-        // $url = "localhost/ibid-ams-schedule/api/scheduleOnline"; //local uses
+        $url = $this->config->item('ibid_schedule')."/api/scheduleOnlineForTheDay/"; //for staging uses
+        // $url = "localhost/ibid-ams-schedule/api/scheduleOnlineForTheDay"; //local uses
         $scheduleOnline = json_decode($this->get_curl($url));
         if ($scheduleOnline) {
             foreach ($scheduleOnline->data as $schedule) {
@@ -70,6 +70,9 @@ class Online extends CI_Controller {
                             $reference->set($postData);  
                         }                    
                     } else {
+                        $updateUrl = $this->config->item('ibid_schedule')."/api/updateStatus/$id";
+                        // $updateUrl = "localhost/ibid-ams-schedule/api/updateStatus/$id";
+                        $this->get_curl($updateUrl);
                         $postData = ["scheduleOn" => false];
                         $reference->update($postData);
                     }
