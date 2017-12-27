@@ -246,17 +246,16 @@ hr {
 	border: 3px solid #52f332; 
 	color: #52f332;
 }
+.default-wrap{
+	border: 3px solid #bd66bd; 
+	color: #bd66bd;
+}
 .bid-count{
-	border: 3px solid #ce505b;
-	color: #ce505b;
-	/*
-	Hijau
-	border: 3px solid #52f332; 
-	color: #52f332; */
-	/*
-	Kuning
-	border: 3px solid yellow; 
-	color: yellow; */
+    -webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+
 	font-size: 3vw;
 	font-family: openbold;
 	border-radius: 50%;

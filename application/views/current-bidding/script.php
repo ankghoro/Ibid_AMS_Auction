@@ -19,6 +19,7 @@
 var dbRef = firebase.database();
 var auctionLog = dbRef.ref('company/3/schedule/1/lot|stock/1321/log');
 var activeCompany = dbRef.ref('company/<?php echo $CompanyId; ?>');
+var liveCount = activeCompany.child('liveCount');
 var onLog;
 activeCompany.child('liveOn').on('value', function(snapshot) {
   if (snapshot.exists()) {
@@ -49,6 +50,8 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
         $('#frame').text(val.Rangka);
         $('.grade-alpha').text(val.Grade);
         $('.fold-price').text("Harga Kelipatan: Rp. "+addPeriod(val.Interval));
+        firstImage = "url("+val.Image[Object.keys(val.Image)[0]]+")";
+        $('.card-img-top').css("background-image",firstImage );
       }
     });
     onLog.on("child_added", function(snap) {
@@ -58,6 +61,25 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
     });
   }else{
     reset()
+  }
+});
+
+liveCount.on("value", function(snapshot) {
+  $('.bid-count').removeClass("default-wrap green-wrap yellow-wrap red-wrap");
+  if (snapshot.exists()) {
+    if (snapshot.val() == 1) {
+      $('.bid-count').addClass("green-wrap");
+    } else if(snapshot.val() == 2) {
+      $('.bid-count').addClass("yellow-wrap");
+    }else{
+      $('.bid-count').addClass("red-wrap");
+    }
+    $('.bid-count').find('div').text(snapshot.val());
+  }else{
+    $('.bid-count').addClass("default-wrap");
+    $('.bid-count').find('div').text('-');
+    // $('#count').val("-");
+    // $('#count_value').val(0);
   }
 });
 // prepare log object's HTML
