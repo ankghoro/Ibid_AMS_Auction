@@ -74,9 +74,9 @@
                                     <div class="row margin11">
                                         <div class="col-md-4">
                                             <center>
-                                                <div class="bid-count">
+                                                <div class="bid-count default-wrap">
                                                     <h6 class="count-right">COUNT</h6>  
-                                                    1
+                                                    <div>-</div>
                                                 </div>
                                             </center>
                                         </div>
