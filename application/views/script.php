@@ -354,7 +354,9 @@
             $('.card-img-top').css("background-image",firstImage );
 
             activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
-            onLog = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot+'/log');
+            onLot = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot);
+            onLog = onLot.child('log');
+            onMode = onLot.child('allowBid');
             
             // pause();
             $('#bid-log').empty();
@@ -376,6 +378,11 @@
               $('#top_bid').html('Rp. '+addPeriod(snap.val().bid));
               $('#top_bid_state').html(state);
             });
+
+            if ($('#auction_start').val() == 1) {
+              start = setInterval( getBidLog, 4000 );
+              // startProxy = setInterval( getProxyBid, 6000);
+            }
           } else {
             activeCompany.child('liveOn').set(null);
             $.ajax({
@@ -424,6 +431,14 @@
             $('#item_grade').text("-");
             $('#item_startprice').text("Rp. "+'-');
             $('#harga_kelipatan').text("Harga Kelipatan: Rp. -");
+            $('#schedule_date').text('-');
+            $('#schedule_company').text('-');
+            $('#schedule_type').text('-');
+            $('#schedule_time').text('-');
+            $('#floor-bid').text("+");
+            $('#lot_total').text('-');
+            $('#top_bid').text('-');
+            $('#top_bid_state').text('');
             $('#bid-log').empty();
 
             clearInterval(start);
@@ -433,16 +448,9 @@
         if (data.disable) {
             $('#btn_next').text("Next Schedule");
             $('#btn_next').attr("data-button",'schedule');
-            $('#auction_modal').find('#modal-auction-body').text("Apakah anda yakin akan melanjutkan ke schedule selanjutnya ?");
         }else{
             $('#btn_next').text("Next Lot");
             $('#btn_next').attr("data-button",'lot');
-            $('#auction_modal').find('#modal-auction-body').text("Apakah anda yakin akan melanjutkan ke lot selanjutnya ?");
-        }
-        
-        if ($('#auction_start').val() == 1) {
-          start = setInterval( getBidLog, 4000 );
-          // startProxy = setInterval( getProxyBid, 6000);
         }
       },
       error: function (jqXHR, textStatus, errorThrown) {
