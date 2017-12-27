@@ -124,6 +124,7 @@
         getLotData();
         $('#auction_modal').modal('hide');
       }
+      $('#skip').val('');
       reset_count();
     });
 
