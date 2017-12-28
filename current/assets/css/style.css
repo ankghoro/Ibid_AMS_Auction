@@ -136,6 +136,7 @@ hr {
 	background-image: url(../img/default.png);
 	background-repeat: no-repeat;
 	background-size: cover;
+	background-position: center;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 	width:100%;
@@ -179,7 +180,12 @@ hr {
 	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
 	background-color: white;
 }
-
+.bottom10{
+	margin-top: 2.5vh;
+}
+.top10{
+	margin-top: 1.2vh;
+}
 .content-page {
     margin-left: 0;
     margin-top: 0;
@@ -343,14 +349,13 @@ hr {
 	margin-top: -20px;
 }
 .bidding-log{
-	max-height: 52vh;
-	min-height: 52vh;
-	margin-bottom: 20px;
+	min-height: 58vh;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	background-color: #ebebed;
 	padding-top: 10px;
 	color: #1b1837 !important;
+	margin-bottom: 10px;
 }
 
 .grey{
@@ -359,6 +364,7 @@ hr {
 
 .padding20{
 	padding-left: 1.5vw;
+	margin-top: 3vh;
 }
 
 .line-height{
@@ -448,7 +454,14 @@ and (max-device-width : 768px)
 	}
 }
 
-
+@media only screen
+and (min-device-height : 768px)
+{
+	.rounded-iden{
+		height: 8.5vh;
+	}
+		
+}
 
 @media only screen
 and (max-device-width : 1199px)

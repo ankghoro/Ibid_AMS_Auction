@@ -76,7 +76,7 @@
                                             <center>
                                                 <div class="bid-count default-wrap">
                                                     <h6 class="count-right">COUNT</h6>  
-                                                    <div>-</div>
+                                                    <div class="bottom10">-</div>
                                                 </div>
                                             </center>
                                         </div>
@@ -90,7 +90,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
+                                    <div class="row top10">
                                         <div class="col-md-4">
                                             <div class="stock-detail padding13">
                                                 <div class="row padding10">
