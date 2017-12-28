@@ -69,10 +69,10 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-6">
-                            <div class="card purple-verybold">
+                            <div class="card grey">
                                 <div class="card-block block-content">
                                     <div class="row margin11">
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 purple-bold left-radius">
                                             <center>
                                                 <div class="bid-count default-wrap">
                                                     <h6 class="count-right">COUNT</h6>  
