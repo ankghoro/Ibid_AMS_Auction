@@ -44,7 +44,7 @@
                                                 <span class="grade-text">Grade</span> <br>
                                                 <span class="grade-alpha data-lot" id="item_grade">-</span>
                                             </div>
-                                            <div class="card-img-top" style="background-image: url(<?php echo base_url('auction/assets/')?>img/ford.jpg);"></div>
+                                            <div class="card-img-top" style="background-image: url(<?php echo base_url('auction/assets/')?>img/default.png);"></div>
                                         </div>
                                     </div>
                                     <div class="border-bottom">

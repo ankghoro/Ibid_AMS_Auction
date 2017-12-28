@@ -19,6 +19,7 @@
   var dbRef = firebase.database();
   var activeCompany = dbRef.ref('company/<?php echo $CompanyId; ?>');
   var liveCount = activeCompany.child('liveCount');
+  var onStock = activeCompany.child('currentStock');
   var onLog ;
 
   var start = 0;
@@ -367,6 +368,10 @@
             onLog = onLot.child('log');
             onMode = onLot.child('allowBid');
             
+            value = data.data;
+            value.Image = data.data.Image[Object.keys(data.data.Image)[0]];
+            onStock.set(value);
+
             // pause();
             $('#bid-log').empty();
             onLog.on("child_added", function(snap) {
@@ -389,6 +394,8 @@
             });
 
             if ($('#auction_start').val() == 1) {
+              $('#btn_count').prop("disabled", false);
+              $('#floor-bid').prop("disabled", false);
               start = setInterval( getBidLog, 4000 );
               // startProxy = setInterval( getProxyBid, 6000);
             }
@@ -396,6 +403,7 @@
           } else {
             activeCompany.child('liveOn').set(null);
             liveCount.set(null);
+            onStock.set(null);
             $.ajax({
               type: "POST",
               url: "<?php echo $this->config->item('ibid_schedule');?>/api/updateStatus/"+data.schedule_id, // Used for Staging
@@ -416,6 +424,7 @@
         } else {
           activeCompany.child('liveOn').set(null);
           liveCount.set(null);
+          onStock.set(null);
           $('#modal').modal({
               backdrop: 'static',
               keyboard: false
@@ -425,7 +434,7 @@
             $('#modal-body').empty();
             $('#modal-body').append(body);
             $('#proceed-winner').hide();
-            $('.card-img-top').css("background-image","url(<?php echo base_url('assets/img/noimage.png')?>)");
+            $('.card-img-top').css("background-image","url(<?php echo base_url('assets/img/default.png')?>)");
             $('#close').show();
 
             $('#item_name').text("Tidak ada data");
@@ -454,15 +463,21 @@
             $('#bid-log').empty();
 
             clearInterval(start);
+            $('#btn_count').prop("disabled", true);
+            $('#floor-bid').prop("disabled", true);
             $('#modal').modal('show');
         }
 
         if (data.disable) {
             $('#btn_next').text("Next Schedule");
             $('#btn_next').attr("data-button",'schedule');
+            $('#skip').prop("disabled", true);
+            $('#btn_skip').prop("disabled", true);
         }else{
             $('#btn_next').text("Next Lot");
             $('#btn_next').attr("data-button",'lot');
+            $('#skip').prop("disabled", false);
+            $('#btn_skip').prop("disabled", false);
         }
       },
       error: function (jqXHR, textStatus, errorThrown) {
