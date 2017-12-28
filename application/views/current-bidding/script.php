@@ -118,6 +118,7 @@ function reset(){
   $('#frame').text("-");
   $('.grade-alpha').text("-");
   $('.fold-price').text("Harga Kelipatan: Rp. -");
+  $('.card-img-top').css("background-image","url(<?php echo base_url('assets/img/default.png')?>)");
 }
 
 </script>

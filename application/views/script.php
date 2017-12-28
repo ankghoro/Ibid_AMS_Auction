@@ -434,7 +434,7 @@
             $('#modal-body').empty();
             $('#modal-body').append(body);
             $('#proceed-winner').hide();
-            $('.card-img-top').css("background-image","url(<?php echo base_url('assets/img/noimage.png')?>)");
+            $('.card-img-top').css("background-image","url(<?php echo base_url('assets/img/default.png')?>)");
             $('#close').show();
 
             $('#item_name').text("Tidak ada data");
