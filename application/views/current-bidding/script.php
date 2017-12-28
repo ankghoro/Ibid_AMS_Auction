@@ -20,6 +20,7 @@ var dbRef = firebase.database();
 var auctionLog = dbRef.ref('company/3/schedule/1/lot|stock/1321/log');
 var activeCompany = dbRef.ref('company/<?php echo $CompanyId; ?>');
 var liveCount = activeCompany.child('liveCount');
+var currentStock = activeCompany.child('currentStock');
 var onLog;
 activeCompany.child('liveOn').on('value', function(snapshot) {
   if (snapshot.exists()) {
@@ -29,14 +30,11 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
     var liveOn = snapshot.val();
     liveOn = liveOn.split('|');
     onLog = activeCompany.child('schedule/'+liveOn[0]+'/lot|stock/'+liveOn[1]+'/log');
-    $.ajax({
-      type: "GET",
-      url: "<?php echo base_url('auction/');?>datalot",
-      dataType: "json",
-      success: function(data){
-        val = data.data;
+    currentStock.once('value', function(stockSnapshot) {
+      if (stockSnapshot.exists()) {
+        val = stockSnapshot.val();
         var name = val.Merk+" "+val.Tipe;
-        $('.main-title').text(name+" "+data.data.Silinder+" "+val.Model);
+        $('.main-title').text(name+" "+val.Silinder+" "+val.Model);
         $('.lot-number').text(val.NoLot);
         $('.separator1').find('h5').text(val.Tahun);
         $('#startprice').text(addPeriod(val.StartPrice));
@@ -50,8 +48,10 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
         $('#frame').text(val.Rangka);
         $('.grade-alpha').text(val.Grade);
         $('.fold-price').text("Harga Kelipatan: Rp. "+addPeriod(val.Interval));
-        firstImage = "url("+val.Image[Object.keys(val.Image)[0]]+")";
+        firstImage = "url("+val.Image+")";
         $('.card-img-top').css("background-image",firstImage );
+      }else{
+        reset()
       }
     });
     onLog.on("child_added", function(snap) {
