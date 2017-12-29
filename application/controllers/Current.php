@@ -116,7 +116,7 @@ class Current extends CI_Controller {
                         "CompanyId" => $UserLogon['CompanyId'],
                     ];
                     setcookie('UserLogon', serialize($userlogon), time() + (3600 * 4), "/", base_domain(base_url()));
-                    redirect($this->config->item('ibid_kpl'), 'refresh');
+                    redirect($this->config->item('ibid_auction')."/current/bidding", 'refresh');
                 }
             }
             redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
