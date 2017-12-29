@@ -66,34 +66,42 @@ class Online extends CI_Controller {
                     // var_dump($check); die();
                     if (strtotime($currentDateTime) <= strtotime($dateTime)+$duration) {
                         if (is_null($check)) {
-                            $postData = ["scheduleOn" => true];
-                            $reference->set($postData); 
                             $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter/$id";
                             // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                             $lotData = json_decode($this->get_curl($lot_url));
-                            foreach ($lotData->data as $value) {
-                                $lotStock = $value->no_lot;
-                                $lotReference = $database->getReference("company/$company/schedule|online/$id/lot|stock/$lotStock");
-                                $lotData = [
-                                    "lot" => $value->no_lot,
-                                    "scheduleId" => $id,
-                                    "date" => $schedule->date,
-                                    "stockName" => $value->stock_name,
-                                    "type_id" => 1,
-                                    "stock_id" => $value->stock_id,
-                                    "model" => $value->stock_model,
-                                    "merk" => $value->stock_name,
-                                    "tipe" => $value->stock_name,
-                                    "silinder" => $value->stock_silinder,
-                                    "tahun" => $value->stock_year,
-                                    "nopol" => $value->stock_police_numb,
-                                    "harga" => $value->stock_startprice,
-                                    "VA" => " ",
-                                ];
-                                $lotReference->set($lotData);
+                            if ($lotData->status) {
+                                $postData = ["scheduleOn" => true];
+                                $reference->set($postData); 
+                                foreach ($lotData->data as $value) {
+                                    $lotStock = $value->no_lot;
+                                    $lotReference = $database->getReference("company/$company/schedule|online/$id/lot|stock/$lotStock");
+                                    $lotData = [
+                                        "lot" => $value->no_lot,
+                                        "scheduleId" => $id,
+                                        "date" => $schedule->date,
+                                        "stockName" => $value->stock_name,
+                                        "type_id" => 1,
+                                        "stock_id" => $value->stock_id,
+                                        "model" => $value->stock_model,
+                                        "merk" => $value->stock_name,
+                                        "tipe" => $value->stock_name,
+                                        "silinder" => $value->stock_silinder,
+                                        "tahun" => $value->stock_year,
+                                        "nopol" => $value->stock_police_numb,
+                                        "harga" => $value->stock_startprice,
+                                        "VA" => " ",
+                                    ];
+                                    $lotReference->set($lotData);
+                                }
                             }
                         }                    
                     } else {
+                        $postData = ["scheduleOn" => false];
+                        $reference->update($postData);
+                        $updateUrl = $this->config->item('ibid_schedule')."/api/updateStatus/$id";
+                        // $updateUrl = "localhost/ibid-ams-schedule/api/updateStatus/$id";
+                        $this->get_curl($updateUrl);
+
                         $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter/$id";
                         // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                         $lotData = json_decode($this->get_curl($lot_url));
@@ -107,7 +115,6 @@ class Online extends CI_Controller {
                                 $last = reset($lastBid);
                                 $harga = $last['bid'];
                                 $npl = $last['npl'];
-                                // var_dump($lotData); die();
                                 $winnerData = array(
                                     "UnitName" => @$lotData['stockName'],
                                     "Npl" => $npl,
@@ -131,11 +138,7 @@ class Online extends CI_Controller {
                                 $this->postCURL($submitWinner, $winnerData);
                             }
                         }
-                        $updateUrl = $this->config->item('ibid_schedule')."/api/updateStatus/$id";
-                        // $updateUrl = "localhost/ibid-ams-schedule/api/updateStatus/$id";
-                        $this->get_curl($updateUrl);
-                        $postData = ["scheduleOn" => false];
-                        $reference->update($postData);
+                        
                     }
                 }
             }
@@ -155,6 +158,7 @@ class Online extends CI_Controller {
         $company = $this->input->post('company');
         $schedule = $this->input->post('schedule');
         $lotStock = $this->input->post('lot');
+        $npl = $this->input->post('npl');
         $database = $this->bid->firebase()->getDatabase();
         $checkreference = $database->getReference("company/$company/schedule|online/$schedule");
         $reference = $database->getReference("company/$company/schedule|online/$schedule/lot|stock/$lotStock/log");
@@ -163,12 +167,12 @@ class Online extends CI_Controller {
         if ($value_check['scheduleOn']) {
             if (is_null($lastBid)) {
                 $bid = $startprice + $interval;
-                $postData = ["bid" => $bid, "npl" => mt_rand(1000, 9999)];
+                $postData = ["bid" => $bid, "npl" => $npl];
                 $reference->push($postData); 
             } else {
                 $last = reset($lastBid);
                 $bid = $last['bid'] + $interval;
-                $postData = ["bid" => $bid, "npl" => mt_rand(1000, 9999)];
+                $postData = ["bid" => $bid, "npl" => $npl];
                 $reference->push($postData); 
             }
             $status = true;
