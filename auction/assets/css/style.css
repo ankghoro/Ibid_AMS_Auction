@@ -66,8 +66,8 @@ html, body{
 }
 .back-button{
 	    position: absolute;
-	    top: 10px;
-	    left: 35px
+	    bottom: -30px;
+	    left: 5px
 }
 .side-lot{
 	background-color: #231f42;
@@ -230,7 +230,7 @@ hr {
 
   .content-page .content {
 	padding: 0 5px 10px 5px;
-	margin-top: 10vh;
+	margin-top: 3vh;
   }
 .car-grade{
 	border-radius: 50%;
