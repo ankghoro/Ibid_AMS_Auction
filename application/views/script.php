@@ -21,6 +21,7 @@
   var liveCount = activeCompany.child('liveCount');
   var onStock = activeCompany.child('currentStock');
   var onLog ;
+  var onMode ;
 
   var start = 0;
   var startProxy = 0;
@@ -133,6 +134,7 @@
       floorBid();
       if(start == null){
         start = setInterval( getBidLog, 4000 );
+        onMode.set(true);
         // startProxy = setInterval( getProxyBid, 6000);
       }
     });
@@ -170,6 +172,7 @@
         liveCount.set(count_value);
         if (count_value == 2) {
           clearInterval(start);
+          onMode.set(false);
           // clearInterval(startProxy);
           start = null;
           // startProxy = null;
@@ -371,6 +374,7 @@
             value = data.data;
             value.Image = data.data.Image[Object.keys(data.data.Image)[0]];
             onStock.set(value);
+            onMode.set(true);
 
             // pause();
             $('#bid-log').empty();
@@ -404,6 +408,7 @@
             activeCompany.child('liveOn').set(null);
             liveCount.set(null);
             onStock.set(null);
+            onMode.set(false);
             $.ajax({
               type: "POST",
               url: "<?php echo $this->config->item('ibid_schedule');?>/api/updateStatus/"+data.schedule_id, // Used for Staging
@@ -425,6 +430,7 @@
           activeCompany.child('liveOn').set(null);
           liveCount.set(null);
           onStock.set(null);
+          onMode.set(false);
           $('#modal').modal({
               backdrop: 'static',
               keyboard: false
@@ -625,16 +631,16 @@
       dataType: "json",
       success: function(data){
         if (data.status) {
-          $('#top_bid').html('-');
-          $('#top_bid_state').html('-');
-          $('#top_bid').html('Rp. '+addPeriod(data.data.Nominal));
-          $('#top_bid_state').html('Online Bidder');
           var last = onLog.orderByKey().limitToLast(1);
           last.once('value', function(snapshot) {
-            onLog.push({
-              bid: data.data.Nominal,
-              type: 'Online',
-              npl: data.data.No
+            onMode.once('value', function(snapmode) {
+              if(snapmode.exists() && snapmode.val()){
+                onLog.push({
+                  bid: data.data.Nominal,
+                  type: 'Online',
+                  npl: data.data.No
+                });
+              }
             });
           });
         } 
