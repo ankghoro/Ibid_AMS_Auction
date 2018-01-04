@@ -408,7 +408,9 @@
             activeCompany.child('liveOn').set(null);
             liveCount.set(null);
             onStock.set(null);
-            onMode.set(false);
+            if (onMode != undefined) {
+              onMode.set(false);
+            }
             $.ajax({
               type: "POST",
               url: "<?php echo $this->config->item('ibid_schedule');?>/api/updateStatus/"+data.schedule_id, // Used for Staging
@@ -429,8 +431,10 @@
         } else {
           activeCompany.child('liveOn').set(null);
           liveCount.set(null);
-          onStock.set(null);
-          onMode.set(false);
+          onStock.set(null); 
+          if (onMode != undefined) {
+            onMode.set(false);
+          }
           $('#modal').modal({
               backdrop: 'static',
               keyboard: false
@@ -635,11 +639,11 @@
           last.once('value', function(snapshot) {
             onMode.once('value', function(snapmode) {
               if(snapmode.exists() && snapmode.val()){
-                onLog.push({
-                  bid: data.data.Nominal,
-                  type: 'Online',
-                  npl: data.data.No
-                });
+                // onLog.push({
+                //   bid: data.data.Nominal,
+                //   type: 'Online',
+                //   npl: data.data.No
+                // });
               }
             });
           });
