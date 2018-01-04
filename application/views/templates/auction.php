@@ -11,10 +11,7 @@
 
 </head>
 <body class="fixed-left">
-    <a href="<?php echo $this->config->item('ibid_auth'); ?>" class="btn btn-info back-button">
-        <i class="fa fa-chevron-left"></i> Back
-    </a>
-    <div id="wrapper">  
+        <div id="wrapper">  
         <div class="content-page">
             <div class="content">
 
@@ -85,6 +82,9 @@
                                         </div>
                                     </div>             
                                 </div>
+                            <a href="<?php echo $this->config->item('ibid_auth'); ?>" class="back-button">
+                                <i class="fa fa-chevron-left"></i> Back
+                            </a>
                             </div>
                         </div>
                         <div class="col-md-4 col-lg-4">
@@ -223,4 +223,5 @@
             </div>
         </div>
     </div>
+
 <?php $this->load->view($content_script); ?>
