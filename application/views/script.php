@@ -97,7 +97,8 @@
         $('#btn_count').prop("disabled",false);
         start = setInterval( getBidLog, 4000 );
         // startProxy = setInterval( getProxyBid, 6000);
-        $('#auction_start').val(1)
+        $('#auction_start').val(1);
+        onMode.set(true);
     });
 
     $('#btn_next').on('click', function(){
@@ -374,7 +375,7 @@
             value = data.data;
             value.Image = data.data.Image[Object.keys(data.data.Image)[0]];
             onStock.set(value);
-            onMode.set(true);
+            onMode.set(false);
 
             // pause();
             $('#bid-log').empty();
@@ -400,6 +401,7 @@
             if ($('#auction_start').val() == 1) {
               $('#btn_count').prop("disabled", false);
               $('#floor-bid').prop("disabled", false);
+              onMode.set(true);
               start = setInterval( getBidLog, 4000 );
               // startProxy = setInterval( getProxyBid, 6000);
             }
