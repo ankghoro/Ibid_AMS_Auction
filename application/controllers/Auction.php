@@ -200,6 +200,8 @@ class Auction extends CI_Controller {
                     $arr['Interval'] = (int)$scheduleData->interval;
                     $arr['Image'] = json_decode($stockData->ImgUrl);
 
+                    shell_exec("php ".FCPATH."../ibid-autobid/index.php proxy bid ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." 2>&1 | tee -a /tmp/mylog 2>/dev/null >/dev/null &");  
+
                     $jadwal = true; 
                     $status = true;
                     $currentLot == $lastLot ? $disable = true : $disable = false; 
