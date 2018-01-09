@@ -49,7 +49,7 @@ class Online extends CI_Controller {
         $database = $this->bid->firebase()->getDatabase();
         date_default_timezone_set("Asia/Jakarta");
         $currentDateTime = date("d-m-y H:i:s");
-        $url = $this->config->item('ibid_schedule')."/api/scheduleOnlineForTheDay/"; //for staging uses
+        $url = "http://ibid-ams-schedule.stagingapps.net/api/scheduleOnlineForTheDay/"; //for staging uses
         // $url = "localhost/ibid-ams-schedule/api/scheduleOnlineForTheDay"; //local uses
         $scheduleOnline = json_decode($this->get_curl($url));
         if ($scheduleOnline) {
@@ -66,7 +66,7 @@ class Online extends CI_Controller {
                     // var_dump($check); die();
                     if (strtotime($currentDateTime) <= strtotime($dateTime)+$duration) {
                         if (is_null($check)) {
-                            $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter/$id";
+                            $lot_url = "http://ibid-ams-lot.stagingapps.net/api/getLotFilter/$id";
                             // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                             $lotData = json_decode($this->get_curl($lot_url));
                             if ($lotData->status) {
@@ -98,11 +98,11 @@ class Online extends CI_Controller {
                     } else {
                         $postData = ["scheduleOn" => false];
                         $reference->update($postData);
-                        $updateUrl = $this->config->item('ibid_schedule')."/api/updateStatus/$id";
+                        $updateUrl = "http://ibid-ams-schedule.stagingapps.net/api/updateStatus/$id";
                         // $updateUrl = "localhost/ibid-ams-schedule/api/updateStatus/$id";
                         $this->get_curl($updateUrl);
 
-                        $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter/$id";
+                        $lot_url = "http://ibid-ams-lot.stagingapps.net/api/getLotFilter/$id";
                         // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                         $lotData = json_decode($this->get_curl($lot_url));
                         foreach ($lotData->data as $value) {
@@ -133,7 +133,7 @@ class Online extends CI_Controller {
                                     "Va" => @$lotData['VA'],
                                 );
                                 // var_dump($winnerData);die();
-                                $submitWinner = $this->config->item('ibid_kpl')."/api/submitWinner";
+                                $submitWinner = "http://ibid-ams-kpl.stagingapps.net/api/submitWinner";
                                 // $submitWinner = "localhost/ibid-kpl/api/submitWinner";
                                 $this->postCURL($submitWinner, $winnerData);
                             }
