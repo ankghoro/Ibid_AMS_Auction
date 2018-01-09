@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -176,7 +175,7 @@
                                                             <div class="form-group clearfix">
                                                                     <label class="control-label">Count :</label>
                                                                     <input type="text" class="form-control" value="-" style="height: 70px; background-color: white; color: #777; text-align: center;" id="count" disabled>
-                                                                    <button class="btn btn-success btn-sm btn-block" id="btn_count" disabled="disabled">COUNT</button>
+                                                                    <button class="btn btn-success btn-sm btn-block" id="btn_count" onclick="btn_count()" disabled="disabled">COUNT</button>
                                                                     <button class="btn btn-warning btn-sm btn-block" id="btn_next">NEXT</button>
                                                             </div>
                                                 </div>
