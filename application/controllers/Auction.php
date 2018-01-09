@@ -106,6 +106,31 @@ class Auction extends CI_Controller {
         curl_close($ch);
         return $response;
     }
+
+    /**
+    * Check if the Application running !
+    * @author akmal.m@smooets.com
+    * @param     unknown_type $PID
+    * @return     boolen
+    */
+    private function is_running($PID){
+       exec("ps $PID", $ProcessState);
+       return(count($ProcessState) >= 2);
+    }
+
+    /**
+    * Kill Application by PID
+    * @author akmal.m@smooets.com
+    * @param  unknown_type $PID
+    * @return boolen
+    */
+    private function kill($PID){
+      if($this->is_running($PID)){
+        exec("kill -KILL $PID");
+      }
+      return true;
+    }
+
 	public function index()
 	{
         $UserLogon = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
@@ -166,6 +191,7 @@ class Auction extends CI_Controller {
                 $jenis = $scheduleData->ItemName;
                 if ($lotReady->status && $lastLot->status) {
                     $stock_id = $lotReady->data->stock_id;
+                    $lot_id = $lotReady->data->id;
                     $currentLot = $lotReady->data->no_lot;
                     $lastLot = $lastLot->data->no_lot;
                     $getStockUrl = $this->config->item('ibid_stock')."/api/stockData/".$stock_id;
@@ -200,7 +226,33 @@ class Auction extends CI_Controller {
                     $arr['Interval'] = (int)$scheduleData->interval;
                     $arr['Image'] = json_decode($stockData->ImgUrl);
 
-                    shell_exec("php ".FCPATH."../ibid-autobid/index.php proxy bid ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." 2>&1 | tee -a /tmp/mylog 2>/dev/null >/dev/null &");  
+                    if (!is_null(@$lotReady->data->proxyBS_PID)) {
+                        $this->kill($lotReady->data->proxyBS_PID);
+                    } else {
+                        $commandForRunProxy = "php ".FCPATH."../ibid-autobid/index.php proxy bid ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." > /dev/null 2>&1 & echo $!";
+                        exec($commandForRunProxy ,$proxyPID);
+                    }
+                    
+                    if (!is_null(@$lotReady->data->queueBS_PID)) {
+                        $this->kill($lotReady->data->queueBS_PID);
+                    } else {
+                        $commandForRunQueueing = "node ".FCPATH."que_worker.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
+                        exec($commandForRunQueueing ,$queuePID);
+                    }
+
+                    $updateBS_PID = $this->config->item('ibid_lot')."/api/updatelot/$lot_id?";
+                    if (!is_null(@$proxyPID[0])) { 
+                        substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
+                        $updateBS_PID .= "proxyPID=$proxyPID[0]";
+                    }
+                    if (!is_null(@$queuePID[0])) { 
+                        substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
+                        $updateBS_PID .= "queuePID=$queuePID[0]";
+                    }
+
+                    if (!is_null($proxyPID) || !is_null($queuePID[0])) {
+                        $UpdateLotRes = json_decode($this->get_curl($updateBS_PID));
+                    }
 
                     $jadwal = true; 
                     $status = true;

@@ -93,7 +93,34 @@ class Online extends CI_Controller {
                                     ];
                                     $lotReference->set($lotData);
 
-                                    shell_exec("php ".FCPATH."../ibid-autobid/index.php proxy bid ".$company." ".$lotData['scheduleId']." ".$lotData['lot']." ".$schedule->interval." 2>&1 | tee -a /tmp/mylog 2>/dev/null >/dev/null &");  
+                                    // if (!is_null(@$lotReady->data->proxyBS_PID)) {
+                                    //     $this->kill($lotReady->data->proxyBS_PID);
+                                    // } else {
+                                    //     $commandForRunProxy = "php ".FCPATH."../ibid-autobid/index.php proxy bid ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." > /dev/null 2>&1 & echo $!";
+                                    //     exec($commandForRunProxy ,$proxyPID);
+                                    // }
+                                    
+                                    // if (!is_null(@$lotReady->data->queueBS_PID)) {
+                                    //     $this->kill($lotReady->data->queueBS_PID);
+                                    // } else {
+                                    //     $commandForRunQueueing = "node ".FCPATH."que_worker.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
+                                    //     exec($commandForRunQueueing ,$queuePID);
+                                    // }
+
+                                    // $updateBS_PID = $this->config->item('ibid_lot')."/api/updatelot/$lot_id?";
+                                    // if (!is_null(@$proxyPID[0])) { 
+                                    //     substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
+                                    //     $updateBS_PID .= "proxyPID=$proxyPID[0]";
+                                    // }
+                                    // if (!is_null(@$queuePID[0])) { 
+                                    //     substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
+                                    //     $updateBS_PID .= "queuePID=$queuePID[0]";
+                                    // }
+
+                                    // if (!is_null($proxyPID) || !is_null($queuePID[0])) {
+                                    //     $UpdateLotRes = json_decode($this->get_curl($updateBS_PID));
+                                    // }
+ 
                                 }
                             }
                         }                    

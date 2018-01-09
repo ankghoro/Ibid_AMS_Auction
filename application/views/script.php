@@ -21,6 +21,7 @@
   var liveCount = activeCompany.child('liveCount');
   var onStock = activeCompany.child('currentStock');
   var onLog ;
+  var onQueueTask ;
   var onMode ;
 
   var start = 0;
@@ -260,6 +261,7 @@
             activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
             onLot = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot);
             onLog = onLot.child('log');
+            onQueueTask = onLot.child('tasks');
             onMode = onLot.child('allowBid');
             
             value = data.data;
@@ -532,7 +534,7 @@
 
       onMode.once('value', function(modeSnapshot) {
         if (modeSnapshot.exists() && modeSnapshot.val()) {
-          onLog.push({
+          onQueueTask.push({
             bid: newbid,
             type: 'Online',
             npl: Math.floor(Math.random() * 1000) + 1
@@ -570,7 +572,7 @@
           newbid = child.val().bid + parseInt(interval);
         });
       }
-      onLog.push({
+      onQueueTask.push({
         bid: newbid,
         type: 'Floor'
       });
