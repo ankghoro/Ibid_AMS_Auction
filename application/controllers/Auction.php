@@ -228,14 +228,20 @@ class Auction extends CI_Controller {
 
                     if (!is_null(@$lotReady->data->proxyBS_PID)) {
                         $this->kill($lotReady->data->proxyBS_PID);
-                    } else {
-                        $commandForRunProxy = "php ".FCPATH."../ibid-autobid/index.php proxy bid ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." > /dev/null 2>&1 & echo $!";
-                        exec($commandForRunProxy ,$proxyPID);
                     }
+
                     
                     if (!is_null(@$lotReady->data->queueBS_PID)) {
                         $this->kill($lotReady->data->queueBS_PID);
-                    } else {
+                    }
+
+                    $this->load->model('bidding_model','bid');
+                    $database = $this->bid->firebase()->getDatabase();
+                    $liveCount = $database->getReference('company/3/liveCount')->getValue();
+                    
+                    if((int)@$liveCount != 3){
+                        $commandForRunProxy = "php ".FCPATH."../ibid-autobid/index.php proxy bid ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." > /dev/null 2>&1 & echo $!";
+                        exec($commandForRunProxy ,$proxyPID);
                         $commandForRunQueueing = "node ".FCPATH."que_worker.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
                         exec($commandForRunQueueing ,$queuePID);
                     }
@@ -250,7 +256,7 @@ class Auction extends CI_Controller {
                         $updateBS_PID .= "queuePID=$queuePID[0]";
                     }
 
-                    if (!is_null($proxyPID) || !is_null($queuePID[0])) {
+                    if (!is_null(@$proxyPID[0]) || !is_null(@$queuePID[0])) {
                         $UpdateLotRes = json_decode($this->get_curl($updateBS_PID));
                     }
 
