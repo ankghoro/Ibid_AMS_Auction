@@ -218,13 +218,13 @@
             $('#top_bid_state').html('');
             $('#btn_next').prop("disabled",false);
             var name = data.data.Merk+" "+data.data.Tipe;
-            var stat = '<br><small class="bid-status pull-right">(SOLD OUT)</small>'
+            var stat = '<br><small class="bid-status pull-right"></small>'
             // var lot = "Lot "+data.data.NoLot;
-            $('#item_name').append(name+" "+data.data.Silinder+" "+data.data.Model);
-            $('#item_name').append(stat);
+            $('#item_name').append(name+" "+data.data.Silinder+" "+data.data.Model+" "+stat);
             $('#item_lot').append(data.data.NoLot);
             $('#lot_id').val(data.data.NoLot);
             $('#item_color').append(data.data.Warna || '-');
+            $('.bid-status').append(data.data.LotStatus || '-');
             $('#item_transmisi').append(data.data.Transmisi || '-');
             $('#item_km').append(data.data.Kilometer || '-');
             $('#item_tahun').append(data.data.Tahun || '-');
