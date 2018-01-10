@@ -123,7 +123,6 @@
 
     $('#floor-bid').on('click', function(){
       floorBid();
-      console.log(start);
     });
 
     $('#btn_skip').on('click', function(){
@@ -217,48 +216,6 @@
             $('#top_bid').html('-');
             $('#top_bid_state').html('');
             $('#btn_next').prop("disabled",false);
-            var name = data.data.Merk+" "+data.data.Tipe;
-            var stat = '<br><small class="bid-status pull-right"></small>'
-            // var lot = "Lot "+data.data.NoLot;
-            $('#item_name').append(name+" "+data.data.Silinder+" "+data.data.Model+" "+stat);
-            $('#item_lot').append(data.data.NoLot);
-            $('#lot_id').val(data.data.NoLot);
-            $('#item_color').append(data.data.Warna || '-');
-            $('.bid-status').append(data.data.LotStatus || '-');
-            $('#item_transmisi').append(data.data.Transmisi || '-');
-            $('#item_km').append(data.data.Kilometer || '-');
-            $('#item_tahun').append(data.data.Tahun || '-');
-            $('#item_nopol').append(data.data.NoPolisi || '-');
-            $('#item_bahanbakar').append(data.data.BahanBakar || '-');
-            $('#item_exterior').append(data.data.Exterior || '-');
-            $('#item_interior').append(data.data.Interior || '-');
-            $('#item_mechanical').append(data.data.Mesin || '-');
-            $('#item_frame').append(data.data.Rangka || '-');
-            $('#item_grade').append(data.data.Grade || '-');
-            $('#item_startprice').append("Rp. "+addPeriod(data.data.StartPrice) || '-');
-            $('#schedule_date').append(data.data.ScheduleDate || '-');
-            $('#schedule_company').append(data.data.Company || '-');
-            $('#schedule_type').append(data.data.Jenis || '-');
-            $('#schedule_time').append(data.data.Waktu || '-');
-            $('#lot_total').append(data.data.LotTotal || '-');
-            $('#start-price').val(data.data.StartPrice);
-            $('#interval').val(data.data.Interval);
-            $('#unit_name').val(name);
-            $('#unit_grade').val(data.data.Grade);
-            $('#stock_id').val(data.data.AuctionItemId);
-            $('#schedule_id').val(data.data.ScheduleId);
-            $('#model').val(data.data.Model);
-            $('#merk').val(data.data.Merk);
-            $('#tipe').val(data.data.Tipe);
-            $('#silinder').val(data.data.Silinder);
-            $('#tahun').val(data.data.Tahun);
-            $('#nopol').val(data.data.NoPolisi);
-            $('#va').val(data.data.VA);
-            $('#floor-bid').append("+"+addPeriod(data.data.Interval));
-            $('#harga_kelipatan').append("Harga Kelipatan: Rp. "+addPeriod(data.data.Interval));
-            $('#date').val(data.data.Date);
-            firstImage = "url("+data.data.Image[Object.keys(data.data.Image)[0]]+")";
-            $('.card-img-top').css("background-image",firstImage );
 
             activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
             onLot = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot);
@@ -269,6 +226,65 @@
             value = data.data;
             value.Image = data.data.Image[Object.keys(data.data.Image)[0]];
             onStock.set(value);
+
+            onStock.on('value', function(currentStockSnap){
+              if (currentStockSnap.exists()) {
+                currentStockData = currentStockSnap.val();
+                var name = currentStockData.Merk+" "+currentStockData.Tipe;
+                var stat = '<br><small class="bid-status pull-right"></small>'
+                // var lot = "Lot "+data.data.NoLot;
+                $('#item_name').html(name+" "+currentStockData.Silinder+" "+currentStockData.Model+" "+stat);
+                $('#item_lot').text(currentStockData.NoLot);
+                $('#lot_id').val(currentStockData.NoLot);
+                $('#item_color').text(currentStockData.Warna || '-');
+                $('.bid-status').append(currentStockData.LotStatus || '-');
+                if (currentStockData.LotStatus == "terjual" || currentStockData.LotStatus == "tidak terjual") {
+                  $('#btn_count').prop("disabled", true);
+                  $('#floor-bid').prop("disabled", true);
+                  $('.bid-status').css('background-color','#de2828');
+                  $('.bid-status').css('color','white');
+                }else{
+                  $('#btn_count').prop("disabled", false);
+                  $('#floor-bid').prop("disabled", false);
+                  $('.bid-status').css('background-color','green');
+                  $('.bid-status').css('color','white');
+                }
+                $('#item_transmisi').text(currentStockData.Transmisi || '-');
+                $('#item_km').text(currentStockData.Kilometer || '-');
+                $('#item_tahun').text(currentStockData.Tahun || '-');
+                $('#item_nopol').text(currentStockData.NoPolisi || '-');
+                $('#item_bahanbakar').text(currentStockData.BahanBakar || '-');
+                $('#item_exterior').text(currentStockData.Exterior || '-');
+                $('#item_interior').text(currentStockData.Interior || '-');
+                $('#item_mechanical').text(currentStockData.Mesin || '-');
+                $('#item_frame').text(currentStockData.Rangka || '-');
+                $('#item_grade').text(currentStockData.Grade || '-');
+                $('#item_startprice').text("Rp. "+addPeriod(currentStockData.StartPrice) || '-');
+                $('#schedule_date').text(currentStockData.ScheduleDate || '-');
+                $('#schedule_company').text(currentStockData.Company || '-');
+                $('#schedule_type').text(currentStockData.Jenis || '-');
+                $('#schedule_time').text(currentStockData.Waktu || '-');
+                $('#lot_total').text(currentStockData.LotTotal || '-');
+                $('#start-price').val(currentStockData.StartPrice);
+                $('#interval').val(currentStockData.Interval);
+                $('#unit_name').val(name);
+                $('#unit_grade').val(currentStockData.Grade);
+                $('#stock_id').val(currentStockData.AuctionItemId);
+                $('#schedule_id').val(currentStockData.ScheduleId);
+                $('#model').val(currentStockData.Model);
+                $('#merk').val(currentStockData.Merk);
+                $('#tipe').val(currentStockData.Tipe);
+                $('#silinder').val(currentStockData.Silinder);
+                $('#tahun').val(currentStockData.Tahun);
+                $('#nopol').val(currentStockData.NoPolisi);
+                $('#va').val(currentStockData.VA);
+                $('#floor-bid').text("+"+addPeriod(currentStockData.Interval));
+                $('#harga_kelipatan').text("Harga Kelipatan: Rp. "+addPeriod(currentStockData.Interval));
+                $('#date').val(currentStockData.Date);
+                firstImage = "url("+currentStockData.Image+")";
+                $('.card-img-top').css("background-image",firstImage );
+              }
+            })
 
             // pause();
             $('#bid-log').empty();
@@ -292,7 +308,6 @@
             });
             onLog.once("value").then(function(snapshot) {
               lastNumLog = snapshot.numChildren();
-              console.log(lastNumLog > 0);
               if (lastNumLog > 0) {
                 confirm_start();
               }
@@ -417,6 +432,7 @@
         if (data.status) {
           $('#modal').modal('hide');
           $('#next_lot').val('');
+          onStock.child('LotStatus').set('terjual');
           // getLotData();
         } 
       },

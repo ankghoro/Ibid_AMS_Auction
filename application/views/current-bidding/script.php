@@ -34,7 +34,16 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
       if (stockSnapshot.exists()) {
         val = stockSnapshot.val();
         var name = val.Merk+" "+val.Tipe;
-        $('.main-title').text(name+" "+val.Silinder+" "+val.Model);
+        var stat = '<br><small class="lot-status pull-right"></small>'
+        $('.main-title').html(name+" "+val.Silinder+" "+val.Model+stat);
+        $('.lot-status').append(val.LotStatus || '-');
+        if (val.LotStatus == "terjual" || val.LotStatus == "tidak terjual") {
+          $('.lot-status').css('background-color','#de2828');
+          $('.lot-status').css('color','white');
+        }else{
+          $('.lot-status').css('background-color','green');
+          $('.lot-status').css('color','white');
+        }
         $('.lot-number').text(val.NoLot);
         $('.separator1').find('h5').text(val.Tahun);
         $('#startprice').text(addPeriod(val.StartPrice));
@@ -57,7 +66,7 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
     onLog.on("child_added", function(snap) {
       $('.bidding-log').prepend(logHtmlFromObject(snap.val()));
       $('.bid-topbid').text('Rp. ' + addPeriod(snap.val().bid));
-      $('.pull-right').text(snap.val().type + " Bidder");
+      $('div.pull-right').text(snap.val().type + " Bidder");
     });
   }else{
     reset()

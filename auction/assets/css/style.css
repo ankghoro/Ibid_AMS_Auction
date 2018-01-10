@@ -82,6 +82,10 @@ html, body{
 	line-height: 0.8em;
 }
 .bid-status{
+	-webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
 	background-color: #9E1313;
 	color: white;
 	padding: 2px 10px;
