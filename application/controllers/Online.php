@@ -61,7 +61,7 @@ class Online extends CI_Controller {
                 if (strtotime($currentDateTime) >= strtotime($dateTime)) {
                     $company = $schedule->company_id;
                     $id = $schedule->id;
-                    $reference = $database->getReference("company/$company/schedule|online/$id");
+                    $reference = $database->getReference("company/$company/schedule/$id");
                     $check = $reference->getValue();
                     // var_dump($check); die();
                     if (strtotime($currentDateTime) <= strtotime($dateTime)+$duration) {
@@ -74,7 +74,7 @@ class Online extends CI_Controller {
                                 $reference->set($postData); 
                                 foreach ($lotData->data as $value) {
                                     $lotStock = $value->no_lot;
-                                    $lotReference = $database->getReference("company/$company/schedule|online/$id/lot|stock/$lotStock");
+                                    $lotReference = $database->getReference("company/$company/schedule/$id/lot|stock/$lotStock");
                                     $lotData = [
                                         "lot" => $value->no_lot,
                                         "scheduleId" => $id,
@@ -92,6 +92,35 @@ class Online extends CI_Controller {
                                         "VA" => " ",
                                     ];
                                     $lotReference->set($lotData);
+
+                                    // if (!is_null(@$lotReady->data->proxyBS_PID)) {
+                                    //     $this->kill($lotReady->data->proxyBS_PID);
+                                    // } else {
+                                    //     $commandForRunProxy = "php ".FCPATH."../ibid-autobid/index.php proxy bid ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." > /dev/null 2>&1 & echo $!";
+                                    //     exec($commandForRunProxy ,$proxyPID);
+                                    // }
+                                    
+                                    // if (!is_null(@$lotReady->data->queueBS_PID)) {
+                                    //     $this->kill($lotReady->data->queueBS_PID);
+                                    // } else {
+                                    //     $commandForRunQueueing = "node ".FCPATH."que_worker.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
+                                    //     exec($commandForRunQueueing ,$queuePID);
+                                    // }
+
+                                    // $updateBS_PID = $this->config->item('ibid_lot')."/api/updatelot/$lot_id?";
+                                    // if (!is_null(@$proxyPID[0])) { 
+                                    //     substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
+                                    //     $updateBS_PID .= "proxyPID=$proxyPID[0]";
+                                    // }
+                                    // if (!is_null(@$queuePID[0])) { 
+                                    //     substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
+                                    //     $updateBS_PID .= "queuePID=$queuePID[0]";
+                                    // }
+
+                                    // if (!is_null($proxyPID) || !is_null($queuePID[0])) {
+                                    //     $UpdateLotRes = json_decode($this->get_curl($updateBS_PID));
+                                    // }
+ 
                                 }
                             }
                         }                    
@@ -107,9 +136,9 @@ class Online extends CI_Controller {
                         $lotData = json_decode($this->get_curl($lot_url));
                         foreach ($lotData->data as $value) {
                             $lotStock = $value->no_lot;
-                            $lotReference = $database->getReference("company/$company/schedule|online/$id/lot|stock/$lotStock");
+                            $lotReference = $database->getReference("company/$company/schedule/$id/lot|stock/$lotStock");
                             $lotData = $lotReference->getValue();
-                            $winnerReference = $database->getReference("company/$company/schedule|online/$id/lot|stock/$lotStock/log");
+                            $winnerReference = $database->getReference("company/$company/schedule/$id/lot|stock/$lotStock/log");
                             $lastBid = $winnerReference->orderByKey()->limitToLast(1)->getValue();
                             if (!is_null($lastBid)) {
                                 $last = reset($lastBid);
@@ -160,8 +189,8 @@ class Online extends CI_Controller {
         $lotStock = $this->input->post('lot');
         $npl = $this->input->post('npl');
         $database = $this->bid->firebase()->getDatabase();
-        $checkreference = $database->getReference("company/$company/schedule|online/$schedule");
-        $reference = $database->getReference("company/$company/schedule|online/$schedule/lot|stock/$lotStock/log");
+        $checkreference = $database->getReference("company/$company/schedule/$schedule");
+        $reference = $database->getReference("company/$company/schedule/$schedule/lot|stock/$lotStock/log");
         $value_check = $checkreference->getValue();
         $lastBid = $reference->orderByKey()->limitToLast(1)->getValue();
         if ($value_check['scheduleOn']) {

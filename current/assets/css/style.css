@@ -84,6 +84,20 @@ hr {
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
 }
+
+.lot-status{
+	-webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+	background-color: #9E1313;
+	color: white;
+	padding: 2px 10px;
+	border-radius: 5px;
+	margin: 10px;
+    font-size: 9pt;
+}
+
 .color-right{
 	background: black;
 }
@@ -193,7 +207,7 @@ hr {
 
   .content-page .content {
 	padding: 0 5px 10px 5px;
-	margin-top: 50px;
+	margin-top: 40px;
   }
 .car-grade{
 	border-radius: 50%;
@@ -350,6 +364,7 @@ hr {
 }
 .bidding-log{
 	min-height: 58vh;
+	max-height: 58vh;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	background-color: #ebebed;

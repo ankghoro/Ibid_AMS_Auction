@@ -1,5 +1,5 @@
 <script src="<?php echo base_url('auction/assets/js/jquery.js'); ?>"></script>
-<script src="<?php echo base_url('auction/assets/js/popper.min.js'); ?>" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="<?php echo base_url('auction/assets/js/popper.min.js'); ?>"></script>
 <script src="<?php echo base_url('auction/assets/js/bootstrap.min.js'); ?>"></script>
 <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script type="text/javascript">
@@ -21,6 +21,7 @@
   var liveCount = activeCompany.child('liveCount');
   var onStock = activeCompany.child('currentStock');
   var onLog ;
+  var onQueueTask ;
   var onMode ;
 
   var start = 0;
@@ -90,17 +91,6 @@
         $('#auction_modal').modal('show');
     }); 
 
-    $('#confirm-start').on('click', function(){
-        $('#auction_modal').modal('hide');
-        $('#floor-bid').prop("disabled", false);
-        $('#start').prop("disabled",true); 
-        $('#btn_count').prop("disabled",false);
-        start = setInterval( getBidLog, 4000 );
-        // startProxy = setInterval( getProxyBid, 6000);
-        $('#auction_start').val(1);
-        onMode.set(true);
-    });
-
     $('#btn_next').on('click', function(){
       var data_button = $(this).attr('data-button');
       var body = "-";
@@ -120,6 +110,8 @@
 
     $('#confirm-next').on('click', function(){
       var next = $('#next_lot').val();
+      $('#skip').val('');
+      reset_count();
       if (next == 'next') {
         nextLot();
         $('#auction_modal').modal('hide');
@@ -127,17 +119,10 @@
         getLotData();
         $('#auction_modal').modal('hide');
       }
-      $('#skip').val('');
-      reset_count();
     });
 
     $('#floor-bid').on('click', function(){
       floorBid();
-      if(start == null){
-        start = setInterval( getBidLog, 4000 );
-        onMode.set(true);
-        // startProxy = setInterval( getProxyBid, 6000);
-      }
     });
 
     $('#btn_skip').on('click', function(){
@@ -165,115 +150,10 @@
         skipLot();
     });
 
-    $('#btn_count').on('click', function(){
-      var count_value = $('#count_value').val();
-      var count = $('#count').val();
-      if (count_value < 3) {
-        count_value = parseInt(count_value) + 1;
-        liveCount.set(count_value);
-        if (count_value == 2) {
-          clearInterval(start);
-          onMode.set(false);
-          // clearInterval(startProxy);
-          start = null;
-          // startProxy = null;
-        }
-        if (count_value == 3) {
-          var winner = $('#npl').val();
-          var state = $('#state').val();
-          $('#modal').modal({
-            backdrop: 'static',
-            keyboard: false
-          })
-          $('#modal-body').empty();
-          var lot = $('#lot_id').val();
-          var name = $('#unit_name').val();
-          var grade = $('#unit_grade').val();
-          var price = $('#start-price').val();
-          if (state == "Floor") {
-            $('#modal-title').text('Selamat, Pemenang '+state+' Bidder');
-            var body ='<h4>Detail Unit</h4>'
-                      +'<div class="row">'
-                          +'<div class="col-md-12">'
-                          +'<div class="card>'
-                            +'<div class="card-body">'
-                              +'<div class="row">'
-                                +'<div class="col-md-3"><b class="pull-left">No.Lot</b></div>'
-                                +'<div class="col-md-9" id="show_date"> : '+lot+'</div>'
-                                +'<div class="col-md-3"><b class="pull-left">Unit Name</b></div>'
-                                +'<div class="col-md-9" id="show_company"> : '+name+'</div>'
-                                +'<div class="col-md-3"><b class="pull-left">Grade</b></div>'
-                                +'<div class="col-md-9" id="show_type"> : '+grade+'</div>'
-                                +'<div class="col-md-3"><b class="pull-left">Harga</b></div>'
-                                +'<div class="col-md-9" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
-                              +'</div>'
-                            +'</div>'
-                          +'</div>'
-                          +'</div>'
-                        +'</div>'
-                        +'<hr class="custom">'
-                        +'<h4>Isi Npl Pemenang</h4>'
-                        +'<div class="form-group noLot-edit">'
-                          +'<div class="col-md-6" style="padding-left:0">'
-                            +'<input type="text" name="input_npl" class="form-control" id="input_npl" onkeypress="return isNumberKey(event)">'
-                          +'</div>'
-                        +'</div>';
-              $('#modal-body').append(body);
-              $('#close').hide();
-              $('#modal').modal('show');
-          } else {
-              $('#modal-title').text('Selamat, Pemenang '+state);
-              $('#modal-body').empty();
-              var body ='<h4>Detail Unit</h4>'
-                        +'<div class="row">'
-                          +'<div class="col-md-12">'
-                          +'<div class="card>'
-                            +'<div class="card-body">'
-                              +'<div class="row">'
-                                +'<div class="col-md-3"><b class="pull-left">No.Lot</b></div>'
-                                +'<div class="col-md-9" id="show_date"> : '+lot+'</div>'
-                                +'<div class="col-md-3"><b class="pull-left">Unit Name</b></div>'
-                                +'<div class="col-md-9" id="show_company"> : '+name+'</div>'
-                                +'<div class="col-md-3"><b class="pull-left">Grade</b></div>'
-                                +'<div class="col-md-9" id="show_type"> : '+grade+'</div>'
-                                +'<div class="col-md-3"><b class="pull-left">Harga</b></div>'
-                                +'<div class="col-md-9" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
-                              +'</div>'
-                            +'</div>'
-                          +'</div>'
-                          +'</div>'
-                        +'</div>'
-                        +'<hr class="custom">'
-                        +'<h4>Detail Pemenang</h4>'
-                          +'<div class="row">'
-                            +'<div class="col-md-12">'
-                            +'<div class="card>'
-                              +'<div class="card-body">'
-                                +'<div class="row">'
-                                  +'<div class="col-md-3"><b class="pull-left">Peserta</b></div>'
-                                  +'<div class="col-md-9" id="show_date"> : '+state+'</div>'
-                                  +'<div class="col-md-3"><b class="pull-left">Npl</b></div>'
-                                  +'<div class="col-md-9" id="show_company"> : '+winner+'</div>'
-                                +'</div>'
-                              +'</div>'
-                            +'</div>'
-                            +'</div>'
-                          +'</div>';
-                          +'<hr class="custom">'
-              $('#modal-body').append(body);
-              $('#close').hide();
-              $('#modal').modal('show');
-          }
-        }
-        // alert('ok');
-      } else {
-        alert('Item already sold');
-      }
-    });
-
     $('#proceed-winner').on('click', function(){
       $('input').removeClass('is-invalid');
       $('.invalid-feedback').remove();
+
       var npl = $('#npl').val();
       if (npl == '') {
         if ($('#input_npl').val() == '') {
@@ -291,15 +171,25 @@
       
     });
 
-    liveCount.on("value", function(snapshot) {
-      if (snapshot.exists()) {
-        $('#count').val(snapshot.val());
-        $('#count_value').val(snapshot.val());
+  });
+  liveCount.on("value", function(snapshot) {
+    if (snapshot.exists()) {
+      count_value = snapshot.val();
+      if((count_value == 2) || (count_value == 3)){
+        if (onMode != undefined) {
+          onMode.set(false);
+        }
       }else{
-        $('#count').val("-");
-        $('#count_value').val(0);
+        if (onMode != undefined) {
+          onMode.set(true);
+        }
       }
-    });
+      $('#count').val(snapshot.val());
+      $('#count_value').val(snapshot.val());
+    }else{
+      $('#count').val("-");
+      $('#count_value').val(0);
+    }
   });
 
   function getLotData() {
@@ -326,56 +216,75 @@
             $('#top_bid').html('-');
             $('#top_bid_state').html('');
             $('#btn_next').prop("disabled",false);
-            var name = data.data.Merk+" "+data.data.Tipe;
-            // var lot = "Lot "+data.data.NoLot;
-            $('#item_name').append(name+" "+data.data.Silinder+" "+data.data.Model);
-            $('#item_lot').append(data.data.NoLot);
-            $('#lot_id').val(data.data.NoLot);
-            $('#item_color').append(data.data.Warna || '-');
-            $('#item_transmisi').append(data.data.Transmisi || '-');
-            $('#item_km').append(data.data.Kilometer || '-');
-            $('#item_tahun').append(data.data.Tahun || '-');
-            $('#item_nopol').append(data.data.NoPolisi || '-');
-            $('#item_bahanbakar').append(data.data.BahanBakar || '-');
-            $('#item_exterior').append(data.data.Exterior || '-');
-            $('#item_interior').append(data.data.Interior || '-');
-            $('#item_mechanical').append(data.data.Mesin || '-');
-            $('#item_frame').append(data.data.Rangka || '-');
-            $('#item_grade').append(data.data.Grade || '-');
-            $('#item_startprice').append("Rp. "+addPeriod(data.data.StartPrice) || '-');
-            $('#schedule_date').append(data.data.ScheduleDate || '-');
-            $('#schedule_company').append(data.data.Company || '-');
-            $('#schedule_type').append(data.data.Jenis || '-');
-            $('#schedule_time').append(data.data.Waktu || '-');
-            $('#lot_total').append(data.data.LotTotal || '-');
-            $('#start-price').val(data.data.StartPrice);
-            $('#interval').val(data.data.Interval);
-            $('#unit_name').val(name);
-            $('#unit_grade').val(data.data.Grade);
-            $('#stock_id').val(data.data.AuctionItemId);
-            $('#schedule_id').val(data.data.ScheduleId);
-            $('#model').val(data.data.Model);
-            $('#merk').val(data.data.Merk);
-            $('#tipe').val(data.data.Tipe);
-            $('#silinder').val(data.data.Silinder);
-            $('#tahun').val(data.data.Tahun);
-            $('#nopol').val(data.data.NoPolisi);
-            $('#va').val(data.data.VA);
-            $('#floor-bid').append("+"+addPeriod(data.data.Interval));
-            $('#harga_kelipatan').append("Harga Kelipatan: Rp. "+addPeriod(data.data.Interval));
-            $('#date').val(data.data.Date);
-            firstImage = "url("+data.data.Image[Object.keys(data.data.Image)[0]]+")";
-            $('.card-img-top').css("background-image",firstImage );
 
             activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
             onLot = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot);
             onLog = onLot.child('log');
+            onQueueTask = onLot.child('tasks');
             onMode = onLot.child('allowBid');
             
             value = data.data;
             value.Image = data.data.Image[Object.keys(data.data.Image)[0]];
             onStock.set(value);
-            onMode.set(false);
+
+            onStock.on('value', function(currentStockSnap){
+              if (currentStockSnap.exists()) {
+                currentStockData = currentStockSnap.val();
+                var name = currentStockData.Merk+" "+currentStockData.Tipe;
+                var stat = '<br><small class="bid-status pull-right"></small>'
+                // var lot = "Lot "+data.data.NoLot;
+                $('#item_name').html(name+" "+currentStockData.Silinder+" "+currentStockData.Model+" "+stat);
+                $('#item_lot').text(currentStockData.NoLot);
+                $('#lot_id').val(currentStockData.NoLot);
+                $('#item_color').text(currentStockData.Warna || '-');
+                $('.bid-status').append(currentStockData.LotStatus || '-');
+                if (currentStockData.LotStatus == "terjual" || currentStockData.LotStatus == "tidak terjual") {
+                  $('#btn_count').prop("disabled", true);
+                  $('#floor-bid').prop("disabled", true);
+                  $('.bid-status').css('background-color','#de2828');
+                  $('.bid-status').css('color','white');
+                }else{
+                  $('#btn_count').prop("disabled", false);
+                  $('#floor-bid').prop("disabled", false);
+                  $('.bid-status').css('background-color','green');
+                  $('.bid-status').css('color','white');
+                }
+                $('#item_transmisi').text(currentStockData.Transmisi || '-');
+                $('#item_km').text(currentStockData.Kilometer || '-');
+                $('#item_tahun').text(currentStockData.Tahun || '-');
+                $('#item_nopol').text(currentStockData.NoPolisi || '-');
+                $('#item_bahanbakar').text(currentStockData.BahanBakar || '-');
+                $('#item_exterior').text(currentStockData.Exterior || '-');
+                $('#item_interior').text(currentStockData.Interior || '-');
+                $('#item_mechanical').text(currentStockData.Mesin || '-');
+                $('#item_frame').text(currentStockData.Rangka || '-');
+                $('#item_grade').text(currentStockData.Grade || '-');
+                $('#item_startprice').text("Rp. "+addPeriod(currentStockData.StartPrice) || '-');
+                $('#schedule_date').text(currentStockData.ScheduleDate || '-');
+                $('#schedule_company').text(currentStockData.Company || '-');
+                $('#schedule_type').text(currentStockData.Jenis || '-');
+                $('#schedule_time').text(currentStockData.Waktu || '-');
+                $('#lot_total').text(currentStockData.LotTotal || '-');
+                $('#start-price').val(currentStockData.StartPrice);
+                $('#interval').val(currentStockData.Interval);
+                $('#unit_name').val(name);
+                $('#unit_grade').val(currentStockData.Grade);
+                $('#stock_id').val(currentStockData.AuctionItemId);
+                $('#schedule_id').val(currentStockData.ScheduleId);
+                $('#model').val(currentStockData.Model);
+                $('#merk').val(currentStockData.Merk);
+                $('#tipe').val(currentStockData.Tipe);
+                $('#silinder').val(currentStockData.Silinder);
+                $('#tahun').val(currentStockData.Tahun);
+                $('#nopol').val(currentStockData.NoPolisi);
+                $('#va').val(currentStockData.VA);
+                $('#floor-bid').text("+"+addPeriod(currentStockData.Interval));
+                $('#harga_kelipatan').text("Harga Kelipatan: Rp. "+addPeriod(currentStockData.Interval));
+                $('#date').val(currentStockData.Date);
+                firstImage = "url("+currentStockData.Image+")";
+                $('.card-img-top').css("background-image",firstImage );
+              }
+            })
 
             // pause();
             $('#bid-log').empty();
@@ -397,14 +306,12 @@
               $('#top_bid').html('Rp. '+addPeriod(snap.val().bid));
               $('#top_bid_state').html(state);
             });
-
-            if ($('#auction_start').val() == 1) {
-              $('#btn_count').prop("disabled", false);
-              $('#floor-bid').prop("disabled", false);
-              onMode.set(true);
-              start = setInterval( getBidLog, 4000 );
-              // startProxy = setInterval( getProxyBid, 6000);
-            }
+            onLog.once("value").then(function(snapshot) {
+              lastNumLog = snapshot.numChildren();
+              if (lastNumLog > 0) {
+                confirm_start();
+              }
+            });
             // reset_count();
           } else {
             activeCompany.child('liveOn').set(null);
@@ -525,6 +432,7 @@
         if (data.status) {
           $('#modal').modal('hide');
           $('#next_lot').val('');
+          onStock.child('LotStatus').set('terjual');
           // getLotData();
         } 
       },
@@ -631,62 +539,27 @@
   function getBidLog(){
     var price = $('#start-price').val();
     var interval = $('#interval').val();
-    $.ajax({
-      type: "GET",
-      url: "<?php echo base_url('auction/');?>bidLogExample/"+price+"/"+interval,
-      dataType: "json",
-      success: function(data){
-        if (data.status) {
-          var last = onLog.orderByKey().limitToLast(1);
-          last.once('value', function(snapshot) {
-            onMode.once('value', function(snapmode) {
-              if(snapmode.exists() && snapmode.val()){
-                // onLog.push({
-                //   bid: data.data.Nominal,
-                //   type: 'Online',
-                //   npl: data.data.No
-                // });
-              }
-            });
-          });
-        } 
-      },
-    });
-  }
+    var last = onLog.orderByKey().limitToLast(1);
+    var newbid;
+    last.once('value', function(snapshot) {
+      if (!snapshot.val()) {
+        newbid = parseInt(price) + parseInt(interval);
+      } else{
+        snapshot.forEach(function(child) {
+          newbid = child.val().bid + parseInt(interval);
+        });
+      }
 
-  function getProxyBid(){
-    // var price = $('#start-price').val();
-    // var interval = $('#interval').val();
-    // $.ajax({
-    //   type: "GET",
-    //   url: "<?php echo base_url('auction/');?>proxyBidExample/"+price+"/"+interval,
-    //   dataType: "json",
-    //   success: function(data){
-    //     if (data.status) {
-    //       // $('#bid-log').empty();
-    //       // $('#npl').val(data.data.No);
-    //       // $('#state').val("Proxy Bidder");
-    //       // $('#bid-log').prepend('<div class="col-xs-4 col-md-4">'+addPeriod(data.data.Nominal)+'</div><div class="col-xs-5 col-md-5 weight">'+data.data.State+'</div><div class="col-xs-3 col-md-3 weight">'+data.data.No+'</div>');
-    //       // $('#start-price').val(data.data.Nominal);
-    //       var last = onLog.orderByKey().limitToLast(1);
-    //       // var newbid;
-    //       last.once('value', function(snapshot) {
-    //         // if (!snapshot.val()) {
-    //         //   newbid = parseInt(price) + parseInt(interval);
-    //         // } else{
-    //           // snapshot.forEach(function(child) {
-    //             // newbid = child.val().bid + parseInt(interval);
-    //           // });
-    //         // }
-    //         onLog.push({
-    //           bid: data.data.Nominal,
-    //           type: data.data.State,
-    //           npl: data.data.No,
-    //         });
-    //       });
-    //     } 
-    //   }
-    // });
+      onMode.once('value', function(modeSnapshot) {
+        if (modeSnapshot.exists() && modeSnapshot.val()) {
+          onQueueTask.push({
+            bid: newbid,
+            type: 'Online',
+            npl: Math.floor(Math.random() * 1000) + 1
+          });
+        }
+      });
+    });
   }
 
   function logHtmlFromObject(log){
@@ -702,7 +575,10 @@
     var interval = $('#interval').val();
     var last = onLog.orderByKey().limitToLast(1);
     var newbid;
-      if (count_value == 2) {
+      clearInterval(start);
+      start = setInterval( getBidLog, 4000 );
+      onMode.set(true);
+      if ((count_value == 2) || (count_value == 3)) {
         reset_count();
       }
     
@@ -714,15 +590,11 @@
           newbid = child.val().bid + parseInt(interval);
         });
       }
-      onLog.push({
+      onQueueTask.push({
         bid: newbid,
         type: 'Floor'
       });
     });
-    $('#top_bid').html('-');
-    $('#top_bid_state').html('-');
-    $('#top_bid').html('Rp. '+addPeriod(newbid));
-    $('#top_bid_state').html('Floor Bidder');
   }
 
 function nextLot() {
@@ -737,6 +609,7 @@ function nextLot() {
     success: function(data){
       if (data.status) {
         getLotData();
+        confirm_start();
         // $('#auction_modal').modal('hide');
       } 
     },
@@ -744,15 +617,156 @@ function nextLot() {
 }
 
 function addPeriod(nStr){
-    nStr += '';
-    x = nStr.split('.');
-    x1 = x[0];
-    x2 = x.length > 1 ? '.' + x[1] : '';
-    var rgx = /(\d+)(\d{3})/;
-    while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + '.' + '$2');
+  nStr += '';
+  x = nStr.split('.');
+  x1 = x[0];
+  x2 = x.length > 1 ? '.' + x[1] : '';
+  var rgx = /(\d+)(\d{3})/;
+  while (rgx.test(x1)) {
+      x1 = x1.replace(rgx, '$1' + '.' + '$2');
+  }
+  return x1 + x2;
+}
+
+function btn_count() {
+  var count_value = $('#count_value').val();
+  var count = $('#count').val();
+  if (count_value < 3) {
+    count_value = parseInt(count_value) + 1;
+    liveCount.set(count_value);
+    if (count_value == 2) {
+      clearInterval(start);
+      onMode.set(false);
+      // clearInterval(startProxy);
+      start = null;
+      // startProxy = null;
     }
-    return x1 + x2;
+    if (count_value == 3) {
+      onMode.set(false);
+      var last = onLog.orderByKey().limitToLast(1);
+
+      last.once('value', function(snapshot) {
+        snapshot.forEach(function(child) {
+          winner_npl = onLog.orderByChild("bid").startAt(child.val().bid).endAt(child.val().bid).limitToFirst(1);
+          winner_npl.once('value', function(winnerSnapshot) {
+            winnerSnapshot.forEach(function(winnerData) {
+              npl = winnerData.val().npl || '';
+              state = winnerData.val().type || 'Floor';
+              set_winner(npl,state);
+            });
+          });
+        });
+      });
+
+      var winner = $('#npl').val();
+      var state = $('#state').val();
+      $('#modal').modal({
+        backdrop: 'static',
+        keyboard: false
+      })
+      $('#modal-body').empty();
+      var lot = $('#lot_id').val();
+      var name = $('#unit_name').val();
+      var grade = $('#unit_grade').val();
+      var price = $('#start-price').val();
+      if (state == "Floor") {
+        $('#modal-title').text('Selamat, Pemenang '+state+' Bidder');
+        var body ='<h4>Detail Unit</h4>'
+                  +'<div class="row">'
+                      +'<div class="col-md-12">'
+                      +'<div class="card>'
+                        +'<div class="card-body">'
+                          +'<div class="row">'
+                            +'<div class="col-md-3"><b class="pull-left">No.Lot</b></div>'
+                            +'<div class="col-md-9" id="show_date"> : '+lot+'</div>'
+                            +'<div class="col-md-3"><b class="pull-left">Unit Name</b></div>'
+                            +'<div class="col-md-9" id="show_company"> : '+name+'</div>'
+                            +'<div class="col-md-3"><b class="pull-left">Grade</b></div>'
+                            +'<div class="col-md-9" id="show_type"> : '+grade+'</div>'
+                            +'<div class="col-md-3"><b class="pull-left">Harga</b></div>'
+                            +'<div class="col-md-9" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
+                          +'</div>'
+                        +'</div>'
+                      +'</div>'
+                      +'</div>'
+                    +'</div>'
+                    +'<hr class="custom">'
+                    +'<h4>Isi Npl Pemenang</h4>'
+                    +'<div class="form-group noLot-edit">'
+                      +'<div class="col-md-6" style="padding-left:0">'
+                        +'<input type="text" name="input_npl" class="form-control" id="input_npl" onkeypress="return isNumberKey(event)">'
+                      +'</div>'
+                    +'</div>';
+          $('#modal-body').append(body);
+          $('#close').hide();
+          $('#modal').modal('show');
+      } else {
+          $('#modal-title').text('Selamat, Pemenang '+state);
+          $('#modal-body').empty();
+          var body ='<h4>Detail Unit</h4>'
+                    +'<div class="row">'
+                      +'<div class="col-md-12">'
+                      +'<div class="card>'
+                        +'<div class="card-body">'
+                          +'<div class="row">'
+                            +'<div class="col-md-3"><b class="pull-left">No.Lot</b></div>'
+                            +'<div class="col-md-9" id="show_date"> : '+lot+'</div>'
+                            +'<div class="col-md-3"><b class="pull-left">Unit Name</b></div>'
+                            +'<div class="col-md-9" id="show_company"> : '+name+'</div>'
+                            +'<div class="col-md-3"><b class="pull-left">Grade</b></div>'
+                            +'<div class="col-md-9" id="show_type"> : '+grade+'</div>'
+                            +'<div class="col-md-3"><b class="pull-left">Harga</b></div>'
+                            +'<div class="col-md-9" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
+                          +'</div>'
+                        +'</div>'
+                      +'</div>'
+                      +'</div>'
+                    +'</div>'
+                    +'<hr class="custom">'
+                    +'<h4>Detail Pemenang</h4>'
+                      +'<div class="row">'
+                        +'<div class="col-md-12">'
+                        +'<div class="card>'
+                          +'<div class="card-body">'
+                            +'<div class="row">'
+                              +'<div class="col-md-3"><b class="pull-left">Peserta</b></div>'
+                              +'<div class="col-md-9" id="show_date"> : '+state+'</div>'
+                              +'<div class="col-md-3"><b class="pull-left">Npl</b></div>'
+                              +'<div class="col-md-9" id="show_company"> : '+winner+'</div>'
+                            +'</div>'
+                          +'</div>'
+                        +'</div>'
+                        +'</div>'
+                      +'</div>';
+                      +'<hr class="custom">'
+          $('#modal-body').append(body);
+          $('#close').hide();
+          $('#modal').modal('show');
+      }
+    }
+    // alert('ok');
+  } else {
+    alert('Item already sold');
+  }
+}
+
+function confirm_start(){
+  $('#auction_modal').modal('hide');
+  $('#floor-bid').prop("disabled", false);
+  $('#start').prop("disabled",true); 
+  $('#btn_count').prop("disabled",false);
+  start = setInterval( getBidLog, 4000 );
+  if (onMode != undefined) {
+    liveCount.once('value', function(countSnap) {
+      if ( (countSnap.val() == 2) || (countSnap.val() == 3) ) {
+        onMode.set(false);
+      } else {
+        onMode.set(true);
+      }
+    });
+  }
+  // startProxy = setInterval( getProxyBid, 6000);
+  $('#auction_start').val(1);
 }
 
 function isNumberKey(evt){
@@ -765,6 +779,12 @@ function isNumberKey(evt){
 function reset_count(){
   liveCount.set(null);
 }
+
+function set_winner(npl,state){
+  $('#npl').val(npl);
+  $('#state').val(state);
+}
+
 function pause(){
   $('#floor-bid').prop("disabled", true);
   $('#start').prop("disabled",false); 
