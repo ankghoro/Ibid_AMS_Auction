@@ -11,7 +11,7 @@ class Bidding_model extends CI_Model {
     }
 
     public function firebase(){
-        $serviceAccount = ServiceAccount::fromJsonFile($_SERVER['DOCUMENT_ROOT'].'/ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json');
+        $serviceAccount = ServiceAccount::fromJsonFile(FCPATH.'ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json');
         $apiKey = 'AIzaSyC-ZoZ16SiFPoz76W0yJbqhlLOYpPrMU7I';
         return $firebase = (new Factory)
         ->withServiceAccountAndApiKey($serviceAccount,$apiKey)

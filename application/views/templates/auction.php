@@ -29,7 +29,8 @@
                                             </div>
                                         </div>
                                         <div class="col-9 col-sm-8 center-align">
-                                            <h6 class="main-title data-lot" id="item_name">Tidak ada data</h6>
+                                            <h6 class="main-title data-lot" id="item_name">Tidak Ada Data
+                                            </h6>
                                         </div>
                                     </div>
                                 </div>
@@ -164,7 +165,7 @@
                                                     </div>
                                                     <div class="form-group clearfix">
                                                             <label class="control-label">Bidding Control :</label>
-                                                            <button class="btn btn-success btn-sm btn-block" style="height:70px;" id="floor-bid" disabled="disabled">+</button>
+                                                            <button class="btn btn-success btn-sm btn-block" style="height:111px;" id="floor-bid" disabled="disabled">+</button>
                                             
                                                     </div>
                                                 </div>
@@ -177,11 +178,10 @@
                                                                     <input type="text" class="form-control" value="-" style="height: 70px; background-color: white; color: #777; text-align: center;" id="count" disabled>
                                                                     <button class="btn btn-success btn-sm btn-block" id="btn_count" onclick="btn_count()" disabled="disabled">COUNT</button>
                                                                     <button class="btn btn-warning btn-sm btn-block" id="btn_next">NEXT</button>
+                                                                    <a target="_blank" href="<?php echo base_url('current/bidding');?>" class="btn btn-info btn-sm btn-block" style="width: 100%;">CURRENT BIDDING</a>
                                                             </div>
                                                 </div>
-                                                <div class="col-12 margin10">
-                                                        <a target="_blank" href="<?php echo base_url('current/bidding');?>" class="btn btn-info btn-sm btn-block" style="width: 100%;">CURRENT BIDDING</a>
-                                                </div>
+                                                
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-12 center-align">

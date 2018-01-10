@@ -193,7 +193,7 @@ hr {
 
   .content-page .content {
 	padding: 0 5px 10px 5px;
-	margin-top: 50px;
+	margin-top: 40px;
   }
 .car-grade{
 	border-radius: 50%;
@@ -350,6 +350,7 @@ hr {
 }
 .bidding-log{
 	min-height: 58vh;
+	max-height: 58vh;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	background-color: #ebebed;
