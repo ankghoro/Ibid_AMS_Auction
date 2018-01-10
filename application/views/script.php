@@ -1,5 +1,5 @@
 <script src="<?php echo base_url('auction/assets/js/jquery.js'); ?>"></script>
-<script src="<?php echo base_url('auction/assets/js/popper.min.js'); ?>" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="<?php echo base_url('auction/assets/js/popper.min.js'); ?>"></script>
 <script src="<?php echo base_url('auction/assets/js/bootstrap.min.js'); ?>"></script>
 <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script type="text/javascript">
@@ -218,8 +218,10 @@
             $('#top_bid_state').html('');
             $('#btn_next').prop("disabled",false);
             var name = data.data.Merk+" "+data.data.Tipe;
+            var stat = '<br><small class="bid-status pull-right">(SOLD OUT)</small>'
             // var lot = "Lot "+data.data.NoLot;
             $('#item_name').append(name+" "+data.data.Silinder+" "+data.data.Model);
+            $('#item_name').append(stat);
             $('#item_lot').append(data.data.NoLot);
             $('#lot_id').val(data.data.NoLot);
             $('#item_color').append(data.data.Warna || '-');
