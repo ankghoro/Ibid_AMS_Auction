@@ -740,7 +740,7 @@ function confirm_start(){
   start = setInterval( getBidLog, 4000 );
   if (onMode != undefined) {
     liveCount.once('value', function(countSnap) {
-      if (countSnap.exists() && ( (countSnap.val() == 2) || (countSnap.val() == 3))) {
+      if ( (countSnap.val() == 2) || (countSnap.val() == 3) ) {
         onMode.set(false);
       } else {
         onMode.set(true);

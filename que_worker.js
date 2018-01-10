@@ -37,11 +37,11 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
       bid: newbid || null,
       type: data.type || null,
       npl: data.npl || null
-    });
-  });
+    }).then(resolve());
+  }).then(resolve());
 
   // Finish the task asynchronously
-  setTimeout(function() {
-    resolve();
-  }, 1000);
+  // setTimeout(function() {
+  //   resolve();
+  // }, 1000);
 });
