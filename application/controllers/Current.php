@@ -109,13 +109,10 @@ class Current extends CI_Controller {
                     delete_cookie('UserLogon', base_domain(base_url()));
                     redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
                 }else {
-                    $userlogon = [
-                        "access_token" => $refresh_token->access_token,
-                        "refresh_token" => $refresh_token->refresh_token,
-                        "username" => $UserLogon['username'],
-                        "CompanyId" => $UserLogon['CompanyId'],
-                    ];
-                    setcookie('UserLogon', serialize($userlogon), time() + (3600 * 4), "/", base_domain(base_url()));
+                    $UserLogon['access_token'] = $refresh_token->access_token;
+                    $UserLogon['refresh_token'] = $refresh_token->refresh_token;
+                    
+                    setcookie('UserLogon', serialize($UserLogon), time() + (3600 * 4), "/", base_domain(base_url()));
                     redirect($this->config->item('ibid_auction')."/current/bidding", 'refresh');
                 }
             }

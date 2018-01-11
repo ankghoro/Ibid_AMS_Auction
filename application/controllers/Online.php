@@ -6,7 +6,7 @@ class Online extends CI_Controller {
  	public function __construct()
     {
         parent::__construct();
-        $this->load->model('online_bid','bid');
+        $this->load->model('bidding_model','bid');
     }
 
     private function postCURL($_url, $_param){
@@ -44,12 +44,37 @@ class Online extends CI_Controller {
         return $result;
     }
 
+
+    /**
+    * Check if the Application running !
+    * @author akmal.m@smooets.com
+    * @param     unknown_type $PID
+    * @return     boolen
+    */
+    private function is_running($PID){
+       exec("ps $PID", $ProcessState);
+       return(count($ProcessState) >= 2);
+    }
+
+    /**
+    * Kill Application by PID
+    * @author akmal.m@smooets.com
+    * @param  unknown_type $PID
+    * @return boolen
+    */
+    private function kill($PID){
+      if($this->is_running($PID)){
+        exec("kill -KILL $PID");
+      }
+      return true;
+    }
+
 	public function scheduler()
 	{
         $database = $this->bid->firebase()->getDatabase();
         date_default_timezone_set("Asia/Jakarta");
         $currentDateTime = date("d-m-y H:i:s");
-        $url = "http://ibid-ams-schedule.stagingapps.net/api/scheduleOnlineForTheDay/"; //for staging uses
+        $url = $this->config->item('ibid_schedule')."/api/scheduleOnlineForTheDay"; 
         // $url = "localhost/ibid-ams-schedule/api/scheduleOnlineForTheDay"; //local uses
         $scheduleOnline = json_decode($this->get_curl($url));
         if ($scheduleOnline) {
@@ -66,12 +91,13 @@ class Online extends CI_Controller {
                     // var_dump($check); die();
                     if (strtotime($currentDateTime) <= strtotime($dateTime)+$duration) {
                         if (is_null($check)) {
-                            $lot_url = "http://ibid-ams-lot.stagingapps.net/api/getLotFilter/$id";
+                            $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter/$id";
                             // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                             $lotData = json_decode($this->get_curl($lot_url));
                             if ($lotData->status) {
-                                $postData = ["scheduleOn" => true];
-                                $reference->set($postData); 
+                                // $postData = ["scheduleOn" => true];
+                                // $reference->set($postData); 
+                                $PID = 0;
                                 foreach ($lotData->data as $value) {
                                     $lotStock = $value->no_lot;
                                     $lotReference = $database->getReference("company/$company/schedule/$id/lot|stock/$lotStock");
@@ -91,47 +117,63 @@ class Online extends CI_Controller {
                                         "harga" => $value->stock_startprice,
                                         "VA" => " ",
                                     ];
+
                                     $lotReference->set($lotData);
 
-                                    // if (!is_null(@$lotReady->data->proxyBS_PID)) {
-                                    //     $this->kill($lotReady->data->proxyBS_PID);
-                                    // } else {
-                                    //     $commandForRunProxy = "php ".FCPATH."../ibid-autobid/index.php proxy bid ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." > /dev/null 2>&1 & echo $!";
-                                    //     exec($commandForRunProxy ,$proxyPID);
-                                    // }
+                                    if (!is_null(@$value->proxyBS_PID)) {
+                                        $this->kill($value->proxyBS_PID);
+                                    }
+
+                                    $backgroundProcess = " > /dev/null 2>&1 & echo $!";
+
+                                    $commandForRunProxy = "php ".FCPATH."../ibid-autobid/index.php proxy bid ";
+                                    $commandForRunProxy .= $value->company_id." ";
+                                    $commandForRunProxy .= $value->schedule_id." ";
+                                    $commandForRunProxy .= $value->no_lot." ";
+                                    $commandForRunProxy .= (int)$schedule->interval+0;
+                                    $commandForRunProxy .= $backgroundProcess;
+
+                                    exec($commandForRunProxy ,$proxyPID);
                                     
-                                    // if (!is_null(@$lotReady->data->queueBS_PID)) {
-                                    //     $this->kill($lotReady->data->queueBS_PID);
-                                    // } else {
-                                    //     $commandForRunQueueing = "node ".FCPATH."que_worker.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
-                                    //     exec($commandForRunQueueing ,$queuePID);
-                                    // }
+                                    if (!is_null(@$value->queueBS_PID)) {
+                                        $this->kill($value->queueBS_PID);
+                                    }
 
-                                    // $updateBS_PID = $this->config->item('ibid_lot')."/api/updatelot/$lot_id?";
-                                    // if (!is_null(@$proxyPID[0])) { 
-                                    //     substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
-                                    //     $updateBS_PID .= "proxyPID=$proxyPID[0]";
-                                    // }
-                                    // if (!is_null(@$queuePID[0])) { 
-                                    //     substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
-                                    //     $updateBS_PID .= "queuePID=$queuePID[0]";
-                                    // }
+                                    $commandForRunQueueing = "node ".FCPATH."que_worker.js ";
+                                    $commandForRunQueueing .= " ".$value->company_id;
+                                    $commandForRunQueueing .= " ".$value->schedule_id;
+                                    $commandForRunQueueing .= " ".$value->no_lot;
+                                    $commandForRunQueueing .= " ".( (int)($schedule->interval+0) );
+                                    $commandForRunQueueing .= " ".( (int)($value->stock_startprice+0) );
+                                    $commandForRunQueueing .= " ".$backgroundProcess;
 
-                                    // if (!is_null($proxyPID) || !is_null($queuePID[0])) {
-                                    //     $UpdateLotRes = json_decode($this->get_curl($updateBS_PID));
-                                    // }
- 
+                                    exec($commandForRunQueueing ,$queuePID);
+
+                                    $updateBS_PID = $this->config->item('ibid_lot')."/api/updatelot/$value->id?";
+                                    if (!is_null(@$proxyPID[$PID])) { 
+                                        substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
+                                        $updateBS_PID .= "proxyPID=$proxyPID[$PID]";
+                                    }
+                                    if (!is_null(@$queuePID[$PID])) { 
+                                        substr($updateBS_PID, -1) == '?' ? $updateBS_PID .= '' :  $updateBS_PID .= '&';
+                                        $updateBS_PID .= "queuePID=$queuePID[$PID]";
+                                    }
+
+                                    if (!is_null($proxyPID[$PID]) || !is_null($queuePID[$PID])) {
+                                        $UpdateLotRes = json_decode($this->get_curl($updateBS_PID));
+                                    }
+                                    $PID++;
                                 }
                             }
                         }                    
                     } else {
                         $postData = ["scheduleOn" => false];
                         $reference->update($postData);
-                        $updateUrl = "http://ibid-ams-schedule.stagingapps.net/api/updateStatus/$id";
+                        $updateUrl = $this->config->item('ibid_schedule')."/api/updateStatus/$id";
                         // $updateUrl = "localhost/ibid-ams-schedule/api/updateStatus/$id";
                         $this->get_curl($updateUrl);
 
-                        $lot_url = "http://ibid-ams-lot.stagingapps.net/api/getLotFilter/$id";
+                        $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter/$id";
                         // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                         $lotData = json_decode($this->get_curl($lot_url));
                         foreach ($lotData->data as $value) {
@@ -165,6 +207,12 @@ class Online extends CI_Controller {
                                 $submitWinner = "http://ibid-ams-kpl.stagingapps.net/api/submitWinner";
                                 // $submitWinner = "localhost/ibid-kpl/api/submitWinner";
                                 $this->postCURL($submitWinner, $winnerData);
+                            } else {
+                                $unSoldUrl = $this->config->item('ibid_lot')."/api/lotUnSold";
+
+                                $lotNotSolData = ['no_lot'=> $lotStock,
+                                                 'schedule_id'=>$id
+                                                ];
                             }
                         }
                         
@@ -172,12 +220,6 @@ class Online extends CI_Controller {
                 }
             }
         }
-
-        return $this->output
-                    ->set_content_type('application/json')
-                    ->set_output(json_encode(["status" => true]));
-        // var_dump($scheduleOnline); die();
-        
 	}
 
 	public function bid()
