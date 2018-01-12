@@ -1,8 +1,11 @@
 <script src="<?php echo base_url('auction/assets/js/jquery.js'); ?>"></script>
 <script src="<?php echo base_url('auction/assets/js/popper.min.js'); ?>"></script>
 <script src="<?php echo base_url('auction/assets/js/bootstrap.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/dummynpl.json'); ?>"></script> <!-- dummy data -->
 <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script type="text/javascript">
+  <!-- dummy data -->
+  var dummyNpl = JSON.parse(dummyNpl).data;
   // file: script.js
   // Initialize Firebase
   var config = {
@@ -426,23 +429,30 @@ function submitWinner(npl){
   var Silinder = $('#silinder').val();
   var Tahun = $('#tahun').val();
   var NoPolisi = $('#nopol').val();
-  $.ajax({
-    type: "POST",
-    url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
-    // url: "http://localhost/ibid-kpl/api/submitWinner", //Used on local
-    data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va,Model:Model,Merk:Merk,Tipe:Tipe,Silinder:Silinder,Tahun:Tahun,NoPolisi:NoPolisi},
-    dataType: "json",
-    success: function(data){
-      if (data.status) {
-        $('#modal').modal('hide');
-        $('#next_lot').val('');
-        onStock.child('LotStatus').set('terjual');
-        // getLotData();
-      } 
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-        alert('Error get data from ajax');
-    },
+  var last = onLog.orderByKey().limitToLast(1);
+  last.once('value', function(snapshot) {
+    if (snapshot.exists()) {
+      winners = snapshot.val();
+      winner = winners[Object.keys(winners)[0]];
+      $.ajax({
+        type: "POST",
+        url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
+        // url: "http://localhost/ibid-kpl/api/submitWinner", //Used on local
+        data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va,Model:Model,Merk:Merk,Tipe:Tipe,Silinder:Silinder,Tahun:Tahun,NoPolisi:NoPolisi,winnerState:winner.type},
+        dataType: "json",
+        success: function(data){
+          if (data.status) {
+            $('#modal').modal('hide');
+            $('#next_lot').val('');
+            onStock.child('LotStatus').set('terjual');
+            // getLotData();
+          } 
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error get data from ajax');
+        },
+      });
+    }
   });
 }
 
@@ -540,6 +550,7 @@ function checkLot(){
       }
 }
 
+// ONLINE LOG DUMMY
 function getBidLog(){
   var price = $('#start-price').val();
   var interval = $('#interval').val();
@@ -556,10 +567,15 @@ function getBidLog(){
 
     onMode.once('value', function(modeSnapshot) {
       if (modeSnapshot.exists() && modeSnapshot.val()) {
+        // npl dummy data <
+        nplDataFiltered = dummyNpl.filter(onThisSchedule);
+        nplData = nplDataFiltered[Math.floor(Math.random() * nplDataFiltered.length)];
+        NPLNumber = typeof nplData === 'object' ? nplData.NPLNumber : '00000';
+        // > npl dummy data
         onQueueTask.push({
           bid: newbid,
           type: 'Online',
-          npl: Math.floor(Math.random() * 1000) + 1
+          npl:  NPLNumber
         });
       }
     });
@@ -796,6 +812,10 @@ function pause(){
   clearInterval(start);
   // startProxy = setInterval( getProxyBid, 6000);
   $('#auction_start').val(0)
+}
+
+function onThisSchedule(value) {
+  return value.ScheduleId == $("#schedule_id").val();
 }
 
 </script>
