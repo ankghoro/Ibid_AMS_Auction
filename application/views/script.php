@@ -1,8 +1,11 @@
 <script src="<?php echo base_url('auction/assets/js/jquery.js'); ?>"></script>
 <script src="<?php echo base_url('auction/assets/js/popper.min.js'); ?>"></script>
 <script src="<?php echo base_url('auction/assets/js/bootstrap.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/dummynpl.json'); ?>"></script> <!-- dummy data -->
 <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script type="text/javascript">
+  <!-- dummy data -->
+  var dummyNpl = JSON.parse(dummyNpl).data;
   // file: script.js
   // Initialize Firebase
   var config = {
@@ -540,6 +543,7 @@ function checkLot(){
       }
 }
 
+// ONLINE LOG DUMMY
 function getBidLog(){
   var price = $('#start-price').val();
   var interval = $('#interval').val();
@@ -556,10 +560,13 @@ function getBidLog(){
 
     onMode.once('value', function(modeSnapshot) {
       if (modeSnapshot.exists() && modeSnapshot.val()) {
+        nplDataFiltered = dummyNpl.filter(onThisSchedule);
+        nplData = nplDataFiltered[Math.floor(Math.random() * nplDataFiltered.length)];
+        NPLNumber = typeof nplData === 'object' ? nplData.NPLNumber : '00000';
         onQueueTask.push({
           bid: newbid,
           type: 'Online',
-          npl: Math.floor(Math.random() * 1000) + 1
+          npl:  NPLNumber
         });
       }
     });
@@ -796,6 +803,10 @@ function pause(){
   clearInterval(start);
   // startProxy = setInterval( getProxyBid, 6000);
   $('#auction_start').val(0)
+}
+
+function onThisSchedule(value) {
+  return value.ScheduleId == $("#schedule_id").val();
 }
 
 </script>
