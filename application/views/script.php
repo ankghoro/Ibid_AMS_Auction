@@ -292,6 +292,7 @@ function getLotData() {
             }
           })
 
+          $('#next_lot').val('next');
           // pause();
           $('#bid-log').empty();
           onLog.on("child_added", function(snap) {
@@ -622,9 +623,9 @@ function nextLot() {
   var Lot = $('#lot_id').val();
   var postData = new FormData();
   $.ajax({
-    url: "<?php echo $this->config->item('ibid_lot');?>/api/lotUnSold",
+    url: "<?php echo $this->config->item('ibid_lot');?>/api/updateBySchedule/"+ScheduleId+"/"+Lot,
     type: "POST",
-    data : {no_lot:Lot,schedule_id:ScheduleId},
+    data : {status:"dilewat"},
     dataType: "json",
     success: function(data){
       if (data.status) {
