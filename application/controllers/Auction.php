@@ -262,6 +262,8 @@ class Auction extends CI_Controller {
                     $status = true;
                     $currentLot == $lastLot ? $disable = true : $disable = false; 
                 } else {
+                    $reAvailbleLot  = $this->config->item('ibid_lot')."/api/updateBySchedule/$schedule_id?reAvailble=1";
+                    $this->postCURL($reAvailbleLot, ['status'=>'tersedia']);
                     $jadwal = true; 
                     $status = false;
                     $disable = true;
