@@ -597,7 +597,7 @@ function floorBid(){
   var last = onLog.orderByKey().limitToLast(1);
   var newbid;
     clearInterval(start);
-    start = setInterval( getBidLog, 4000 );
+    // start = setInterval( getBidLog, 4000 );
     onMode.set(true);
     if ((count_value == 2) || (count_value == 3)) {
       reset_count();
@@ -774,7 +774,7 @@ function confirm_start(){
   $('#floor-bid').prop("disabled", false);
   $('#start').prop("disabled",true); 
   $('#btn_count').prop("disabled",false);
-  start = setInterval( getBidLog, 4000 );
+  // start = setInterval( getBidLog, 4000 );
   liveCount.once('value', function(countSnap) {
     if ( countSnap.exists() && ( (countSnap.val() == 2) || (countSnap.val() == 3) ) ) {
       if (onMode != undefined) {
