@@ -65,7 +65,7 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
         $('.card-img-top').css("background-image",firstImage );
         if (val.LotStatus == "terjual") {
           swal({
-            imageUrl: 'http://art-of-love-festival.com/wp-content/uploads/2014/07/sold-out.png',
+            imageUrl: '<?php echo base_url('assets/img/sold-out.png'); ?>',
             // imageHeight: 400,
             imageAlt: 'A tall image',
             showConfirmButton: false
