@@ -223,14 +223,16 @@ function getLotData() {
           activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
           onLot = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot);
           onLog = onLot.child('log');
+          currentLotData = onLot.child('lotData');
           onQueueTask = onLot.child('tasks');
           onMode = onLot.child('allowBid');
           
           value = data.data;
           value.Image = data.data.Image[Object.keys(data.data.Image)[0]];
           onStock.set(value);
+          currentLotData.set(value);
 
-          onStock.on('value', function(currentStockSnap){
+          currentLotData.on('value', function(currentStockSnap){
             if (currentStockSnap.exists()) {
               currentStockData = currentStockSnap.val();
               var name = currentStockData.Merk+" "+currentStockData.Tipe;
@@ -256,7 +258,7 @@ function getLotData() {
                 $('.bid-status').css('color','white');
               }
               $('#item_transmisi').text(currentStockData.Transmisi || '-');
-              $('#item_km').text(currentStockData.Kilometer || '-');
+              $('#item_km').text(addPeriod(currentStockData.Kilometer) || '-');
               $('#item_tahun').text(currentStockData.Tahun || '-');
               $('#item_nopol').text(currentStockData.NoPolisi || '-');
               $('#item_bahanbakar').text(currentStockData.BahanBakar || '-');
@@ -559,7 +561,7 @@ function getBidLog(){
   var newbid;
   last.once('value', function(snapshot) {
     if (!snapshot.val()) {
-      newbid = parseInt(price) + parseInt(interval);
+      newbid = parseInt(price);
     } else{
       snapshot.forEach(function(child) {
         newbid = child.val().bid + parseInt(interval);
@@ -603,19 +605,22 @@ function floorBid(){
       reset_count();
     }
   
-  last.once('value', function(snapshot) {
-    if (!snapshot.val()) {
-      newbid = parseInt(price) + parseInt(interval);
-    } else{
-      snapshot.forEach(function(child) {
-        newbid = child.val().bid + parseInt(interval);
+    currentLotData.once('value', function(currentStockSnap){
+      last.once('value', function(snapshot) {
+      startPrice = currentStockSnap.exists() ? currentStockSnap.val().StartPrice : 0;
+        if (!snapshot.val()) {
+          newbid = parseInt(startPrice);
+        } else{
+          snapshot.forEach(function(child) {
+            newbid = child.val().bid + parseInt(interval);
+          });
+        }
+        onQueueTask.push({
+          bid: newbid,
+          type: 'Floor'
+        });
       });
-    }
-    onQueueTask.push({
-      bid: newbid,
-      type: 'Floor'
     });
-  });
 }
 
 function nextLot() {
