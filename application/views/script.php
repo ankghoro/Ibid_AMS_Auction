@@ -197,10 +197,6 @@
 
 function getLotData() {
   getLotData.called = true;
-  var id = $('#lot_id').val();
-  id = parseInt(id);
-  id = id + 1;
-  $('#lot_id').val(id);
   $('#loader').append('<i class="fa fa-spinner fa-pulse fa-lg fa-5x new-loader"></i>');
   $('#content').hide();
   $.ajax({
@@ -689,26 +685,29 @@ function btn_count() {
         keyboard: false
       })
       $('#modal-body').empty();
-      var lot = $('#lot_id').val();
-      var name = $('#unit_name').val();
+      var lot   = $('#lot_id').val();
+      var name  = $('#unit_name').val();
       var grade = $('#unit_grade').val();
       var price = $('#start-price').val();
+      var nopol = $('#nopol').val();
       if (state == "Floor") {
-        $('#modal-title').text('Selamat, Pemenang '+state+' Bidder');
+        $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
         var body ='<h4>Detail Unit</h4>'
                   +'<div class="row">'
                       +'<div class="col-md-12">'
                       +'<div class="card>'
                         +'<div class="card-body">'
                           +'<div class="row">'
-                            +'<div class="col-md-3"><b class="pull-left">No.Lot</b></div>'
-                            +'<div class="col-md-9" id="show_date"> : '+lot+'</div>'
-                            +'<div class="col-md-3"><b class="pull-left">Unit Name</b></div>'
-                            +'<div class="col-md-9" id="show_company"> : '+name+'</div>'
-                            +'<div class="col-md-3"><b class="pull-left">Grade</b></div>'
-                            +'<div class="col-md-9" id="show_type"> : '+grade+'</div>'
-                            +'<div class="col-md-3"><b class="pull-left">Harga</b></div>'
-                            +'<div class="col-md-9" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Nomor Lot</b></div>'
+                            +'<div class="col-md-8" id="show_date"> : '+lot+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Nomor Polisi</b></div>'
+                            +'<div class="col-md-8" id="show_date"> : '+nopol+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Nama Unit</b></div>'
+                            +'<div class="col-md-8" id="show_company"> : '+name+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Grade</b></div>'
+                            +'<div class="col-md-8" id="show_type"> : '+grade+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Harga</b></div>'
+                            +'<div class="col-md-8" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
                           +'</div>'
                         +'</div>'
                       +'</div>'
@@ -725,7 +724,7 @@ function btn_count() {
           $('#close').hide();
           $('#modal').modal('show');
       } else {
-          $('#modal-title').text('Selamat, Pemenang '+state);
+          $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
           $('#modal-body').empty();
           var body ='<h4>Detail Unit</h4>'
                     +'<div class="row">'
@@ -733,14 +732,16 @@ function btn_count() {
                       +'<div class="card>'
                         +'<div class="card-body">'
                           +'<div class="row">'
-                            +'<div class="col-md-3"><b class="pull-left">No.Lot</b></div>'
-                            +'<div class="col-md-9" id="show_date"> : '+lot+'</div>'
-                            +'<div class="col-md-3"><b class="pull-left">Unit Name</b></div>'
-                            +'<div class="col-md-9" id="show_company"> : '+name+'</div>'
-                            +'<div class="col-md-3"><b class="pull-left">Grade</b></div>'
-                            +'<div class="col-md-9" id="show_type"> : '+grade+'</div>'
-                            +'<div class="col-md-3"><b class="pull-left">Harga</b></div>'
-                            +'<div class="col-md-9" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Nomor Lot</b></div>'
+                            +'<div class="col-md-8" id="show_date"> : '+lot+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Nomor Polisi</b></div>'
+                            +'<div class="col-md-8" id="show_date"> : '+nopol+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Nama Unit</b></div>'
+                            +'<div class="col-md-8" id="show_company"> : '+name+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Grade</b></div>'
+                            +'<div class="col-md-8" id="show_type"> : '+grade+'</div>'
+                            +'<div class="col-md-4"><b class="pull-left">Harga</b></div>'
+                            +'<div class="col-md-8" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
                           +'</div>'
                         +'</div>'
                       +'</div>'
@@ -753,10 +754,10 @@ function btn_count() {
                         +'<div class="card>'
                           +'<div class="card-body">'
                             +'<div class="row">'
-                              +'<div class="col-md-3"><b class="pull-left">Peserta</b></div>'
-                              +'<div class="col-md-9" id="show_date"> : '+state+'</div>'
-                              +'<div class="col-md-3"><b class="pull-left">Npl</b></div>'
-                              +'<div class="col-md-9" id="show_company"> : '+winner+'</div>'
+                              +'<div class="col-md-4"><b class="pull-left">Peserta</b></div>'
+                              +'<div class="col-md-8" id="show_date"> : '+state+'</div>'
+                              +'<div class="col-md-4"><b class="pull-left">Npl</b></div>'
+                              +'<div class="col-md-8" id="show_company"> : '+winner+'</div>'
                             +'</div>'
                           +'</div>'
                         +'</div>'
