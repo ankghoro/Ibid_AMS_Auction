@@ -15,6 +15,7 @@
   "dependencies": {
     "firebase": "^4.8.1",
     "firebase-admin": "^5.7.0",
-    "firebase-queue": "^1.6.1"
+    "firebase-queue": "^1.6.1",
+    "sweetalert2": "^7.3.5"
   }
 }

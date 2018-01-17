@@ -443,6 +443,7 @@ function submitWinner(npl){
           if (data.status) {
             $('#modal').modal('hide');
             $('#next_lot').val('');
+            currentLotData.child('LotStatus').set('terjual');
             onStock.child('LotStatus').set('terjual');
             // getLotData();
           } 
