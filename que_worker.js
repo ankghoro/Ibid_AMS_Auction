@@ -19,29 +19,27 @@ var logsRef = mainRef.child('log');
 var tasksRef = mainRef.child('tasks');
 var specsRef = mainRef.child('specs');
 var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data, progress, resolve, reject) {
-  // Read and process task data
-
   var last = logsRef.orderByKey().limitToLast(1);
-  // console.log(data.npl);
   last.once('value', function(snapshot) {
     if (!snapshot.exists()) {
-      newbid = parseInt(startPrice) + parseInt(Interval);
+      newbid = parseInt(startPrice);
     } else{
       snapshot.forEach(function(child) {
         newbid = child.val().bid + parseInt(Interval);
       });
     }
 
-    // console.log(newbid);
     logsRef.push({
       bid: newbid || null,
       type: data.type || null,
       npl: data.npl || null
-    }).then(resolve());
-  }).then(resolve());
+    });
 
-  // Finish the task asynchronously
-  // setTimeout(function() {
-  //   resolve();
-  // }, 1000);
+    sameBid = tasksRef.orderByChild("bid").startAt(newbid).endAt(newbid);
+    sameBid.once('value', function(snapshot) {
+      let removeTasks = {};
+      snapshot.forEach(child => removeTasks[child.key] = null);
+      tasksRef.update(removeTasks).then(resolve());
+    });
+  });
 });

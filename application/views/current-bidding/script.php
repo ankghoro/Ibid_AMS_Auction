@@ -1,4 +1,6 @@
 <script src="<?php echo base_url('assets/vendor/jquery/jquery.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('node_modules/sweetalert/dist/sweetalert.min.js'); ?>"></script> -->
+<script src="<?php echo base_url('node_modules/sweetalert2/dist/sweetalert2.all.min.js'); ?>"></script>
 <!-- Include Firebase Library -->
 <script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
 <script>
@@ -29,7 +31,9 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
     $('.pull-right').text('-');
     var liveOn = snapshot.val();
     liveOn = liveOn.split('|');
-    onLog = activeCompany.child('schedule/'+liveOn[0]+'/lot|stock/'+liveOn[1]+'/log');
+    activeLot = activeCompany.child('schedule/'+liveOn[0]+'/lot|stock/'+liveOn[1]);
+    onLog = activeLot.child('log');
+    currentStock = activeLot.child('lotData');
     currentStock.once('value', function(stockSnapshot) {
       if (stockSnapshot.exists()) {
         val = stockSnapshot.val();
@@ -59,7 +63,18 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
         $('.fold-price').text("Harga Kelipatan: Rp. "+addPeriod(val.Interval));
         firstImage = "url("+val.Image+")";
         $('.card-img-top').css("background-image",firstImage );
+        if (val.LotStatus == "terjual") {
+          swal({
+            imageUrl: '<?php echo base_url('assets/img/sold-out.png'); ?>',
+            // imageHeight: 400,
+            imageAlt: 'A tall image',
+            showConfirmButton: false
+          });
+        }else{
+          swal.close();
+        }
       }else{
+        swal.close();
         reset()
       }
     });

@@ -386,7 +386,10 @@ hr {
 	line-height: 32pt;
 	font-size: 1.4vw;
 }
-
+.swal2-modal {
+	width: auto !important;
+	background: rgba(0,0,0,0) !important;
+}
 @media only screen
 and (max-device-width : 320px) {
 	.bid-name > h4 {
