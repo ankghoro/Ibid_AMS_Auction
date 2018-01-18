@@ -238,7 +238,7 @@ class Auction extends CI_Controller {
                     $liveCount = $database->getReference('company/3/liveCount')->getValue();
                     
                     if((int)@$liveCount != 3){
-                        $commandForRunProxy = "php ".FCPATH."../ibid-autobid/index.php proxy bid ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." > /dev/null 2>&1 & echo $!";
+                        $commandForRunProxy = "node ".FCPATH."proxy_runner.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
                         exec($commandForRunProxy ,$proxyPID);
                         $commandForRunQueueing = "node ".FCPATH."que_worker.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
                         exec($commandForRunQueueing ,$queuePID);
