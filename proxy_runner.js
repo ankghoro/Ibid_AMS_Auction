@@ -27,7 +27,6 @@ runner.exec("php " + phpScriptPath, function(err, phpResponse, stderr) {
 	value = JSON.parse(phpResponse);
 	topBidder = value.top_autobidder;
 	if (Object.size(topBidder) > 0) {
-		console.log('blah');
 		var proxyInterval =	setInterval(function(){
 		  	var last = logsRef.orderByKey().limitToLast(1);
 			tasksRef.once('value', function(taskSnapshot) {
@@ -55,7 +54,7 @@ runner.exec("php " + phpScriptPath, function(err, phpResponse, stderr) {
 							sameBid = tasksRef.orderByChild("bid").startAt(newbid).endAt(newbid);
 							sameBid.once('value', function(snapshot) {
 							  let removeTasks = {};
-							  snapshot.forEach(child => newKey != child.key ? removeTasks[child.key] = null : console.log('iyahh'));
+							  snapshot.forEach(child => newKey != child.key ? removeTasks[child.key] = null : console.log('skip remove task'));
 							  tasksRef.update(removeTasks);
 							});
 
