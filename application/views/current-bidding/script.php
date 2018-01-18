@@ -34,7 +34,7 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
     activeLot = activeCompany.child('schedule/'+liveOn[0]+'/lot|stock/'+liveOn[1]);
     onLog = activeLot.child('log');
     currentStock = activeLot.child('lotData');
-    currentStock.once('value', function(stockSnapshot) {
+    currentStock.on('value', function(stockSnapshot) {
       if (stockSnapshot.exists()) {
         val = stockSnapshot.val();
         var name = val.Merk+" "+val.Tipe;
