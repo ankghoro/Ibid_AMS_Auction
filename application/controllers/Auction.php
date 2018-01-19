@@ -197,6 +197,7 @@ class Auction extends CI_Controller {
                     $arr['AuctionItemId'] = $stockData->AuctionItemId; 
                     $arr['Merk'] = $stockData->Merk;
                     $arr['Tipe'] = $stockData->Tipe;
+                    $arr['Seri'] = $stockData->Seri;
                     $arr['Silinder'] = $stockData->Silinder;
                     $arr['Model'] = $stockData->Model;
                     $arr['Tahun'] = $stockData->Tahun;
