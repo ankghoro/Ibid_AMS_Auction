@@ -414,6 +414,9 @@ function getLotData() {
 }
 
 function submitWinner(npl){
+  var loader = '<i class="fa fa-spinner fa-pulse fa-1x fa-fw" id="btn_loader"></i>';
+  $('#proceed-winner').prepend(loader);
+  $('#proceed-winner').prop("disabled",true);
   var UnitName = $('#unit_name').val();
   var AuctionItemId = $('#stock_id').val();
   var ScheduleId = $('#schedule_id').val();
@@ -446,10 +449,12 @@ function submitWinner(npl){
             currentLotData.child('LotStatus').set('terjual');
             onStock.child('LotStatus').set('terjual');
             // getLotData();
-          } 
+          }
+          $('#proceed-winner').prop("disabled",false); 
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error get data from ajax');
+            $('#proceed-winner').prop("disabled",false);
         },
       });
     }
