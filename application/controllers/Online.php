@@ -95,8 +95,8 @@ class Online extends CI_Controller {
                             // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                             $lotData = json_decode($this->get_curl($lot_url));
                             if ($lotData->status) {
-                                // $postData = ["scheduleOn" => true];
-                                // $reference->set($postData); 
+                                $postData = ["allowBid" => true];
+                                $reference->set($postData); 
                                 $PID = 0;
                                 foreach ($lotData->data as $value) {
                                     $lotStock = $value->no_lot;
@@ -126,11 +126,12 @@ class Online extends CI_Controller {
 
                                     $backgroundProcess = " > /dev/null 2>&1 & echo $!";
 
-                                    $commandForRunProxy = "php ".FCPATH."../ibid-autobid/index.php proxy bid ";
+                                    $commandForRunProxy = "node ".FCPATH."proxy_runner.js ";
                                     $commandForRunProxy .= $value->company_id." ";
                                     $commandForRunProxy .= $value->schedule_id." ";
-                                    $commandForRunProxy .= $value->no_lot." ";
-                                    $commandForRunProxy .= (int)$schedule->interval+0;
+                                    $commandForRunProxy .= $value->no_lot;
+                                    $commandForRunProxy .= " ".(int)$schedule->interval+0;
+                                    $commandForRunProxy .= " ".(int)$value->stock_startprice+0;
                                     $commandForRunProxy .= $backgroundProcess;
 
                                     exec($commandForRunProxy ,$proxyPID);
@@ -143,8 +144,8 @@ class Online extends CI_Controller {
                                     $commandForRunQueueing .= " ".$value->company_id;
                                     $commandForRunQueueing .= " ".$value->schedule_id;
                                     $commandForRunQueueing .= " ".$value->no_lot;
-                                    $commandForRunQueueing .= " ".( (int)($schedule->interval+0) );
-                                    $commandForRunQueueing .= " ".( (int)($value->stock_startprice+0) );
+                                    $commandForRunQueueing .= " ".(int)$schedule->interval+0;
+                                    $commandForRunQueueing .= " ".(int)$value->stock_startprice+0;
                                     $commandForRunQueueing .= " ".$backgroundProcess;
 
                                     exec($commandForRunQueueing ,$queuePID);
@@ -167,7 +168,7 @@ class Online extends CI_Controller {
                             }
                         }                    
                     } else {
-                        $postData = ["scheduleOn" => false];
+                        $postData = ["allowBid" => false];
                         $reference->update($postData);
                         $updateUrl = $this->config->item('ibid_schedule')."/api/updateStatus/$id";
                         // $updateUrl = "localhost/ibid-ams-schedule/api/updateStatus/$id";

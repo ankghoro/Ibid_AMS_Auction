@@ -8,9 +8,8 @@ var lotNum = process.argv[4];
 var Interval = process.argv[5];
 var startPrice = process.argv[6];
 
-var phpScriptPath = path.join(__dirname, '../ibid-autobid/index.php proxy getProxy '+companyId+' '+scheduleId+' '+lotNum+' '+Interval);
+var phpScriptPath = path.join(__dirname, '../ibid-autobid/index.php proxy getProxy '+companyId+' '+scheduleId+' '+lotNum+' '+Interval+' '+startPrice);
 var serviceAccount = require(path.join(__dirname,'ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json'));
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://ibid-ams-sample.firebaseio.com'
@@ -25,7 +24,7 @@ runner.exec("php " + phpScriptPath, function(err, phpResponse, stderr) {
 	if(err) console.log(err); /* log error */
 	
 	value = JSON.parse(phpResponse);
-	topBidder = value.top_autobidder;
+	topBidder = value.data.top_autobidder;
 	if (Object.size(topBidder) > 0) {
 		var proxyInterval =	setInterval(function(){
 		  	var last = logsRef.orderByKey().limitToLast(1);
@@ -38,7 +37,7 @@ runner.exec("php " + phpScriptPath, function(err, phpResponse, stderr) {
 							} else {
 							  snapshot.forEach(function(child) {
 							    newbid = child.val().bid + parseInt(Interval);
-							    if (child.val().bid >= parseInt(topBidder.nominal) || newbid >= parseInt(topBidder.nominal)) {
+							    if (child.val().bid > parseInt(topBidder.nominal) || newbid > parseInt(topBidder.nominal) ) {
 									clearInterval(proxyInterval);			
     								process.exit();
 							    }

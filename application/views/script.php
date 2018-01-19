@@ -665,110 +665,142 @@ function btn_count() {
     if (count_value == 3) {
       onMode.set(false);
       var last = onLog.orderByKey().limitToLast(1);
-
       last.once('value', function(snapshot) {
         snapshot.forEach(function(child) {
           winner_npl = onLog.orderByChild("bid").startAt(child.val().bid).endAt(child.val().bid).limitToFirst(1);
-          winner_npl.once('value', function(winnerSnapshot) {
-            winnerSnapshot.forEach(function(winnerData) {
-              npl = winnerData.val().npl || '';
-              state = winnerData.val().type || 'Floor';
-              set_winner(npl,state);
+          currentLotData.once('value', function(currentStockSnap){
+            dataLot = currentStockSnap.val();
+            winner_npl.once('value', function(winnerSnapshot) {
+              winnerSnapshot.forEach(function(winnerData) {
+                formedPrice = winnerData.val().bid || 0;
+                npl = winnerData.val().npl || '';
+                state = winnerData.val().type || 'Floor';
+                $.ajax({
+                  type: "GET",
+                  url: "<?php echo $this->config->item('ibid_autobid');?>/api/getproxy/"+<?php echo $CompanyId; ?>+"/"+dataLot.ScheduleId+"/"+dataLot.NoLot+"/"+dataLot.StartPrice,
+                  dataType: "json",
+                  processData: false,
+                  contenType: false,
+                  success: function(data){
+                    if (data.status) {
+                      topProxy = data.data.top_autobidder;
+                      topProxy2nd = data.data.top_autobidder2nd;
+                      if (winnerData.val().bid < topProxy.nominal) {
+                        if (winnerData.val().type != "Proxy") {
+                          onLog.push({
+                            bid: winnerData.val().bid + dataLot.Interval,
+                            type: "Proxy",
+                            npl: topProxy.npl || null
+                          });
+                          formedPrice = winnerData.val().bid + dataLot.Interval;
+                        }
+                        npl = topProxy.npl || '';
+                        state = "Proxy";
+                      }
+                      if ( !jQuery.isEmptyObject(topProxy2nd) &&  (winnerData.val().bid <= parseInt(topProxy2nd.nominal)) ) {
+                        onLog.push({
+                          bid: parseInt(topProxy2nd.nominal) + dataLot.Interval,
+                          type: "Proxy",
+                          npl: topProxy.npl || null
+                        });
+                        formedPrice = parseInt(topProxy2nd.nominal) + dataLot.Interval;
+                        npl = topProxy.npl || '';
+                        state = "Proxy";
+                      }
+                    }
+                    $('#modal').modal({
+                      backdrop: 'static',
+                      keyboard: false
+                    })
+                    $('#modal-body').empty();
+                    if (state == "Floor") {
+                      $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
+                      var body ='<h4>Detail Unit</h4>'
+                                +'<div class="row">'
+                                    +'<div class="col-md-12">'
+                                    +'<div class="card>'
+                                      +'<div class="card-body">'
+                                        +'<div class="row">'
+                                          +'<div class="col-md-4"><b class="pull-left">Nomor Lot</b></div>'
+                                          +'<div class="col-md-8"> : '+dataLot.NoLot+'</div>'
+                                          +'<div class="col-md-4"><b class="pull-left">Nomor Polisi</b></div>'
+                                          +'<div class="col-md-8"> : '+dataLot.NoPolisi+'</div>'
+                                          +'<div class="col-md-4"><b class="pull-left">Nama Unit</b></div>'
+                                          +'<div class="col-md-8"> : '+dataLot.Merk+' '+dataLot.Seri+'</div>'
+                                          +'<div class="col-md-4"><b class="pull-left">Grade</b></div>'
+                                          +'<div class="col-md-8"> : '+dataLot.Grade+'</div>'
+                                          +'<div class="col-md-4"><b class="pull-left">Harga</b></div>'
+                                          +'<div class="col-md-8"> : Rp. '+addPeriod(formedPrice)+'</div>'
+                                        +'</div>'
+                                      +'</div>'
+                                    +'</div>'
+                                    +'</div>'
+                                  +'</div>'
+                                  +'<hr class="custom">'
+                                  +'<h4>Isi Npl Pemenang</h4>'
+                                  +'<div class="form-group noLot-edit">'
+                                    +'<div class="col-md-6" style="padding-left:0">'
+                                      +'<input type="text" name="input_npl" class="form-control" id="input_npl" onkeypress="return isNumberKey(event)">'
+                                    +'</div>'
+                                  +'</div>';
+                        $('#modal-body').append(body);
+                        $('#close').hide();
+                        $('#modal').modal('show');
+                    } else {
+                        $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
+                        $('#modal-body').empty();
+                        var body ='<h4>Detail Unit</h4>'
+                                  +'<div class="row">'
+                                    +'<div class="col-md-12">'
+                                    +'<div class="card>'
+                                      +'<div class="card-body">'
+                                        +'<div class="row">'
+                                          +'<div class="col-md-4"><b class="pull-left">Nomor Lot</b></div>'
+                                          +'<div class="col-md-8"> : '+dataLot.NoLot+'</div>'
+                                          +'<div class="col-md-4"><b class="pull-left">Nomor Polisi</b></div>'
+                                          +'<div class="col-md-8"> : '+dataLot.NoPolisi+'</div>'
+                                          +'<div class="col-md-4"><b class="pull-left">Nama Unit</b></div>'
+                                          +'<div class="col-md-8"> : '+dataLot.Merk+' '+dataLot.Seri+'</div>'
+                                          +'<div class="col-md-4"><b class="pull-left">Grade</b></div>'
+                                          +'<div class="col-md-8"> : '+dataLot.Grade+'</div>'
+                                          +'<div class="col-md-4"><b class="pull-left">Harga</b></div>'
+                                          +'<div class="col-md-8"> : Rp. '+addPeriod(formedPrice)+'</div>'
+                                        +'</div>'
+                                      +'</div>'
+                                    +'</div>'
+                                    +'</div>'
+                                  +'</div>'
+                                  +'<hr class="custom">'
+                                  +'<h4>Detail Pemenang</h4>'
+                                    +'<div class="row">'
+                                      +'<div class="col-md-12">'
+                                      +'<div class="card>'
+                                        +'<div class="card-body">'
+                                          +'<div class="row">'
+                                            +'<div class="col-md-4"><b class="pull-left">Peserta</b></div>'
+                                            +'<div class="col-md-8" id="show_date"> : '+state+'</div>'
+                                            +'<div class="col-md-4"><b class="pull-left">Npl</b></div>'
+                                            +'<div class="col-md-8" id="show_company"> : '+npl+'</div>'
+                                          +'</div>'
+                                        +'</div>'
+                                      +'</div>'
+                                      +'</div>'
+                                    +'</div>';
+                                    +'<hr class="custom">'
+                        $('#modal-body').append(body);
+                        $('#close').hide();
+                        $('#modal').modal('show');
+                    }
+                  },
+                  error: function (jqXHR, textStatus, errorThrown) {
+                  },
+                });
+              });
             });
           });
         });
       });
 
-      var winner = $('#npl').val();
-      var state = $('#state').val();
-      $('#modal').modal({
-        backdrop: 'static',
-        keyboard: false
-      })
-      $('#modal-body').empty();
-      var lot   = $('#lot_id').val();
-      var name  = $('#unit_name').val();
-      var grade = $('#unit_grade').val();
-      var price = $('#start-price').val();
-      var nopol = $('#nopol').val();
-      if (state == "Floor") {
-        $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
-        var body ='<h4>Detail Unit</h4>'
-                  +'<div class="row">'
-                      +'<div class="col-md-12">'
-                      +'<div class="card>'
-                        +'<div class="card-body">'
-                          +'<div class="row">'
-                            +'<div class="col-md-4"><b class="pull-left">Nomor Lot</b></div>'
-                            +'<div class="col-md-8" id="show_date"> : '+lot+'</div>'
-                            +'<div class="col-md-4"><b class="pull-left">Nomor Polisi</b></div>'
-                            +'<div class="col-md-8" id="show_date"> : '+nopol+'</div>'
-                            +'<div class="col-md-4"><b class="pull-left">Nama Unit</b></div>'
-                            +'<div class="col-md-8" id="show_company"> : '+name+'</div>'
-                            +'<div class="col-md-4"><b class="pull-left">Grade</b></div>'
-                            +'<div class="col-md-8" id="show_type"> : '+grade+'</div>'
-                            +'<div class="col-md-4"><b class="pull-left">Harga</b></div>'
-                            +'<div class="col-md-8" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
-                          +'</div>'
-                        +'</div>'
-                      +'</div>'
-                      +'</div>'
-                    +'</div>'
-                    +'<hr class="custom">'
-                    +'<h4>Isi Npl Pemenang</h4>'
-                    +'<div class="form-group noLot-edit">'
-                      +'<div class="col-md-6" style="padding-left:0">'
-                        +'<input type="text" name="input_npl" class="form-control" id="input_npl" onkeypress="return isNumberKey(event)">'
-                      +'</div>'
-                    +'</div>';
-          $('#modal-body').append(body);
-          $('#close').hide();
-          $('#modal').modal('show');
-      } else {
-          $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
-          $('#modal-body').empty();
-          var body ='<h4>Detail Unit</h4>'
-                    +'<div class="row">'
-                      +'<div class="col-md-12">'
-                      +'<div class="card>'
-                        +'<div class="card-body">'
-                          +'<div class="row">'
-                            +'<div class="col-md-4"><b class="pull-left">Nomor Lot</b></div>'
-                            +'<div class="col-md-8" id="show_date"> : '+lot+'</div>'
-                            +'<div class="col-md-4"><b class="pull-left">Nomor Polisi</b></div>'
-                            +'<div class="col-md-8" id="show_date"> : '+nopol+'</div>'
-                            +'<div class="col-md-4"><b class="pull-left">Nama Unit</b></div>'
-                            +'<div class="col-md-8" id="show_company"> : '+name+'</div>'
-                            +'<div class="col-md-4"><b class="pull-left">Grade</b></div>'
-                            +'<div class="col-md-8" id="show_type"> : '+grade+'</div>'
-                            +'<div class="col-md-4"><b class="pull-left">Harga</b></div>'
-                            +'<div class="col-md-8" id="show_lot"> : Rp. '+addPeriod(price)+'</div>'
-                          +'</div>'
-                        +'</div>'
-                      +'</div>'
-                      +'</div>'
-                    +'</div>'
-                    +'<hr class="custom">'
-                    +'<h4>Detail Pemenang</h4>'
-                      +'<div class="row">'
-                        +'<div class="col-md-12">'
-                        +'<div class="card>'
-                          +'<div class="card-body">'
-                            +'<div class="row">'
-                              +'<div class="col-md-4"><b class="pull-left">Peserta</b></div>'
-                              +'<div class="col-md-8" id="show_date"> : '+state+'</div>'
-                              +'<div class="col-md-4"><b class="pull-left">Npl</b></div>'
-                              +'<div class="col-md-8" id="show_company"> : '+winner+'</div>'
-                            +'</div>'
-                          +'</div>'
-                        +'</div>'
-                        +'</div>'
-                      +'</div>';
-                      +'<hr class="custom">'
-          $('#modal-body').append(body);
-          $('#close').hide();
-          $('#modal').modal('show');
-      }
     }
     // alert('ok');
   } else {
