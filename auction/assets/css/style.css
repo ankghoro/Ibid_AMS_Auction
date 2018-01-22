@@ -25,7 +25,7 @@
 html, body{
 	background: #f7f7f7;
 	font-family: open sans;
-	color:#777777;;
+	color:black;
 }
 @font-face {
     font-family: open sans;
@@ -127,7 +127,7 @@ hr {
 	border-top-right-radius: 10px;
 }
 .color-right{
-	background: #81be2a;
+	background: #863688;;
 	border-top-left-radius:10px;
 }
 .white{
@@ -138,7 +138,7 @@ hr {
 	border-bottom-right-radius: 10px; 
 }
 .young-purple{
-	background:#81be2a;
+	background:#863688;
 	text-align: left;
 	/*height: 100%;*/
 	width: 100%;
@@ -156,17 +156,18 @@ hr {
 	background-color: #231f42;
 }
 .orange-bg{
-	background-color: #ffc107;
+	background-color: #49274a;
+	color: white;
 }
 .rounded-iden{
 	border-radius: 100px;
-	background-color: #ffc107;
+	background-color: #49274a;
 	width: 45%;	
 	margin-left: 2px;
 	margin-right: auto;
 	padding: 2px;
 	margin-bottom: 10px;
-	color: #777;
+	color: white;
 	float: left;
 	font-size: 1.2vw;
 }
@@ -223,6 +224,30 @@ hr {
 .btn{
 	margin-top: 5px;
 	border-radius: 4px;
+}
+
+.btn-warning{
+	background-color: rgba(0, 0, 0, .0);
+	border-color: #52f332;
+	color: #52f332;
+}
+
+.btn-success{
+	background-color:#f19f41;
+	border-color: #f19f41;
+	color: white;
+}
+
+.btn-green{
+	background-color:#3fc325;
+	border-color: #3fc325;
+	color: white;
+}
+
+.btn-info{
+	background-color:#863688;
+	border-color: #863688;
+	color: white;
 }
 
 .control-label{
@@ -347,8 +372,7 @@ hr {
 }
 
 .fold-price{
-	background-color: #81be2a;
-	color: white;
+	border-bottom: 2px solid #49274a;
 	padding: 5px;
 	margin-bottom: 10px;
 	font-size: 1vw;
@@ -386,7 +410,7 @@ hr {
 	float: right;
 }
 .dot-separator{
-	color:#ffc107;
+	color:#49274a;
 	font-family: openbold;
 	font-size: 3rem;
 	float: left;
@@ -598,4 +622,8 @@ and (max-device-width : 577px){
 and (min-device-width : 992px){
 	
 	
+}
+
+.fold-prices{
+	color: #863688;
 }
