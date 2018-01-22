@@ -102,7 +102,7 @@
                                         <div class="col-md-12  padding11 color-right">
                                             <div class="young-purple">
                                                 <div class="center-content">
-                                                    <img src="<?php echo base_url('auction/assets/img/topbid_icon.png');?>" class="img-top">&nbsp <span class="top-bidder" style="color: #ffed00;">TOP BIDDER</span>
+                                                    <img src="<?php echo base_url('auction/assets/img/star.png');?>" class="img-top">&nbsp <span class="top-bidder">TOP BIDDER</span>
                                                 </div>
                                                 <div class="bid-topbid" id="top_bid"></div>
                                                 <div class="pull-right openbold white" id="top_bid_state"></div>
@@ -112,7 +112,7 @@
                                     <div class="row">
                                       
                                         <div class="col-12 padding10">
-                                            <div class="fold-price center-align">Bidding Log</div>
+                                            <div class="fold-price center-align">BIDDING LOG</div>
                                             <div class="bidding-log" style="border: 1px solid #cccccc !important">
                                                 <div class="row line-height center-align" id="bid-log"></div>  
                                             </div>
@@ -142,7 +142,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <div class="fold-price center-align" id="harga_kelipatan">
+                                            <div class="fold-prices center-align" id="harga_kelipatan">
                                                 Harga Kelipatan: -
                                             </div>
                                         </div>
@@ -154,7 +154,7 @@
                             <div class="card">
                                 <div class="card-block block-content">
                                     <div class="fold-price center-align">
-                                            Control
+                                            CONTROL
                                     </div> 
                                         <div class="row">
                                                 <div class="col-md-6 center-align">
@@ -165,7 +165,7 @@
                                                     </div>
                                                     <div class="form-group clearfix">
                                                             <label class="control-label">Bidding Control :</label>
-                                                            <button class="btn btn-success btn-sm btn-block" style="height:111px;" id="floor-bid" disabled="disabled">+</button>
+                                                            <button class="btn btn-green btn-sm btn-block" style="height:111px;" id="floor-bid" disabled="disabled">+</button>
                                             
                                                     </div>
                                                 </div>
@@ -186,7 +186,7 @@
                                             <div class="row">
                                                 <div class="col-md-12 center-align">
                                                         <div class="fold-price">
-                                                                Detail Lelang
+                                                                DETAIL LELANG
                                                         </div>
                                                             <div class="stock-detail">
                                                                     <div class="row spec">
