@@ -153,6 +153,12 @@
         skipLot();
     });
 
+    $('#confirm-skip').on('click', function(){
+        $('#reason').removeClass('is-invalid');
+        $('.invalid-feedback').remove();
+        skipLot();
+    });
+
     $('#proceed-winner').on('click', function(){
       $('input').removeClass('is-invalid');
       $('.invalid-feedback').remove();
@@ -172,6 +178,16 @@
       }
       
       
+    });
+
+    $('#confirm-restart').on('click', function(){
+      var id = $(this).attr('data-scheduleId');
+      restartCurrentSchedule(id);
+    });
+
+    $('#confirm-done').on('click', function(){
+      var id = $(this).attr('data-scheduleId');
+      doneCurrentSchedule(id);
     });
 
   });
@@ -228,10 +244,10 @@ function getLotData() {
           onStock.set(value);
           currentLotData.set(value);
 
-          currentLotData.on('value', function(currentStockSnap){
+          onStock.on('value', function(currentStockSnap){
             if (currentStockSnap.exists()) {
               currentStockData = currentStockSnap.val();
-              var name = currentStockData.Merk+" "+currentStockData.Tipe;
+              var name = currentStockData.Merk+" "+currentStockData.Seri;
               var stat = '<br><small class="bid-status pull-right"></small>'
               // var lot = "Lot "+data.data.NoLot;
               $('#item_name').html(name+" "+currentStockData.Silinder+" "+currentStockData.Model+" "+stat);
@@ -287,6 +303,46 @@ function getLotData() {
               $('#date').val(currentStockData.Date);
               firstImage = "url("+currentStockData.Image+")";
               $('.card-img-top').css("background-image",firstImage );
+            }else{
+              $('#item_name').html("-");
+              $('#item_lot').text("-");
+              $('#lot_id').val(null);
+              $('#item_color').text('-');
+              $('#btn_count').prop("disabled", true);
+              $('#floor-bid').prop("disabled", true);
+              $('#item_transmisi').text('-');
+              $('#item_km').text('-');
+              $('#item_tahun').text('-');
+              $('#item_nopol').text('-');
+              $('#item_bahanbakar').text('-');
+              $('#item_exterior').text('-');
+              $('#item_interior').text('-');
+              $('#item_mechanical').text('-');
+              $('#item_frame').text('-');
+              $('#item_grade').text('-');
+              $('#item_startprice').text('-');
+              $('#schedule_date').text('-');
+              $('#schedule_company').text('-');
+              $('#schedule_type').text('-');
+              $('#schedule_time').text('-');
+              $('#lot_total').text('-');
+              $('#start-price').val(null);
+              $('#interval').val(null);
+              $('#unit_name').val(null);
+              $('#unit_grade').val(null);
+              $('#stock_id').val(null);
+              $('#schedule_id').val(null);
+              $('#model').val(null);
+              $('#merk').val(null);
+              $('#tipe').val(null);
+              $('#silinder').val(null);
+              $('#tahun').val(null);
+              $('#nopol').val(null);
+              $('#va').val(null);
+              $('#floor-bid').text("-");
+              $('#harga_kelipatan').text("Harga Kelipatan: Rp. -");
+              $('#date').val(null);
+              $('.card-img-top').css("background-image","url(assets/img/default.png)" );
             }
           })
 
@@ -320,30 +376,60 @@ function getLotData() {
           });
           // reset_count();
         } else {
+          $('#bid-log').empty();
           activeCompany.child('liveOn').set(null);
           liveCount.set(null);
           onStock.set(null);
+          $('#top_bid').html('Rp. -');
+          $('#top_bid_state').html("-");
           if (onMode != undefined) {
             onMode.set(false);
           }
-          $.ajax({
-            type: "POST",
-            url: "<?php echo $this->config->item('ibid_schedule');?>/api/updateStatus/"+data.schedule_id, // Used for Staging
-            // url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
-            data : {},
-            dataType: "json",
-            success: function(data){
-              if (data.status) {
-                $('#modal').modal('hide');
-                getLotData();
-              } 
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
-            },
-          });
+          $('#start').prop('disabled', true);
+          $('#modal').modal({
+            backdrop: 'static',
+            keyboard: false
+          })
+          $('#modal-body').empty();
+          $('#modal-title').html('<span class="fa fa-warning"><span> Perhatian');
+          $('#close').hide();
+          $('#proceed-winner').hide();
+          lotInfo = data.lotInfo;
+          // lotInfo.skippedLot = 0;
+          $('button.last-confirm').hide(); 
+          if (lotInfo.skippedLot > 0) {
+            message = "Di jadwal ini tersisa "+lotInfo.skippedLot+" lot terlewat, apakah anda ingin melelangnya lagi ?";
+            $('#confirm-done').text('Tidak');
+            $('#confirm-done').removeClass('btn-success');
+            $('#confirm-done').addClass('btn-default');
+            $('#confirm-done').attr('data-scheduleId',data.schedule_id);
+            $('#confirm-done').show();
+            $('#confirm-restart').attr('data-scheduleId',data.schedule_id);
+            $('#confirm-restart').show();
+          }else{
+            message = "Lot di jawdal ini sudah habis, apakah ingin mengakhiri jadwal ini dan lanjut ke jadwal berikutnya ?";
+            $('#confirm-done').addClass('btn-success');
+            $('#confirm-done').removeClass('btn-default');
+            $('#confirm-done').text('Ya');
+            $('#confirm-done').attr('data-scheduleId',data.schedule_id);
+            $('#confirm-done').show();
+          }
+          $('#modal-body').append(message);
+          $('#modal').modal('show');
+        }
+
+
+        if (data.disable) {
+            $('#btn_next').attr("data-button",'schedule');
+            $('#skip').prop("disabled", true);
+            $('#btn_skip').prop("disabled", true);
+        }else{
+            $('#btn_next').attr("data-button",'lot');
+            $('#skip').prop("disabled", false);
+            $('#btn_skip').prop("disabled", false);
         }
       } else {
+        $('#bid-log').empty();
         activeCompany.child('liveOn').set(null);
         liveCount.set(null);
         onStock.set(null); 
@@ -390,19 +476,12 @@ function getLotData() {
           clearInterval(start);
           $('#btn_count').prop("disabled", true);
           $('#floor-bid').prop("disabled", true);
+          $('button.last-confirm').hide();
           $('#modal').modal('show');
-      }
-
-      if (data.disable) {
-          $('#btn_next').text("Next Schedule");
-          $('#btn_next').attr("data-button",'schedule');
+          
+          $('#btn_next').prop("disabled", true);
           $('#skip').prop("disabled", true);
           $('#btn_skip').prop("disabled", true);
-      }else{
-          $('#btn_next').text("Next Lot");
-          $('#btn_next').attr("data-button",'lot');
-          $('#skip').prop("disabled", false);
-          $('#btn_skip').prop("disabled", false);
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -713,6 +792,8 @@ function btn_count() {
                       keyboard: false
                     })
                     $('#modal-body').empty();
+                    $('button.last-confirm').hide();
+                    $('#proceed-winner').show();   
                     if (state == "Floor") {
                       $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
                       var body ='<h4>Detail Unit</h4>'
@@ -790,7 +871,7 @@ function btn_count() {
                         $('#modal-body').append(body);
                         $('#close').hide();
                         $('#modal').modal('show');
-                    }
+                    }       
                   },
                   error: function (jqXHR, textStatus, errorThrown) {
                   },
@@ -858,6 +939,59 @@ function onThisSchedule(value) {
   return value.ScheduleId == $("#schedule_id").val();
 }
 
+function doneCurrentSchedule(id){
+  $.ajax({
+    type: "POST",
+    url: "<?php echo $this->config->item('ibid_lot');?>/api/updateBySchedule/"+id+"?reAvailble=1", // Used for Staging
+    data : {status:"tidak terjual"},
+    dataType: "json",
+    success: function(data){
+      if (data.status) {
+        $('#modal').modal('hide');
+        doneSchedule(id);
+      } 
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    },
+  });
+}
+
+function restartCurrentSchedule(id){
+  $.ajax({
+    type: "POST",
+    url: "<?php echo $this->config->item('ibid_lot');?>/api/updateBySchedule/"+id+"?reAvailble=1", // Used for Staging
+    data : {status:"tersedia"},
+    dataType: "json",
+    success: function(data){
+      if (data.status) {
+        $('#modal').modal('hide');
+        getLotData();
+      } 
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+    },
+  });
+}
+
+function doneSchedule(id){
+  $('#modal').modal('show');
+  $.ajax({
+    type: "POST",
+    url: "<?php echo $this->config->item('ibid_schedule');?>/api/updateStatus/"+id, // Used for Staging
+    // url: "http://ibid-kpl.dev/api/submitWinner", //Used on local
+    data : {},
+    dataType: "json",
+    success: function(data){
+      if (data.status) {
+        $('#modal').modal('hide');
+        getLotData();
+      } 
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+        alert('Error get data from ajax');
+    },
+  });
+}
 </script>
 <?php $this->load->view($content_modal); ?>
   </body>

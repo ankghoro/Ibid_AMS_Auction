@@ -11,6 +11,8 @@
       <div class="modal-footer" id="modal-footer">
       	<button type="button" class="btn btn-outline btn-primary" id="proceed-winner">Lanjutkan</button>
         <button type="button" class="btn btn-outline btn-secondary" id="close" data-dismiss="modal" autofocus="">Tutup</button>
+        <button type="button" class="btn btn-outline last-confirm" id="confirm-done">Tidak</button>
+        <button type="button" class="btn btn-outline btn-success last-confirm" id="confirm-restart">Ya</button>
       </div>
     </div>
     

@@ -170,13 +170,19 @@ class Auction extends CI_Controller {
             if ($check_schedule != 0) {
                 $scheduleData = $scheduledata->data;
                 $schedule_id    = $scheduleData->id;
+                // get current availble lot
                 $getLotUrl      = $this->config->item('ibid_lot')."/api/getLot/$schedule_id";
                 $lotReady       = json_decode($this->get_curl($getLotUrl));
+                // get last availble lot
                 $getLastLotUrl  = $this->config->item('ibid_lot')."/api/getLastLot/$schedule_id";
                 $lastLot        = json_decode($this->get_curl($getLastLotUrl));
+                // get all lot by schedule
                 $getLotBySchedule  = $this->config->item('ibid_lot')."/api/getLotBySchedule/$schedule_id";
                 $lotBySchedule     = json_decode($this->get_curl($getLotBySchedule));
                 $lotBySchedule     = count($lotBySchedule->data);
+                // get info lot of schedule
+                $getLotInfoUrl = $this->config->item('ibid_lot')."/api/infoLotOfSchedule/$schedule_id";
+                $lotInfo     = json_decode($this->get_curl($getLotInfoUrl));
                 $date = $scheduleData->date;
                 $schedule_date = $scheduleData->date;
                 $schedule_date = date_create($schedule_date);
@@ -263,22 +269,25 @@ class Auction extends CI_Controller {
                     $status = true;
                     $currentLot == $lastLot ? $disable = true : $disable = false; 
                 } else {
-                    $reAvailbleLot  = $this->config->item('ibid_lot')."/api/updateBySchedule/$schedule_id?reAvailble=1";
-                    $this->postCURL($reAvailbleLot, ['status'=>'tersedia']);
+                    // $reAvailbleLot  = $this->config->item('ibid_lot')."/api/updateBySchedule/$schedule_id?reAvailble=1";
+                    // $this->postCURL($reAvailbleLot, ['status'=>'tersedia']);
                     $jadwal = true; 
                     $status = false;
                     $disable = true;
                 }
+                $lotInfoData = $lotInfo->data;
             } else {
                 $jadwal = false;
                 $status = false;
                 $disable = true;
+                $lotInfoData = [];
             }
         }
         $newData = [
             'jadwal' => $jadwal,
             'schedule_id' => isset($schedule_id) ? $schedule_id : null,
             'status' => $status,
+            'lotInfo' => $lotInfoData,
             'data' => $arr,
             'disable' => $disable
         ];
