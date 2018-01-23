@@ -232,6 +232,12 @@ hr {
 	color: #52f332;
 }
 
+.btn-warning:disabled {
+	background-color: #847979;
+	border-color: #52f332;
+	color: #52f332;
+}
+
 .btn-success{
 	background-color:#f19f41;
 	border-color: #f19f41;
