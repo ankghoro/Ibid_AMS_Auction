@@ -233,9 +233,9 @@ hr {
 }
 
 .btn-warning:disabled {
-	background-color: #847979;
-	border-color: #52f332;
-	color: #52f332;
+	background-color: #e8e8e8;
+	border-color: #c3c3c3;
+	color: black;
 }
 
 .btn-success{
