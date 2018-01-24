@@ -78,6 +78,7 @@ class Online extends CI_Controller {
         // $url = "localhost/ibid-ams-schedule/api/scheduleOnlineForTheDay"; //local uses
         $scheduleOnline = json_decode($this->get_curl($url));
         if ($scheduleOnline) {
+            $PID = 0;
             foreach ($scheduleOnline->data as $schedule) {
                 $date = date_create($schedule->date);
                 $date = date_format($date, "d-m-y");
@@ -88,19 +89,16 @@ class Online extends CI_Controller {
                     $id = $schedule->id;
                     $reference = $database->getReference("company/$company/schedule/$id");
                     $check = $reference->getValue();
-                    // var_dump($check); die();
                     if (strtotime($currentDateTime) <= strtotime($dateTime)+$duration) {
                         if (is_null($check)) {
                             $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter/$id";
                             // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                             $lotData = json_decode($this->get_curl($lot_url));
                             if ($lotData->status) {
-                                $postData = ["allowBid" => true];
-                                $reference->set($postData); 
-                                $PID = 0;
                                 foreach ($lotData->data as $value) {
                                     $lotStock = $value->no_lot;
                                     $lotReference = $database->getReference("company/$company/schedule/$id/lot|stock/$lotStock");
+
                                     $lotData = [
                                         "lot" => $value->no_lot,
                                         "scheduleId" => $id,
@@ -109,16 +107,22 @@ class Online extends CI_Controller {
                                         "type_id" => 1,
                                         "stock_id" => $value->stock_id,
                                         "model" => $value->stock_model,
-                                        "merk" => $value->stock_name,
-                                        "tipe" => $value->stock_name,
+                                        "merk" => $value->stock_merk,
+                                        "tipe" => $value->stock_tipe,
+                                        "seri" => $value->stock_seri,
                                         "silinder" => $value->stock_silinder,
                                         "tahun" => $value->stock_year,
                                         "nopol" => $value->stock_police_numb,
                                         "harga" => $value->stock_startprice,
-                                        "VA" => " ",
+                                        "duration" => $value->duration,
+                                        "VA" => $value->no_va,
+                                        "LotStatus" => $value->status
                                     ];
 
-                                    $lotReference->set($lotData);
+                                    $lotDataReference = $lotReference->getChild("lotData");
+                                    $lotDataReference->set($lotData);
+                                    $allowBidReference = $lotReference->getChild("allowBid");
+                                    $allowBidReference->set(true);
 
                                     if (!is_null(@$value->proxyBS_PID)) {
                                         $this->kill($value->proxyBS_PID);
@@ -129,9 +133,10 @@ class Online extends CI_Controller {
                                     $commandForRunProxy = "node ".FCPATH."proxy_runner.js ";
                                     $commandForRunProxy .= $value->company_id." ";
                                     $commandForRunProxy .= $value->schedule_id." ";
-                                    $commandForRunProxy .= $value->no_lot;
-                                    $commandForRunProxy .= " ".(int)$schedule->interval+0;
-                                    $commandForRunProxy .= " ".(int)$value->stock_startprice+0;
+                                    $commandForRunProxy .= $value->no_lot." ";
+                                    $commandForRunProxy .= (int)$schedule->interval+0;
+                                    $commandForRunProxy .= " ";
+                                    $commandForRunProxy .= ((int)str_replace(array('.'), '',$value->stock_startprice));
                                     $commandForRunProxy .= $backgroundProcess;
 
                                     exec($commandForRunProxy ,$proxyPID);
@@ -140,13 +145,14 @@ class Online extends CI_Controller {
                                         $this->kill($value->queueBS_PID);
                                     }
 
-                                    $commandForRunQueueing = "node ".FCPATH."que_worker.js ";
+                                    $commandForRunQueueing = "node ".FCPATH."online_worker.js ";
                                     $commandForRunQueueing .= " ".$value->company_id;
                                     $commandForRunQueueing .= " ".$value->schedule_id;
-                                    $commandForRunQueueing .= " ".$value->no_lot;
-                                    $commandForRunQueueing .= " ".(int)$schedule->interval+0;
-                                    $commandForRunQueueing .= " ".(int)$value->stock_startprice+0;
-                                    $commandForRunQueueing .= " ".$backgroundProcess;
+                                    $commandForRunQueueing .= " ".$value->no_lot." ";
+                                    $commandForRunQueueing .= (int)$schedule->interval+0;
+                                    $commandForRunQueueing .= " ";
+                                    $commandForRunQueueing .= ((int)str_replace(array('.'), '',$value->stock_startprice));
+                                    $commandForRunQueueing .= " ".$backgroundProcess; 
 
                                     exec($commandForRunQueueing ,$queuePID);
 
@@ -167,58 +173,9 @@ class Online extends CI_Controller {
                                 }
                             }
                         }                    
-                    } else {
-                        $postData = ["allowBid" => false];
-                        $reference->update($postData);
-                        $updateUrl = $this->config->item('ibid_schedule')."/api/updateStatus/$id";
-                        // $updateUrl = "localhost/ibid-ams-schedule/api/updateStatus/$id";
-                        $this->get_curl($updateUrl);
-
-                        $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter/$id";
-                        // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
-                        $lotData = json_decode($this->get_curl($lot_url));
-                        foreach ($lotData->data as $value) {
-                            $lotStock = $value->no_lot;
-                            $lotReference = $database->getReference("company/$company/schedule/$id/lot|stock/$lotStock");
-                            $lotData = $lotReference->getValue();
-                            $winnerReference = $database->getReference("company/$company/schedule/$id/lot|stock/$lotStock/log");
-                            $lastBid = $winnerReference->orderByKey()->limitToLast(1)->getValue();
-                            if (!is_null($lastBid)) {
-                                $last = reset($lastBid);
-                                $harga = $last['bid'];
-                                $npl = $last['npl'];
-                                $winnerData = array(
-                                    "UnitName" => @$lotData['stockName'],
-                                    "Npl" => $npl,
-                                    "Lot" => @$lotData['lot'],
-                                    "ScheduleId" => @$lotData['scheduleId'],
-                                    "Schedule" => @$lotData['date'],
-                                    "Type" => 1,
-                                    "AuctionItemId" => @$lotData['stock_id'],
-                                    "Price" => $harga,
-                                    "Model" => @$lotData['model'],
-                                    "Merk" => @$lotData['merk'],
-                                    "Tipe" => @$lotData['tipe'],
-                                    "Silinder" => @$lotData['silinder'],
-                                    "Tahun" => @$lotData['tahun'],
-                                    "NoPolisi" =>@$lotData['nopol'],
-                                    "Va" => @$lotData['VA'],
-                                );
-                                // var_dump($winnerData);die();
-                                $submitWinner = "http://ibid-ams-kpl.stagingapps.net/api/submitWinner";
-                                // $submitWinner = "localhost/ibid-kpl/api/submitWinner";
-                                $this->postCURL($submitWinner, $winnerData);
-                            } else {
-                                $unSoldUrl = $this->config->item('ibid_lot')."/api/lotUnSold";
-
-                                $lotNotSolData = ['no_lot'=> $lotStock,
-                                                 'schedule_id'=>$id
-                                                ];
-                            }
-                        }
-                        
                     }
                 }
+            $PID++;
             }
         }
 	}
@@ -258,7 +215,6 @@ class Online extends CI_Controller {
             'status' => $status,
             'description' => $description
         ];
-        // var_dump($value['scheduleOn']);die();
 
         return $this->output
                     ->set_content_type('application/json')
