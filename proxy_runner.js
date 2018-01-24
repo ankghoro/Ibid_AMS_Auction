@@ -19,6 +19,7 @@ var mainRef = admin.database().ref('company/'+companyId+'/schedule/'+scheduleId+
 var logsRef = mainRef.child('log');
 var tasksRef = mainRef.child('tasks');
 var modeBid = mainRef.child('allowBid');
+var lotRef = mainRef.child('lotData');
 
 runner.exec("php " + phpScriptPath, function(err, phpResponse, stderr) {
 	if(err) console.log(err); /* log error */
@@ -26,47 +27,7 @@ runner.exec("php " + phpScriptPath, function(err, phpResponse, stderr) {
 	value = JSON.parse(phpResponse);
 	topBidder = value.data.top_autobidder;
 	if (Object.size(topBidder) > 0) {
-		var proxyInterval =	setInterval(function(){
-		  	var last = logsRef.orderByKey().limitToLast(1);
-			tasksRef.once('value', function(taskSnapshot) {
-			    modeBid.once('value', function(modeSnapshot) {
-				  	if (!taskSnapshot.exists() && modeSnapshot.exists() && modeSnapshot.val()) {
-						last.once('value', function(snapshot) {
-							if (!snapshot.exists()) {
-							  newbid = parseInt(startPrice);
-							} else {
-							  snapshot.forEach(function(child) {
-							    newbid = child.val().bid + parseInt(Interval);
-							    if (child.val().bid > parseInt(topBidder.nominal) || newbid > parseInt(topBidder.nominal) ) {
-									clearInterval(proxyInterval);			
-    								process.exit();
-							    }
-							  });
-							}
-
-							newKey = tasksRef.push({
-							  bid: newbid || null,
-							  type: "Proxy",
-							  npl: topBidder.npl || null
-							}).key;
-
-							sameBid = tasksRef.orderByChild("bid").startAt(newbid).endAt(newbid);
-							sameBid.once('value', function(snapshot) {
-							  let removeTasks = {};
-							  snapshot.forEach(child => newKey != child.key ? removeTasks[child.key] = null : console.log('skip remove task'));
-							  tasksRef.update(removeTasks);
-							});
-
-							tasksRef.push({
-							  bid: newbid || null,
-							  type: "Proxy",
-							  npl: topBidder.npl || null
-							});
-						});
-				  	}
-			  	});
-			});
-		}, 3000);
+		proxyBid();
 	}else{
     	process.exit();
 	}
@@ -78,4 +39,55 @@ Object.size = function(obj) {
         if (obj.hasOwnProperty(key)) size++;
     }
     return size;
+};
+
+function proxyBid(){
+  	var last = logsRef.orderByKey().limitToLast(1);
+	tasksRef.once('value', function(taskSnapshot) {
+	    modeBid.once('value', function(modeSnapshot) {
+		  	if (!taskSnapshot.exists() && modeSnapshot.exists() && modeSnapshot.val()) {
+				last.once('value', function(snapshot) {
+					if (!snapshot.exists()) {
+					  newbid = parseInt(startPrice);
+					} else {
+					  snapshot.forEach(function(child) {
+					    newbid = child.val().bid + parseInt(Interval);
+					    if (child.val().bid > parseInt(topBidder.nominal) || newbid > parseInt(topBidder.nominal) ) {
+							// clearInterval(proxyInterval);			
+							process.exit();
+					    }
+					  });
+					}
+
+					newKey = tasksRef.push({
+					  bid: newbid || null,
+					  type: "Proxy",
+					  npl: topBidder.npl || null
+					}).key;
+
+					sameBid = tasksRef.orderByChild("bid").startAt(newbid).endAt(newbid);
+					sameBid.once('value', function(snapshot) {
+					  let removeTasks = {};
+					  snapshot.forEach(child => newKey != child.key ? removeTasks[child.key] = null : console.log('skip remove task'));
+					  tasksRef.update(removeTasks);
+					});
+
+					tasksRef.push({
+					  bid: newbid || null,
+					  type: "Proxy",
+					  npl: topBidder.npl || null
+					});
+				});
+		  	}
+	  	});
+	});
+
+	mainRef.once('value',function(mainSnap){
+		mainData = mainSnap.val();
+		if (!mainData.allowBid && mainData.lotData.LotStatus != 'tersedia') {
+		 	process.exit();
+		}else{
+				setTimeout(proxyBid, 3000);
+		}
+	});
 };
