@@ -95,6 +95,7 @@ class Online extends CI_Controller {
                             // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                             $lotData = json_decode($this->get_curl($lot_url));
                             if ($lotData->status) {
+                                $backgroundProcess = " > /dev/null 2>&1 & echo $!";
                                 foreach ($lotData->data as $value) {
                                     $lotStock = $value->no_lot;
                                     $lotReference = $database->getReference("company/$company/schedule/$id/lot|stock/$lotStock");
@@ -127,8 +128,6 @@ class Online extends CI_Controller {
                                     if (!is_null(@$value->proxyBS_PID)) {
                                         $this->kill($value->proxyBS_PID);
                                     }
-
-                                    $backgroundProcess = " > /dev/null 2>&1 & echo $!";
 
                                     $commandForRunProxy = "node ".FCPATH."proxy_runner.js ";
                                     $commandForRunProxy .= $value->company_id." ";
@@ -171,6 +170,12 @@ class Online extends CI_Controller {
                                     }
                                     $PID++;
                                 }
+                                $commandScheduleFinisher = "node ".FCPATH."schedule_finisher.js ";
+                                $commandScheduleFinisher .= $company." ";
+                                $commandScheduleFinisher .= $id;
+                                $commandScheduleFinisher .= $backgroundProcess;
+
+                                exec($commandScheduleFinisher ,$finisherPID);
                             }
                         }                    
                     }
