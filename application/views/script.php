@@ -530,10 +530,12 @@ function submitWinner(npl){
             // getLotData();
           }
           $('#proceed-winner').prop("disabled",false); 
+          $('#btn_loader').remove();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error get data from ajax');
             $('#proceed-winner').prop("disabled",false);
+            $('#btn_loader').remove();
         },
       });
     }
