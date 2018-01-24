@@ -109,7 +109,7 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
                           }
                           UnitName = dataLot.merk +' '+dataLot.lot
                           winPostData = {UnitName:UnitName,Npl:npl,Lot:dataLot.lot,ScheduleId:scheduleId,Schedule:dataLot.date,Type:1,AuctionItemId:dataLot.stock_id,Price:formedPrice,Va:dataLot.VA,Model:dataLot.model,Merk:dataLot.merk,Tipe:dataLot.tipe,Silinder:dataLot.silinder,Tahun:dataLot.tahun,NoPolisi:dataLot.nopol,winnerState:state};
-                          submitWinnerUrl = 'http://ibid-ams-kpl.development.net/api/submitWinner';
+                          submitWinnerUrl = 'http://ibid-ams-kpl.stagingapps.net/api/submitWinner';
                           httpPost(winPostData,submitWinnerUrl);
                       });
                   }).on('error', function(e){
@@ -122,7 +122,7 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
         }else{
           lotRef.child('LotStatus').set('tidak terjual');
           lotUnsoldData = {no_lot:lotNum,schedule_id:scheduleId};
-          lotUnsoldUrl = 'http://ibid-ams-lot.development.net/api/lotUnSold';
+          lotUnsoldUrl = 'http://ibid-ams-lot.stagingapps.net/api/lotUnSold';
           httpPost(lotUnsoldData,lotUnsoldUrl);
         }
       });
