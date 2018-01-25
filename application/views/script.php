@@ -288,7 +288,6 @@ function getLotData() {
               $('#schedule_company').text(currentStockData.Company || '-');
               $('#schedule_type').text(currentStockData.Jenis || '-');
               $('#schedule_time').text(currentStockData.Waktu || '-');
-              $('#lot_total').text(currentStockData.LotTotal || '-');
               $('#start-price').val(currentStockData.StartPrice);
               $('#interval').val(currentStockData.Interval);
               $('#unit_name').val(name);
@@ -329,7 +328,6 @@ function getLotData() {
               $('#schedule_company').text('-');
               $('#schedule_type').text('-');
               $('#schedule_time').text('-');
-              $('#lot_total').text('-');
               $('#start-price').val(null);
               $('#interval').val(null);
               $('#unit_name').val(null);
