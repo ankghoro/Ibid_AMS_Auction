@@ -153,12 +153,6 @@
         skipLot();
     });
 
-    $('#confirm-skip').on('click', function(){
-        $('#reason').removeClass('is-invalid');
-        $('.invalid-feedback').remove();
-        skipLot();
-    });
-
     $('#proceed-winner').on('click', function(){
       $('input').removeClass('is-invalid');
       $('.invalid-feedback').remove();
@@ -487,6 +481,7 @@ function getLotData() {
           $('#schedule_time').text('-');
           $('#floor-bid').text("+");
           $('#lot_total').text('-');
+          $('#lot_available').text('-');
           $('#top_bid').text('-');
           $('#top_bid_state').text('');
           $('#bid-log').empty();
@@ -611,6 +606,9 @@ function skipLot(){
 function checkLot(){
   $('#another-modal-header').removeClass('background-danger');
     var description = '<div class="form-group"><label for="textarea">Berikan alasan : </label><textarea class="form-control" id="reason" rows="6"></textarea></div>'
+    var loader = '<i class="fa fa-spinner fa-pulse fa-1x fa-fw" id="btn_loader"></i>';
+    $('#btn_skip').prepend(loader);
+    $('#btn_skip').prop("disabled",true);
     var SkipRange = $('#skip').val();
     var CurrentLot = $('#lot_id').val()
       var ScheduleId = $('#schedule_id').val();
@@ -649,6 +647,8 @@ function checkLot(){
                 $('#skip').addClass('is-invalid');
                 $('<div class="invalid-feedback">Total lot hanya ada '+data.data.total+'.</div>').insertAfter('#skip');
               }
+              $('#btn_loader').remove();
+              $('#btn_skip').prop("disabled",false);
             }
         });
       }

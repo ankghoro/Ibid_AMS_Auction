@@ -84,7 +84,7 @@ function proxyBid(){
 
 	mainRef.once('value',function(mainSnap){
 		mainData = mainSnap.val();
-		if (!mainData.allowBid && mainData.lotData.LotStatus != 'tersedia') {
+		if (mainSnap.exists() && !mainData.allowBid && mainData.lotData.LotStatus != 'tersedia') {
 		 	process.exit();
 		}else{
 			setTimeout(proxyBid, 3000);
