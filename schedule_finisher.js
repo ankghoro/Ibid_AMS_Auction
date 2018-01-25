@@ -27,7 +27,7 @@ function finisher() {
 			mainData.forEach(value => value.lotData.LotStatus == 'tersedia' ? countAvailable++ : countUnAvailable++);
 			done = countAvailable > 0 ? false : true;
 			if (done) {
-				updateScheduleUrl = 'http://ibid-ams-schedule.development.net/api/updateStatus/'+scheduleId;
+				updateScheduleUrl = 'http://ibid-ams-schedule.stagingapps.net/api/updateStatus/'+scheduleId;
 				httpPost({},updateScheduleUrl);
 			}
 		}
