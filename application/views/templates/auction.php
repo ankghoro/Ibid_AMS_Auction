@@ -82,7 +82,7 @@
                                         </div>
                                     </div>             
                                 </div>
-                            <a href="<?php echo $this->config->item('ibid_auth'); ?>" class="back-button">
+                            <a href="<?php echo $this->config->item('ibid_stock'); ?>" class="back-button">
                                 <i class="fa fa-chevron-left"></i> Back
                             </a>
                             </div>
