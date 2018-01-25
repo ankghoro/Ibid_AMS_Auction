@@ -156,64 +156,66 @@
                                     <div class="fold-price center-align">
                                             CONTROL
                                     </div> 
-                                        <div class="row">
-                                                <div class="col-md-6 center-align">
-                                                    <div class="form-group clearfix">
-                                                        <label class="control-label">Nomor Lot :</label>
-                                                        <input type="text" class="form-control" id="skip" onkeypress="return isNumberKey(event)">
-                                                        <button class="btn btn-warning btn-sm btn-block" id="btn_skip">SKIP</button>
-                                                    </div>
-                                                    <div class="form-group clearfix">
-                                                            <label class="control-label">Bidding Control :</label>
-                                                            <button class="btn btn-green btn-sm btn-block" style="height:111px;" id="floor-bid" disabled="disabled">+</button>
-                                            
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6 center-align">
-                                                        <div class="form-group clearfix">
-                                                                <button class="btn btn-info btn-sm btn-block" id="start">START</button>
-                                                        </div>
-                                                            <div class="form-group clearfix">
-                                                                    <label class="control-label">Count :</label>
-                                                                    <input type="text" class="form-control" value="-" style="height: 70px; background-color: white; color: #777; text-align: center;" id="count" disabled>
-                                                                    <button class="btn btn-success btn-sm btn-block" id="btn_count" onclick="btn_count()" disabled="disabled">COUNT</button>
-                                                                    <button class="btn btn-warning btn-sm btn-block" id="btn_next">NEXT</button>
-                                                                    <a target="_blank" href="<?php echo base_url('current/bidding');?>" class="btn btn-info btn-sm btn-block" style="width: 100%;">CURRENT BIDDING</a>
-                                                            </div>
-                                                </div>
-                                                
+                                    <div class="row">
+                                        <div class="col-md-6 center-align">
+                                            <div class="form-group clearfix">
+                                                <label class="control-label">Nomor Lot :</label>
+                                                <input type="text" class="form-control" id="skip" onkeypress="return isNumberKey(event)">
+                                                <button class="btn btn-warning btn-sm btn-block" id="btn_skip">SKIP</button>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-12 center-align">
-                                                        <div class="fold-price">
-                                                                DETAIL LELANG
-                                                        </div>
-                                                            <div class="stock-detail">
-                                                                    <div class="row spec">
-                                                                        <div class="col-md-6 col-lg-6 item">
-                                                                            <h6 class="title-caption2">Tempat</h6>
-                                                                            <h5 class="main-caption2 weight data-lot" id="schedule_company"></h5>
-                                                                        </div>
-                                                                        <div class=" col-md-6 col-lg-6 item item2">
-                                                                                <h6 class="title-caption2">Tanggal</h6>
-                                                                                <h5 class="main-caption2 weight data-lot" id="schedule_date"></h5>
-                                                                            </div>
-                                                                            <div class="col-md-6 col-lg-6 item">
-                                                                                    <h6 class="title-caption2">Waktu</h6>
-                                                                                    <h5 class="main-caption2 weight data-lot" id="schedule_time"></h5>
-                                                                            </div>
-                                                                            <div class="col-md-6 col-lg-6 item">
-                                                                                    <h6 class="title-caption2">Jenis</h6>
-                                                                                    <h5 class="main-caption2 weight data-lot" id="schedule_type"></h5>
-                                                                            </div>
-                                                                            <div class="col-md-12 col-lg-12 item">
-                                                                                <h6 class="title-caption2">Total LOT</h6>
-                                                                                <h5 class="main-caption2 weight data-lot" id="lot_total"></h5>
-                                                                            </div>
-                                                                            </div>
-                                                                 </div>
+                                            <div class="form-group clearfix">
+                                                <label class="control-label">Bidding Control :</label>
+                                                <button class="btn btn-green btn-sm btn-block" style="height:111px;" id="floor-bid" disabled="disabled">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 center-align">
+                                            <div class="form-group clearfix">
+                                                <button class="btn btn-info btn-sm btn-block" id="start">START</button>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <label class="control-label">Count :</label>
+                                                <input type="text" class="form-control" value="-" style="height: 70px; background-color: white; color: #777; text-align: center;" id="count" disabled>
+                                                <button class="btn btn-success btn-sm btn-block" id="btn_count" onclick="btn_count()" disabled="disabled">COUNT</button>
+                                                <button class="btn btn-warning btn-sm btn-block" id="btn_next">NEXT</button>
+                                                <a target="_blank" href="<?php echo base_url('current/bidding');?>" class="btn btn-info btn-sm btn-block" style="width: 100%;">CURRENT BIDDING</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 center-align">
+                                            <div class="fold-price">
+                                                    DETAIL LELANG
+                                            </div>
+                                            <div class="stock-detail">
+                                                <div class="row spec">
+                                                    <div class="col-md-6 col-lg-6 item">
+                                                        <h6 class="title-caption2">Tempat</h6>
+                                                        <h5 class="main-caption2 weight data-lot" id="schedule_company"></h5>
+                                                    </div>
+                                                    <div class=" col-md-6 col-lg-6 item item2">
+                                                        <h6 class="title-caption2">Tanggal</h6>
+                                                        <h5 class="main-caption2 weight data-lot" id="schedule_date"></h5>
+                                                    </div>
+                                                    <div class="col-md-6 col-lg-6 item">
+                                                        <h6 class="title-caption2">Waktu</h6>
+                                                        <h5 class="main-caption2 weight data-lot" id="schedule_time"></h5>
+                                                    </div>
+                                                    <div class="col-md-6 col-lg-6 item">
+                                                        <h6 class="title-caption2">Jenis</h6>
+                                                        <h5 class="main-caption2 weight data-lot" id="schedule_type"></h5>
+                                                    </div>
+                                                    <div class="col-md-6 col-lg-6 item">
+                                                        <h6 class="title-caption2">Total LOT</h6>
+                                                        <h5 class="main-caption2 weight data-lot" id="lot_total"></h5>
+                                                    </div>
+                                                    <div class="col-md-6 col-lg-6 item">
+                                                        <h6 class="title-caption2">LOT Tersedia</h6>
+                                                        <h5 class="main-caption2 weight data-lot" id="lot_available"></h5>
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
                               </div>
                             </div>
                         </div>

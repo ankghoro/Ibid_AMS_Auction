@@ -223,7 +223,16 @@ function getLotData() {
       $('#loader').empty();
       $('#content').show();
       if (data.jadwal) {
+        activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
+        onSchedule = activeCompany.child('schedule/'+data.data.ScheduleId);
+        lotInfo = onSchedule.child('lotInfo');
+        
         if (data.status) {
+          onLot = onSchedule.child('lot|stock/'+data.data.NoLot);
+          onLog = onLot.child('log');
+          currentLotData = onLot.child('lotData');
+          onQueueTask = onLot.child('tasks');
+          onMode = onLot.child('allowBid');
           $('.data-lot').html('');
           $('#floor-bid').html('');
           $('#harga_kelipatan').html('');
@@ -232,12 +241,7 @@ function getLotData() {
           $('#top_bid_state').html('');
           $('#btn_next').prop("disabled",false);
 
-          activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
-          onLot = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot);
-          onLog = onLot.child('log');
-          currentLotData = onLot.child('lotData');
-          onQueueTask = onLot.child('tasks');
-          onMode = onLot.child('allowBid');
+          
           
           value = data.data;
           value.Image = data.data.Image[Object.keys(data.data.Image)[0]];
@@ -344,7 +348,8 @@ function getLotData() {
               $('#date').val(null);
               $('.card-img-top').css("background-image","url(assets/img/default.png)" );
             }
-          })
+          });
+          
 
           $('#next_lot').val('next');
           // pause();
@@ -418,7 +423,6 @@ function getLotData() {
           $('#modal').modal('show');
         }
 
-
         if (data.disable) {
             $('#btn_next').attr("data-button",'schedule');
             $('#skip').prop("disabled", true);
@@ -428,6 +432,22 @@ function getLotData() {
             $('#skip').prop("disabled", false);
             $('#btn_skip').prop("disabled", false);
         }
+        lotInfo.set(data.lotInfo);
+        
+        lotInfo.once('value', function(snapInfo){
+          if (snapInfo.exists()) {
+            infoData = snapInfo.val();
+            $('#lot_total').text(infoData.allLot || '-');
+            $('#lot_available').text(infoData.availableLot || '-');
+            if (infoData.availableLot <= 2) {
+              $('#skip').prop("disabled", true);
+              $('#btn_skip').prop("disabled", true);
+            }
+          }else{
+            $('#lot_total').text('-');
+            $('#lot_available').text('-');
+          }
+        });
       } else {
         $('#bid-log').empty();
         activeCompany.child('liveOn').set(null);
