@@ -87,7 +87,7 @@ function proxyBid(){
 		if (!mainData.allowBid && mainData.lotData.LotStatus != 'tersedia') {
 		 	process.exit();
 		}else{
-				setTimeout(proxyBid, 3000);
+			setTimeout(proxyBid, 3000);
 		}
 	});
 };

@@ -70,7 +70,7 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
                   formedPrice = winnerData.val().bid || 0;
                   npl = winnerData.val().npl || '';
                   state = winnerData.val().type || 'Floor';
-                  var getProxyUrl = 'http://ibid-ams-autobid.development.net/api/getproxy/'+companyId+"/"+scheduleId+"/"+lotNum+"/"+startPrice;
+                  var getProxyUrl = 'http://ibid-ams-autobid.stagingapps.net/api/getproxy/'+companyId+"/"+scheduleId+"/"+lotNum+"/"+startPrice;
                   http.get(getProxyUrl, function(res){
                       var body = '';
 
