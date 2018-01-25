@@ -153,12 +153,6 @@
         skipLot();
     });
 
-    $('#confirm-skip').on('click', function(){
-        $('#reason').removeClass('is-invalid');
-        $('.invalid-feedback').remove();
-        skipLot();
-    });
-
     $('#proceed-winner').on('click', function(){
       $('input').removeClass('is-invalid');
       $('.invalid-feedback').remove();
@@ -223,7 +217,16 @@ function getLotData() {
       $('#loader').empty();
       $('#content').show();
       if (data.jadwal) {
+        activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
+        onSchedule = activeCompany.child('schedule/'+data.data.ScheduleId);
+        lotInfo = onSchedule.child('lotInfo');
+        
         if (data.status) {
+          onLot = onSchedule.child('lot|stock/'+data.data.NoLot);
+          onLog = onLot.child('log');
+          currentLotData = onLot.child('lotData');
+          onQueueTask = onLot.child('tasks');
+          onMode = onLot.child('allowBid');
           $('.data-lot').html('');
           $('#floor-bid').html('');
           $('#harga_kelipatan').html('');
@@ -232,12 +235,7 @@ function getLotData() {
           $('#top_bid_state').html('');
           $('#btn_next').prop("disabled",false);
 
-          activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
-          onLot = activeCompany.child('schedule/'+data.data.ScheduleId+'/lot|stock/'+data.data.NoLot);
-          onLog = onLot.child('log');
-          currentLotData = onLot.child('lotData');
-          onQueueTask = onLot.child('tasks');
-          onMode = onLot.child('allowBid');
+          
           
           value = data.data;
           value.Image = data.data.Image[Object.keys(data.data.Image)[0]];
@@ -284,7 +282,6 @@ function getLotData() {
               $('#schedule_company').text(currentStockData.Company || '-');
               $('#schedule_type').text(currentStockData.Jenis || '-');
               $('#schedule_time').text(currentStockData.Waktu || '-');
-              $('#lot_total').text(currentStockData.LotTotal || '-');
               $('#start-price').val(currentStockData.StartPrice);
               $('#interval').val(currentStockData.Interval);
               $('#unit_name').val(name);
@@ -325,7 +322,6 @@ function getLotData() {
               $('#schedule_company').text('-');
               $('#schedule_type').text('-');
               $('#schedule_time').text('-');
-              $('#lot_total').text('-');
               $('#start-price').val(null);
               $('#interval').val(null);
               $('#unit_name').val(null);
@@ -344,7 +340,8 @@ function getLotData() {
               $('#date').val(null);
               $('.card-img-top').css("background-image","url(assets/img/default.png)" );
             }
-          })
+          });
+          
 
           $('#next_lot').val('next');
           // pause();
@@ -418,7 +415,6 @@ function getLotData() {
           $('#modal').modal('show');
         }
 
-
         if (data.disable) {
             $('#btn_next').attr("data-button",'schedule');
             $('#skip').prop("disabled", true);
@@ -428,6 +424,22 @@ function getLotData() {
             $('#skip').prop("disabled", false);
             $('#btn_skip').prop("disabled", false);
         }
+        lotInfo.set(data.lotInfo);
+        
+        lotInfo.once('value', function(snapInfo){
+          if (snapInfo.exists()) {
+            infoData = snapInfo.val();
+            $('#lot_total').text(infoData.allLot || '-');
+            $('#lot_available').text(infoData.availableLot || '-');
+            if (infoData.availableLot <= 2) {
+              $('#skip').prop("disabled", true);
+              $('#btn_skip').prop("disabled", true);
+            }
+          }else{
+            $('#lot_total').text('-');
+            $('#lot_available').text('-');
+          }
+        });
       } else {
         $('#bid-log').empty();
         activeCompany.child('liveOn').set(null);
@@ -469,6 +481,7 @@ function getLotData() {
           $('#schedule_time').text('-');
           $('#floor-bid').text("+");
           $('#lot_total').text('-');
+          $('#lot_available').text('-');
           $('#top_bid').text('-');
           $('#top_bid_state').text('');
           $('#bid-log').empty();
@@ -593,6 +606,9 @@ function skipLot(){
 function checkLot(){
   $('#another-modal-header').removeClass('background-danger');
     var description = '<div class="form-group"><label for="textarea">Berikan alasan : </label><textarea class="form-control" id="reason" rows="6"></textarea></div>'
+    var loader = '<i class="fa fa-spinner fa-pulse fa-1x fa-fw" id="btn_loader"></i>';
+    $('#btn_skip').prepend(loader);
+    $('#btn_skip').prop("disabled",true);
     var SkipRange = $('#skip').val();
     var CurrentLot = $('#lot_id').val()
       var ScheduleId = $('#schedule_id').val();
@@ -631,6 +647,8 @@ function checkLot(){
                 $('#skip').addClass('is-invalid');
                 $('<div class="invalid-feedback">Total lot hanya ada '+data.data.total+'.</div>').insertAfter('#skip');
               }
+              $('#btn_loader').remove();
+              $('#btn_skip').prop("disabled",false);
             }
         });
       }

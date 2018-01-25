@@ -52,7 +52,7 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
         $('.separator1').find('h5').text(val.Tahun);
         $('#startprice').text(addPeriod(val.StartPrice));
         $('#policenumber').text(val.NoPolisi);
-        $('#kilometers').text(val.Kilometer);
+        $('#kilometers').text(addPeriod(val.Kilometer));
         $('#color').text(val.Warna);
         $('#transmission').text(addPeriod(val.Transmisi));
         $('#exterior').text(val.Exterior);
