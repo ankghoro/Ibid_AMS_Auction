@@ -381,7 +381,7 @@ function getLotData() {
           $('#modal-body').append(message);
           $('#modal').modal('show');
         }
-        
+
         if (data.disable) {
             $('#btn_next').attr("data-button",'schedule');
             $('#skip').prop("disabled", true);
@@ -594,6 +594,11 @@ function checkLot(){
         $('#submit-logout').hide();
         $('#modal-close').show();
         $('#another-modal').modal('show');
+      } else if(SkipRange <= 0) {
+        $('#skip').addClass('is-invalid');
+        $('<div class="invalid-feedback">Tidak boleh memasukan angka kurang dari 0</div>').insertAfter('#skip');
+        $('#btn_loader').remove();
+        $('#btn_skip').prop("disabled",false);
       } else {
         $.ajax({
             type: "POST",
