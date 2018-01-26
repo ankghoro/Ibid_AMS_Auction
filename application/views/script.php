@@ -837,7 +837,7 @@ function btn_count() {
                         $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
                         $('#modal-body').empty();
                         var body ='<h4>Detail Unit</h4>'
-                                  +'<div class="row">'
+                                  +'<div class="row" style="margin-bottom: 2%;">'
                                     +'<div class="col-md-12">'
                                     +'<div class="card>'
                                       +'<div class="card-body">'
@@ -857,7 +857,6 @@ function btn_count() {
                                     +'</div>'
                                     +'</div>'
                                   +'</div>'
-                                  +'<hr class="custom">'
                                   +'<h4>Detail Pemenang</h4>'
                                     +'<div class="row">'
                                       +'<div class="col-md-12">'
