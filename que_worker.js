@@ -36,7 +36,7 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
     sameBid = tasksRef.orderByChild("bid").startAt(newbid).endAt(newbid);
     sameBid.once('value', function(snapshot) {
       let removeTasks = {};
-      snapshot.forEach(child => removeTasks[child.key] = null);
+      snapshot.forEach( child => child.val().type != 'Floor' ? removeTasks[child.key] = null : console.log('skip remove task') );
       tasksRef.update(removeTasks).then(resolve());
     });
   });

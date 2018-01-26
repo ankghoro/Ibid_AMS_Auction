@@ -19,7 +19,6 @@
 
 // create firebase database reference
 var dbRef = firebase.database();
-var auctionLog = dbRef.ref('company/3/schedule/1/lot|stock/1321/log');
 var activeCompany = dbRef.ref('company/<?php echo $CompanyId; ?>');
 var liveCount = activeCompany.child('liveCount');
 var currentStock = activeCompany.child('currentStock');

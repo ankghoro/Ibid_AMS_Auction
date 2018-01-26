@@ -71,12 +71,6 @@ function proxyBid(){
 					  snapshot.forEach(child => newKey != child.key ? removeTasks[child.key] = null : console.log('skip remove task'));
 					  tasksRef.update(removeTasks);
 					});
-
-					tasksRef.push({
-					  bid: newbid || null,
-					  type: "Proxy",
-					  npl: topBidder.npl || null
-					});
 				});
 		  	}
 	  	});
@@ -84,7 +78,7 @@ function proxyBid(){
 
 	mainRef.once('value',function(mainSnap){
 		mainData = mainSnap.val();
-		if (mainSnap.exists() && !mainData.allowBid && mainData.lotData.LotStatus != 'tersedia') {
+		if (mainSnap.exists() && mainData.lotData.LotStatus != 'tersedia') {
 		 	process.exit();
 		}else{
 			setTimeout(proxyBid, 3000);
