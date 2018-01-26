@@ -43,6 +43,10 @@
       $('#modal-close').trigger('focus')
     })
 
+    $('#modal').on('shown.bs.modal', function () {
+      $('#confirm-restart').trigger('focus')
+    })
+
 
     $('.site-footer').find('p').prepend('Copyright © '+year);
     $('a#logout').click(function(){
@@ -242,7 +246,7 @@ function getLotData() {
           onStock.set(value);
           currentLotData.set(value);
 
-          onStock.on('value', function(currentStockSnap){
+          onStock.once('value', function(currentStockSnap){
             if (currentStockSnap.exists()) {
               currentStockData = currentStockSnap.val();
               var name = currentStockData.Merk+" "+currentStockData.Seri;
@@ -301,44 +305,7 @@ function getLotData() {
               firstImage = "url("+currentStockData.Image+")";
               $('.card-img-top').css("background-image",firstImage );
             }else{
-              $('#item_name').html("-");
-              $('#item_lot').text("-");
-              $('#lot_id').val(null);
-              $('#item_color').text('-');
-              $('#btn_count').prop("disabled", true);
-              $('#floor-bid').prop("disabled", true);
-              $('#item_transmisi').text('-');
-              $('#item_km').text('-');
-              $('#item_tahun').text('-');
-              $('#item_nopol').text('-');
-              $('#item_bahanbakar').text('-');
-              $('#item_exterior').text('-');
-              $('#item_interior').text('-');
-              $('#item_mechanical').text('-');
-              $('#item_frame').text('-');
-              $('#item_grade').text('-');
-              $('#item_startprice').text('-');
-              $('#schedule_date').text('-');
-              $('#schedule_company').text('-');
-              $('#schedule_type').text('-');
-              $('#schedule_time').text('-');
-              $('#start-price').val(null);
-              $('#interval').val(null);
-              $('#unit_name').val(null);
-              $('#unit_grade').val(null);
-              $('#stock_id').val(null);
-              $('#schedule_id').val(null);
-              $('#model').val(null);
-              $('#merk').val(null);
-              $('#tipe').val(null);
-              $('#silinder').val(null);
-              $('#tahun').val(null);
-              $('#nopol').val(null);
-              $('#va').val(null);
-              $('#floor-bid').text("-");
-              $('#harga_kelipatan').text("Harga Kelipatan: Rp. -");
-              $('#date').val(null);
-              $('.card-img-top').css("background-image","url(assets/img/default.png)" );
+              reset_data();
             }
           });
           
@@ -373,6 +340,7 @@ function getLotData() {
           });
           // reset_count();
         } else {
+          reset_data();
           $('#bid-log').empty();
           activeCompany.child('liveOn').set(null);
           liveCount.set(null);
@@ -391,11 +359,10 @@ function getLotData() {
           $('#modal-title').html('<span class="fa fa-warning"><span> Perhatian');
           $('#close').hide();
           $('#proceed-winner').hide();
-          lotInfo = data.lotInfo;
           // lotInfo.skippedLot = 0;
           $('button.last-confirm').hide(); 
-          if (lotInfo.skippedLot > 0) {
-            message = "Di jadwal ini tersisa "+lotInfo.skippedLot+" lot terlewat, apakah anda ingin melelangnya lagi ?";
+          if (data.lotInfo.skippedLot > 0) {
+            message = "Di jadwal ini tersisa "+data.lotInfo.skippedLot+" lot terlewat, apakah anda ingin melelangnya lagi ?";
             $('#confirm-done').text('Tidak');
             $('#confirm-done').removeClass('btn-success');
             $('#confirm-done').addClass('btn-default');
@@ -414,7 +381,7 @@ function getLotData() {
           $('#modal-body').append(message);
           $('#modal').modal('show');
         }
-
+        
         if (data.disable) {
             $('#btn_next').attr("data-button",'schedule');
             $('#skip').prop("disabled", true);
@@ -424,8 +391,9 @@ function getLotData() {
             $('#skip').prop("disabled", false);
             $('#btn_skip').prop("disabled", false);
         }
-        lotInfo.set(data.lotInfo);
-        
+        if (lotInfo != undefined) {
+          lotInfo.set(data.lotInfo);
+        }
         lotInfo.once('value', function(snapInfo){
           if (snapInfo.exists()) {
             infoData = snapInfo.val();
@@ -1016,6 +984,47 @@ function doneSchedule(id){
         alert('Error get data from ajax');
     },
   });
+}
+
+function reset_data(){
+  $('#item_name').html("-");
+  $('#item_lot').text("-");
+  $('#lot_id').val(null);
+  $('#item_color').text('-');
+  $('#btn_count').prop("disabled", true);
+  $('#floor-bid').prop("disabled", true);
+  $('#item_transmisi').text('-');
+  $('#item_km').text('-');
+  $('#item_tahun').text('-');
+  $('#item_nopol').text('-');
+  $('#item_bahanbakar').text('-');
+  $('#item_exterior').text('-');
+  $('#item_interior').text('-');
+  $('#item_mechanical').text('-');
+  $('#item_frame').text('-');
+  $('#item_grade').text('-');
+  $('#item_startprice').text('-');
+  $('#schedule_date').text('-');
+  $('#schedule_company').text('-');
+  $('#schedule_type').text('-');
+  $('#schedule_time').text('-');
+  $('#start-price').val(null);
+  $('#interval').val(null);
+  $('#unit_name').val(null);
+  $('#unit_grade').val(null);
+  $('#stock_id').val(null);
+  $('#schedule_id').val(null);
+  $('#model').val(null);
+  $('#merk').val(null);
+  $('#tipe').val(null);
+  $('#silinder').val(null);
+  $('#tahun').val(null);
+  $('#nopol').val(null);
+  $('#va').val(null);
+  $('#floor-bid').text("-");
+  $('#harga_kelipatan').text("Harga Kelipatan: Rp. -");
+  $('#date').val(null);
+  $('.card-img-top').css("background-image","url(assets/img/default.png)" );
 }
 </script>
 <?php $this->load->view($content_modal); ?>
