@@ -36,7 +36,7 @@ activeCompany.child('liveOn').on('value', function(snapshot) {
     currentStock.on('value', function(stockSnapshot) {
       if (stockSnapshot.exists()) {
         val = stockSnapshot.val();
-        var name = val.Merk+" "+val.Tipe;
+        var name = val.Merk+" "+val.Seri;
         var stat = '<br><small class="lot-status pull-right"></small>'
         $('.main-title').html(name+" "+val.Silinder+" "+val.Model+stat);
         $('.lot-status').append(val.LotStatus || '-');

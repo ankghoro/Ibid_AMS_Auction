@@ -43,6 +43,10 @@
       $('#modal-close').trigger('focus')
     })
 
+    $('#modal').on('shown.bs.modal', function () {
+      $('#confirm-restart').trigger('focus')
+    })
+
 
     $('.site-footer').find('p').prepend('Copyright © '+year);
     $('a#logout').click(function(){
@@ -242,7 +246,7 @@ function getLotData() {
           onStock.set(value);
           currentLotData.set(value);
 
-          onStock.on('value', function(currentStockSnap){
+          onStock.once('value', function(currentStockSnap){
             if (currentStockSnap.exists()) {
               currentStockData = currentStockSnap.val();
               var name = currentStockData.Merk+" "+currentStockData.Seri;
@@ -301,44 +305,7 @@ function getLotData() {
               firstImage = "url("+currentStockData.Image+")";
               $('.card-img-top').css("background-image",firstImage );
             }else{
-              $('#item_name').html("-");
-              $('#item_lot').text("-");
-              $('#lot_id').val(null);
-              $('#item_color').text('-');
-              $('#btn_count').prop("disabled", true);
-              $('#floor-bid').prop("disabled", true);
-              $('#item_transmisi').text('-');
-              $('#item_km').text('-');
-              $('#item_tahun').text('-');
-              $('#item_nopol').text('-');
-              $('#item_bahanbakar').text('-');
-              $('#item_exterior').text('-');
-              $('#item_interior').text('-');
-              $('#item_mechanical').text('-');
-              $('#item_frame').text('-');
-              $('#item_grade').text('-');
-              $('#item_startprice').text('-');
-              $('#schedule_date').text('-');
-              $('#schedule_company').text('-');
-              $('#schedule_type').text('-');
-              $('#schedule_time').text('-');
-              $('#start-price').val(null);
-              $('#interval').val(null);
-              $('#unit_name').val(null);
-              $('#unit_grade').val(null);
-              $('#stock_id').val(null);
-              $('#schedule_id').val(null);
-              $('#model').val(null);
-              $('#merk').val(null);
-              $('#tipe').val(null);
-              $('#silinder').val(null);
-              $('#tahun').val(null);
-              $('#nopol').val(null);
-              $('#va').val(null);
-              $('#floor-bid').text("-");
-              $('#harga_kelipatan').text("Harga Kelipatan: Rp. -");
-              $('#date').val(null);
-              $('.card-img-top').css("background-image","url(assets/img/default.png)" );
+              reset_data();
             }
           });
           
@@ -373,6 +340,7 @@ function getLotData() {
           });
           // reset_count();
         } else {
+          reset_data();
           $('#bid-log').empty();
           activeCompany.child('liveOn').set(null);
           liveCount.set(null);
@@ -391,11 +359,10 @@ function getLotData() {
           $('#modal-title').html('<span class="fa fa-warning"><span> Perhatian');
           $('#close').hide();
           $('#proceed-winner').hide();
-          lotInfo = data.lotInfo;
           // lotInfo.skippedLot = 0;
           $('button.last-confirm').hide(); 
-          if (lotInfo.skippedLot > 0) {
-            message = "Di jadwal ini tersisa "+lotInfo.skippedLot+" lot terlewat, apakah anda ingin melelangnya lagi ?";
+          if (data.lotInfo.skippedLot > 0) {
+            message = "Di jadwal ini tersisa "+data.lotInfo.skippedLot+" lot terlewat, apakah anda ingin melelangnya lagi ?";
             $('#confirm-done').text('Tidak');
             $('#confirm-done').removeClass('btn-success');
             $('#confirm-done').addClass('btn-default');
@@ -424,8 +391,9 @@ function getLotData() {
             $('#skip').prop("disabled", false);
             $('#btn_skip').prop("disabled", false);
         }
-        lotInfo.set(data.lotInfo);
-        
+        if (lotInfo != undefined) {
+          lotInfo.set(data.lotInfo);
+        }
         lotInfo.once('value', function(snapInfo){
           if (snapInfo.exists()) {
             infoData = snapInfo.val();
@@ -453,7 +421,7 @@ function getLotData() {
             keyboard: false
           })
           var body ='<h5>Semua jadwal hari ini telah selesai dilaksanakan.</h5>'
-          $('#modal-title').html('<i class="fa fa-send-o"></i> Pesan');
+          $('#modal-title').html('<i class="fa fa-send-o"></i> Terimakasih');
           $('#modal-body').empty();
           $('#modal-body').append(body);
           $('#proceed-winner').hide();
@@ -509,48 +477,56 @@ function submitWinner(npl){
   var loader = '<i class="fa fa-spinner fa-pulse fa-1x fa-fw" id="btn_loader"></i>';
   $('#proceed-winner').prepend(loader);
   $('#proceed-winner').prop("disabled",true);
-  var UnitName = $('#unit_name').val();
-  var AuctionItemId = $('#stock_id').val();
-  var ScheduleId = $('#schedule_id').val();
-  var Va = $('#va').val();
-  var Lot = $('#lot_id').val();
-  var Schedule = $('#date').val();
-  var Type = 0;
-  var Price = $('#start-price').val();
-  var Model = $('#model').val();
-  var Merk = $('#merk').val();
-  var Tipe = $('#tipe').val();
-  var Silinder = $('#silinder').val();
-  var Tahun = $('#tahun').val();
-  var NoPolisi = $('#nopol').val();
   var last = onLog.orderByKey().limitToLast(1);
   last.once('value', function(snapshot) {
     if (snapshot.exists()) {
       winners = snapshot.val();
       winner = winners[Object.keys(winners)[0]];
-      $.ajax({
-        type: "POST",
-        url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
-        // url: "http://localhost/ibid-kpl/api/submitWinner", //Used on local
-        data : {UnitName:UnitName,Npl:npl,Lot:Lot,ScheduleId:ScheduleId,Schedule:Schedule,Type:Type,AuctionItemId:AuctionItemId,Price:Price,Va:Va,Model:Model,Merk:Merk,Tipe:Tipe,Silinder:Silinder,Tahun:Tahun,NoPolisi:NoPolisi,winnerState:winner.type},
-        dataType: "json",
-        success: function(data){
-          if (data.status) {
-            $('#modal').modal('hide');
-            $('#next_lot').val('');
-            currentLotData.child('LotStatus').set('terjual');
-            onStock.child('LotStatus').set('terjual');
-            // getLotData();
-          }
-          $('#proceed-winner').prop("disabled",false); 
-          $('#btn_loader').remove();
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error get data from ajax');
-            $('#proceed-winner').prop("disabled",false);
+      onStock.once('value', function(currentStockSnap){
+      currentStockData = currentStockSnap.val();
+      const UnitName =  currentStockData.Merk+" "+currentStockData.Seri;
+      const postData ={
+        UnitName: UnitName,
+        Npl: npl,
+        Lot: currentStockData.NoLot,
+        ScheduleId: currentStockData.ScheduleId,
+        Schedule: currentStockData.Date,
+        Type: 0,
+        AuctionItemId: currentStockData.AuctionItemId,
+        Price: winner.bid,
+        Va: currentStockData.VA,
+        Model: currentStockData.Model,
+        Merk: currentStockData.Merk,
+        Tipe: currentStockData.Tipe,
+        Silinder: currentStockData.Silinder,
+        Tahun: currentStockData.Tahun,
+        NoPolisi: currentStockData.NoPolisi,
+        winnerState: winner.type
+      }
+        $.ajax({
+          type: "POST",
+          url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
+          // url: "http://localhost/ibid-kpl/api/submitWinner", //Used on local
+          data : postData,
+          dataType: "json",
+          success: function(data){
+            if (data.status) {
+              $('#modal').modal('hide');
+              $('#next_lot').val('');
+              currentLotData.child('LotStatus').set('terjual');
+              onStock.child('LotStatus').set('terjual');
+              // getLotData();
+            }
+            $('#proceed-winner').prop("disabled",false); 
             $('#btn_loader').remove();
-        },
-      });
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+              // alert('Error post data from ajax');
+              $('#proceed-winner').prop("disabled",false);
+              $('#btn_loader').remove();
+          },
+        });
+      })
     }
   });
 }
@@ -626,6 +602,11 @@ function checkLot(){
         $('#submit-logout').hide();
         $('#modal-close').show();
         $('#another-modal').modal('show');
+      } else if(SkipRange <= 0) {
+        $('#skip').addClass('is-invalid');
+        $('<div class="invalid-feedback">Tidak boleh memasukan angka kurang dari 0</div>').insertAfter('#skip');
+        $('#btn_loader').remove();
+        $('#btn_skip').prop("disabled",false);
       } else {
         $.ajax({
             type: "POST",
@@ -856,7 +837,7 @@ function btn_count() {
                         $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
                         $('#modal-body').empty();
                         var body ='<h4>Detail Unit</h4>'
-                                  +'<div class="row">'
+                                  +'<div class="row" style="margin-bottom: 2%;">'
                                     +'<div class="col-md-12">'
                                     +'<div class="card>'
                                       +'<div class="card-body">'
@@ -876,7 +857,6 @@ function btn_count() {
                                     +'</div>'
                                     +'</div>'
                                   +'</div>'
-                                  +'<hr class="custom">'
                                   +'<h4>Detail Pemenang</h4>'
                                     +'<div class="row">'
                                       +'<div class="col-md-12">'
@@ -935,11 +915,16 @@ function confirm_start(){
   $('#auction_start').val(1);
 }
 
-function isNumberKey(evt){
-    var charCode = (evt.which) ? evt.which : event.keyCode
-    if (charCode > 31 && (charCode < 48 || charCode > 57))
-        return false;
-    return true;
+function isNumberKey(event){
+  var key = window.event ? event.keyCode : event.which;
+  if (event.keyCode == 8 || event.keyCode == 46
+   || event.keyCode == 37 || event.keyCode == 39) {
+      return true;
+  }
+  else if ( key < 48 || key > 57 ) {
+      return false;
+  }
+  else return true;
 }  
 
 function reset_count(){
@@ -1016,6 +1001,47 @@ function doneSchedule(id){
         alert('Error get data from ajax');
     },
   });
+}
+
+function reset_data(){
+  $('#item_name').html("-");
+  $('#item_lot').text("-");
+  $('#lot_id').val(null);
+  $('#item_color').text('-');
+  $('#btn_count').prop("disabled", true);
+  $('#floor-bid').prop("disabled", true);
+  $('#item_transmisi').text('-');
+  $('#item_km').text('-');
+  $('#item_tahun').text('-');
+  $('#item_nopol').text('-');
+  $('#item_bahanbakar').text('-');
+  $('#item_exterior').text('-');
+  $('#item_interior').text('-');
+  $('#item_mechanical').text('-');
+  $('#item_frame').text('-');
+  $('#item_grade').text('-');
+  $('#item_startprice').text('-');
+  $('#schedule_date').text('-');
+  $('#schedule_company').text('-');
+  $('#schedule_type').text('-');
+  $('#schedule_time').text('-');
+  $('#start-price').val(null);
+  $('#interval').val(null);
+  $('#unit_name').val(null);
+  $('#unit_grade').val(null);
+  $('#stock_id').val(null);
+  $('#schedule_id').val(null);
+  $('#model').val(null);
+  $('#merk').val(null);
+  $('#tipe').val(null);
+  $('#silinder').val(null);
+  $('#tahun').val(null);
+  $('#nopol').val(null);
+  $('#va').val(null);
+  $('#floor-bid').text("-");
+  $('#harga_kelipatan').text("Harga Kelipatan: Rp. -");
+  $('#date').val(null);
+  $('.card-img-top').css("background-image","url(assets/img/default.png)" );
 }
 </script>
 <?php $this->load->view($content_modal); ?>

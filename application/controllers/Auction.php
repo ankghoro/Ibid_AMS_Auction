@@ -230,6 +230,7 @@ class Auction extends CI_Controller {
                     $arr['Interval'] = (int)$scheduleData->interval;
                     $arr['Image'] = json_decode($stockData->ImgUrl);
                     $arr['LotStatus'] = $lotReady->data->status;
+                    $arr['VA'] = $lotReady->data->no_va;
 
                     if (!is_null(@$lotReady->data->proxyBS_PID)) {
                         $this->kill($lotReady->data->proxyBS_PID);
