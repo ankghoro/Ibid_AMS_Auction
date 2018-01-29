@@ -222,7 +222,7 @@ function getLotData() {
       $('#content').show();
       if (data.jadwal) {
         activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
-        onSchedule = activeCompany.child('schedule/'+data.data.ScheduleId);
+        onSchedule = activeCompany.child('schedule/'+data.schedule_id);
         lotInfo = onSchedule.child('lotInfo');
         
         if (data.status) {
