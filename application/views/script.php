@@ -211,15 +211,13 @@
 
 function getLotData() {
   getLotData.called = true;
-  $('#loader').append('<i class="fa fa-spinner fa-pulse fa-lg fa-5x new-loader"></i>');
+  $('#loader').html('<i class="fa fa-spinner fa-pulse fa-lg fa-5x new-loader"></i>');
   $('#content').hide();
   $.ajax({
     type: "GET",
     url: "<?php echo base_url('auction/');?>datalot",
     dataType: "json",
     success: function(data){
-      $('#loader').empty();
-      $('#content').show();
       if (data.jadwal) {
         activeCompany.child('liveOn').set(data.data.ScheduleId+"|"+data.data.NoLot);
         onSchedule = activeCompany.child('schedule/'+data.schedule_id);
@@ -464,6 +462,8 @@ function getLotData() {
           $('#skip').prop("disabled", true);
           $('#btn_skip').prop("disabled", true);
       }
+      $('#loader').empty();
+      $('#content').show();
     },
     error: function (jqXHR, textStatus, errorThrown) {
         $('#loader').empty();
@@ -517,7 +517,7 @@ function submitWinner(npl){
               onStock.child('LotStatus').set('terjual');
 
               $('.bid-status').text('terjual');
-              
+
               $('#btn_count').prop("disabled", true);
               $('#floor-bid').prop("disabled", true);
               $('.bid-status').css('background-color','#de2828');
@@ -956,6 +956,8 @@ function onThisSchedule(value) {
 }
 
 function doneCurrentSchedule(id){
+  $('#loader').html('<i class="fa fa-spinner fa-pulse fa-lg fa-5x new-loader"></i>');
+  $('#content').hide();
   $.ajax({
     type: "POST",
     url: "<?php echo $this->config->item('ibid_lot');?>/api/updateBySchedule/"+id+"?reAvailble=1", // Used for Staging
@@ -968,6 +970,8 @@ function doneCurrentSchedule(id){
       } 
     },
     error: function (jqXHR, textStatus, errorThrown) {
+      $('#loader').empty();
+      $('#content').show();
     },
   });
 }
@@ -1005,6 +1009,8 @@ function doneSchedule(id){
     },
     error: function (jqXHR, textStatus, errorThrown) {
         alert('Error get data from ajax');
+        $('#loader').empty();
+        $('#content').show();
     },
   });
 }
