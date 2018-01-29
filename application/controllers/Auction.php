@@ -245,10 +245,11 @@ class Auction extends CI_Controller {
                     $database = $this->bid->firebase()->getDatabase();
                     $liveCount = $database->getReference('company/3/liveCount')->getValue();
                     
+                    $nodePath = FCPATH.'application/third_party/node/';
                     if((int)@$liveCount != 3){
-                        $commandForRunProxy = "node ".FCPATH."proxy_runner.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
+                        $commandForRunProxy = "node ".$nodePath."proxy_runner.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
                         exec($commandForRunProxy ,$proxyPID);
-                        $commandForRunQueueing = "node ".FCPATH."que_worker.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
+                        $commandForRunQueueing = "node ".$nodePath."que_worker.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
                         exec($commandForRunQueueing ,$queuePID);
                     }
 

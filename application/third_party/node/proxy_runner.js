@@ -1,6 +1,9 @@
 var runner	= require("child_process");
 var path 	= require('path');
 var admin 	= require('firebase-admin');
+var projectBasePath = path.join(__dirname,'../../../');
+
+require('dotenv').config(projectBasePath+'.env'); // environment declaration
 
 var companyId = process.argv[2];
 var scheduleId = process.argv[3];
@@ -8,8 +11,8 @@ var lotNum = process.argv[4];
 var Interval = process.argv[5];
 var startPrice = process.argv[6];
 
-var phpScriptPath = path.join(__dirname, '../ibid-autobid/index.php proxy getProxy '+companyId+' '+scheduleId+' '+lotNum+' '+Interval+' '+startPrice);
-var serviceAccount = require(path.join(__dirname,'ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json'));
+var phpScriptPath = projectBasePath+process.env.PATH_AUTOBID+'index.php proxy getProxy '+companyId+' '+scheduleId+' '+lotNum+' '+Interval+' '+startPrice;
+var serviceAccount = require(projectBasePath+process.env.FIREBASE_DATABASE_SERVICE_ACCOUNT);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: 'https://ibid-ams-sample.firebaseio.com'

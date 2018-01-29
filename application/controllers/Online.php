@@ -96,6 +96,7 @@ class Online extends CI_Controller {
                             $lotData = json_decode($this->get_curl($lot_url));
                             if ($lotData->status) {
                                 $backgroundProcess = " > /dev/null 2>&1 & echo $!";
+                                $nodePath = FCPATH.'application/third_party/node/';
                                 foreach ($lotData->data as $value) {
                                     $lotStock = $value->no_lot;
                                     $lotReference = $database->getReference("company/$company/schedule/$id/lot|stock/$lotStock");
@@ -129,7 +130,7 @@ class Online extends CI_Controller {
                                         $this->kill($value->proxyBS_PID);
                                     }
 
-                                    $commandForRunProxy = "node ".FCPATH."proxy_runner.js ";
+                                    $commandForRunProxy = "node ".$nodePath."proxy_runner.js ";
                                     $commandForRunProxy .= $value->company_id." ";
                                     $commandForRunProxy .= $value->schedule_id." ";
                                     $commandForRunProxy .= $value->no_lot." ";
@@ -144,14 +145,14 @@ class Online extends CI_Controller {
                                         $this->kill($value->queueBS_PID);
                                     }
 
-                                    $commandForRunQueueing = "node ".FCPATH."online_worker.js ";
+                                    $commandForRunQueueing = "node ".$nodePath."online_worker.js ";
                                     $commandForRunQueueing .= " ".$value->company_id;
                                     $commandForRunQueueing .= " ".$value->schedule_id;
                                     $commandForRunQueueing .= " ".$value->no_lot." ";
                                     $commandForRunQueueing .= (int)$schedule->interval+0;
                                     $commandForRunQueueing .= " ";
                                     $commandForRunQueueing .= ((int)str_replace(array('.'), '',$value->stock_startprice));
-                                    $commandForRunQueueing .= " ".$backgroundProcess; 
+                                    $commandForRunQueueing .= " ".$backgroundProcess;
 
                                     exec($commandForRunQueueing ,$queuePID);
 
@@ -170,7 +171,7 @@ class Online extends CI_Controller {
                                     }
                                     $PID++;
                                 }
-                                $commandScheduleFinisher = "node ".FCPATH."schedule_finisher.js ";
+                                $commandScheduleFinisher = "node ".$nodePath."schedule_finisher.js ";
                                 $commandScheduleFinisher .= $company." ";
                                 $commandScheduleFinisher .= $id;
                                 $commandScheduleFinisher .= $backgroundProcess;

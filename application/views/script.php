@@ -371,7 +371,7 @@ function getLotData() {
             $('#confirm-restart').attr('data-scheduleId',data.schedule_id);
             $('#confirm-restart').show();
           }else{
-            message = "Lot di jawdal ini sudah habis, apakah ingin mengakhiri jadwal ini dan lanjut ke jadwal berikutnya ?";
+            message = "Lot di jadwal ini sudah habis, apakah ingin mengakhiri jadwal ini dan lanjut ke jadwal berikutnya ?";
             $('#confirm-done').addClass('btn-success');
             $('#confirm-done').removeClass('btn-default');
             $('#confirm-done').text('Ya');
@@ -515,7 +515,13 @@ function submitWinner(npl){
               $('#next_lot').val('');
               currentLotData.child('LotStatus').set('terjual');
               onStock.child('LotStatus').set('terjual');
-              // getLotData();
+
+              $('.bid-status').text('terjual');
+              
+              $('#btn_count').prop("disabled", true);
+              $('#floor-bid').prop("disabled", true);
+              $('.bid-status').css('background-color','#de2828');
+              $('.bid-status').css('color','white');
             }
             $('#proceed-winner').prop("disabled",false); 
             $('#btn_loader').remove();
