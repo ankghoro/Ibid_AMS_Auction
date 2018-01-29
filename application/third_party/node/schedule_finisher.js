@@ -1,6 +1,7 @@
 var path = require('path');
+var projectBasePath = path.join(__dirname,'../../../');
 
-require('dotenv').config(path.join(__dirname,'.env')); // environment declaration
+require('dotenv').config(projectBasePath+'.env'); // environment declaration
 
 var Queue = require('firebase-queue');
 var admin = require('firebase-admin');
@@ -9,7 +10,7 @@ var https = require("https");
 var querystring = require('querystring');
 var url = require('url'); // url parser
 
-var serviceAccount = require(path.join(__dirname,'ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json'));
+var serviceAccount = require(projectBasePath+process.env.FIREBASE_DATABASE_SERVICE_ACCOUNT);
 
 var companyId = process.argv[2];
 var scheduleId = process.argv[3];
@@ -30,7 +31,7 @@ function finisher() {
 			mainData.forEach(value => value.lotData.LotStatus == 'tersedia' ? countAvailable++ : countUnAvailable++);
 			done = countAvailable > 0 ? false : true;
 			if (done) {
-				updateScheduleUrl = process.env.SCHEDULE_API+'api/updateStatus/'+scheduleId;
+				updateScheduleUrl = process.env.API_SCHEDULE+'api/updateStatus/'+scheduleId;
 				httpPost({},updateScheduleUrl);
 			}
 		}
@@ -53,7 +54,8 @@ function httpPost(data,postUrl){
     }
   };
 
-  const req = http.request(options, (res) => {
+  const protocol = url_callback.protocol == "https:" ? https : http;
+  const req = protocol.request(options, (res) => {
     console.log(`STATUS: ${res.statusCode}`);
     console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
     res.setEncoding('utf8');

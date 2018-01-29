@@ -1,7 +1,11 @@
+var path = require('path');
+var projectBasePath = path.join(__dirname,'../../../');
 var Queue = require('firebase-queue');
 var admin = require('firebase-admin');
-var path = require('path');
-var serviceAccount = require(path.join(__dirname,'ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json'));
+
+require('dotenv').config(projectBasePath+'.env'); // environment declaration
+
+var serviceAccount = require(projectBasePath+process.env.FIREBASE_DATABASE_SERVICE_ACCOUNT);
 
 var companyId = process.argv[2];
 var scheduleId = process.argv[3];

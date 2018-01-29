@@ -1,6 +1,7 @@
-var path = require('path');
+var path = require('path')
+var projectBasePath = path.join(__dirname,'../../../');
 
-require('dotenv').config(path.join(__dirname,'.env')); // environment declaration
+require('dotenv').config(projectBasePath+'.env'); // environment declaration
 
 var Queue = require('firebase-queue');
 var admin = require('firebase-admin');
@@ -8,7 +9,7 @@ var http = require('http');
 var https = require("https");
 var querystring = require('querystring');
 var url = require('url'); // url parser
-var serviceAccount = require(path.join(__dirname,'ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json'));
+var serviceAccount = require(projectBasePath+process.env.FIREBASE_DATABASE_SERVICE_ACCOUNT);
 
 var companyId = process.argv[2];
 var scheduleId = process.argv[3];
@@ -18,7 +19,7 @@ var startPrice = process.argv[6];
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://ibid-ams-sample.firebaseio.com'
+  databaseURL: process.env.FIREBASE_DATABASE_URL
 });
 
 var mainRef = admin.database().ref('company/'+companyId+'/schedule/'+scheduleId+'/lot|stock/'+lotNum);
@@ -75,7 +76,7 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
                   formedPrice = winnerData.val().bid || 0;
                   npl = winnerData.val().npl || '';
                   state = winnerData.val().type || 'Floor';
-                  var getProxyUrl = process.env.AUTOBID_API+'api/getproxy/'+companyId+"/"+scheduleId+"/"+lotNum+"/"+startPrice;
+                  var getProxyUrl = process.env.API_AUTOBID+'api/getproxy/'+companyId+"/"+scheduleId+"/"+lotNum+"/"+startPrice;
                   http.get(getProxyUrl, function(res){
                       var body = '';
 
@@ -114,7 +115,7 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
                           }
                           UnitName = dataLot.merk +' '+dataLot.lot
                           winPostData = {UnitName:UnitName,Npl:npl,Lot:dataLot.lot,ScheduleId:scheduleId,Schedule:dataLot.date,Type:1,AuctionItemId:dataLot.stock_id,Price:formedPrice,Va:dataLot.VA,Model:dataLot.model,Merk:dataLot.merk,Tipe:dataLot.tipe,Silinder:dataLot.silinder,Tahun:dataLot.tahun,NoPolisi:dataLot.nopol,winnerState:state};
-                          submitWinnerUrl = process.env.KPL_API+'api/submitWinner';
+                          submitWinnerUrl = process.env.API_KPL+'api/submitWinner';
                           httpPost(winPostData,submitWinnerUrl);
                       });
                   }).on('error', function(e){
@@ -127,7 +128,7 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
         }else{
           lotRef.child('LotStatus').set('tidak terjual');
           lotUnsoldData = {no_lot:lotNum,schedule_id:scheduleId};
-          lotUnsoldUrl = process.env.LOT_API  +'api/lotUnSold';
+          lotUnsoldUrl = process.env.API_LOT+'api/lotUnSold';
           httpPost(lotUnsoldData,lotUnsoldUrl);
         }
       });
