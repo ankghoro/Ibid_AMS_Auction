@@ -1,6 +1,9 @@
+var path = require('path');
+
+require('dotenv').config(path.join(__dirname,'.env')); // environment declaration
+
 var Queue = require('firebase-queue');
 var admin = require('firebase-admin');
-var path = require('path');
 var http = require('http');
 var https = require("https");
 var querystring = require('querystring');
@@ -27,7 +30,7 @@ function finisher() {
 			mainData.forEach(value => value.lotData.LotStatus == 'tersedia' ? countAvailable++ : countUnAvailable++);
 			done = countAvailable > 0 ? false : true;
 			if (done) {
-				updateScheduleUrl = 'http://ibid-ams-schedule.stagingapps.net/api/updateStatus/'+scheduleId;
+				updateScheduleUrl = process.env.SCHEDULE_API+'api/updateStatus/'+scheduleId;
 				httpPost({},updateScheduleUrl);
 			}
 		}
