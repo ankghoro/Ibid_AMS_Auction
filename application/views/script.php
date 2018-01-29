@@ -977,6 +977,8 @@ function doneCurrentSchedule(id){
 }
 
 function restartCurrentSchedule(id){
+  $('#loader').html('<i class="fa fa-spinner fa-pulse fa-lg fa-5x new-loader"></i>');
+  $('#content').hide();
   $.ajax({
     type: "POST",
     url: "<?php echo $this->config->item('ibid_lot');?>/api/updateBySchedule/"+id+"?reAvailble=1", // Used for Staging
@@ -989,6 +991,8 @@ function restartCurrentSchedule(id){
       } 
     },
     error: function (jqXHR, textStatus, errorThrown) {
+      $('#loader').empty();
+      $('#content').show();
     },
   });
 }
