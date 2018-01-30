@@ -310,6 +310,7 @@ function getLotData() {
 
           $('#next_lot').val('next');
           // pause();
+          onLog.off();
           $('#bid-log').empty();
           onLog.on("child_added", function(snap) {
             var state;
