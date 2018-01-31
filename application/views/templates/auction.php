@@ -102,7 +102,7 @@
                                         <div class="col-md-12  padding11 color-right">
                                             <div class="young-purple">
                                                 <div class="center-content">
-                                                    <img src="<?php echo base_url('auction/assets/img/star.png');?>" class="img-top">&nbsp <span class="top-bidder">TOP BIDDER</span>
+                                                    <img src="<?php echo base_url('auction/assets/img/topbid_icon.png');?>" class="img-top">&nbsp <span class="top-bidder">TOP BIDDER</span>
                                                 </div>
                                                 <div class="bid-topbid" id="top_bid"></div>
                                                 <div class="pull-right openbold white" id="top_bid_state"></div>
@@ -174,7 +174,7 @@
                                             </div>
                                             <div class="form-group clearfix">
                                                 <label class="control-label">Count :</label>
-                                                <input type="text" class="form-control" value="-" style="height: 70px; background-color: white; color: #777; text-align: center;" id="count" disabled>
+                                                <input type="text" class="form-control" value="-" style="height: 70px; background-color: white; color: #777; text-align: center; font-size: 50px" id="count" disabled>
                                                 <button class="btn btn-success btn-sm btn-block" id="btn_count" onclick="btn_count()" disabled="disabled">COUNT</button>
                                                 <button class="btn btn-warning btn-sm btn-block" id="btn_next">NEXT</button>
                                                 <a target="_blank" href="<?php echo base_url('current/bidding');?>" class="btn btn-info btn-sm btn-block" style="width: 100%;">CURRENT BIDDING</a>

@@ -162,6 +162,7 @@
       $('.invalid-feedback').remove();
 
       var npl = $('#npl').val();
+      var scheduleId = $(this).attr('data-schedule_id');
       if (npl == '') {
         if ($('#input_npl').val() == '') {
           $('[name="input_npl"]').addClass('is-invalid');
@@ -169,7 +170,32 @@
           // alert('isi npl!!');
         } else {
           npl = $('#input_npl').val();
-          submitWinner(npl);
+          loader = '<i class="fa fa-spinner fa-pulse fa-1x fa-fw" id="btn_loader"></i>';
+          $('#proceed-winner').prepend(loader);
+          $('#proceed-winner').prop("disabled",true);
+
+          $.ajax({
+            type: "GET",
+            url: "http://ibidadmsdevservicenpl.azurewebsites.net/index.php/detail?NPLNumber="+npl+"&ScheduleId="+scheduleId,
+            dataType: "json",
+            processData: false,
+            contenType: false,
+            success: function(data){
+              if (data.data != null) {
+                submitWinner(npl);
+              }else{
+                $('[name="input_npl"]').addClass('is-invalid');
+                $('<div class="invalid-feedback">NPL tidak terdaftar</div>').insertAfter('[name="input_npl"]');
+                $('#proceed-winner').prop("disabled",false); 
+                $('#btn_loader').remove();
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              $('#proceed-winner').prop("disabled",false); 
+              $('#btn_loader').remove();
+            },
+          });
+          // submitWinner(npl);
         }
       } else {
         submitWinner(npl);
@@ -361,7 +387,7 @@ function getLotData() {
           // lotInfo.skippedLot = 0;
           $('button.last-confirm').hide(); 
           if (data.lotInfo.skippedLot > 0) {
-            message = "Di jadwal ini tersisa "+data.lotInfo.skippedLot+" lot terlewat, apakah anda ingin melelangnya lagi ?";
+            message = "Di jadwal ini tersisa "+data.lotInfo.skippedLot+" lot belum terjual, apakah anda ingin melelangnya lagi ?";
             $('#confirm-done').text('Tidak');
             $('#confirm-done').removeClass('btn-success');
             $('#confirm-done').addClass('btn-default');
@@ -806,7 +832,8 @@ function btn_count() {
                     })
                     $('#modal-body').empty();
                     $('button.last-confirm').hide();
-                    $('#proceed-winner').show();   
+                    $('#proceed-winner').show();
+                    $('#proceed-winner').attr('data-schedule_id',dataLot.ScheduleId);   
                     if (state == "Floor") {
                       $('#modal-title').text('Lelang dimenangkan '+state+' Bidder');
                       var body ='<h4>Detail Unit</h4>'

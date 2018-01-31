@@ -369,7 +369,8 @@ hr {
 .top-bidder{
 	font-size: 1vw;
 	line-height: 35px;
-	color: #231f42;
+	color: #fff410;
+	font-weight: bold;
 }
 
 .img-top{
