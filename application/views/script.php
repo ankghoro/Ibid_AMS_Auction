@@ -245,7 +245,7 @@ function getLotData() {
   $('#content').hide();
   $.ajax({
     type: "GET",
-    url: "<?php echo base_url('auction/');?>datalot",
+    url: "<?php echo base_url('auction/');?>datalot/<?php echo $CompanyId; ?>",
     dataType: "json",
     success: function(data){
       if (data.jadwal) {
