@@ -30,6 +30,7 @@
   var start = 0;
   var startProxy = 0;
   var skipLotNo = 0;
+  var lotSkiped = [];
 
   $(document).ready(function(e) {
     var date = new Date();
@@ -146,7 +147,10 @@
             if(valid == false){
                 return false; //is superfluous, but I put it here as a fallback
             } else {
-                checkLot();
+              checkLot();
+              lotSkiped = [];
+              $('#btn_loader').remove();
+              $('#confirm-skip').prop("disabled",false);
               return true;
             }
     });
@@ -270,7 +274,7 @@ function getLotData() {
           onStock.set(value);
           currentLotData.set(value);
 
-          onStock.once('value', function(currentStockSnap){
+          currentLotData.once('value', function(currentStockSnap){
             if (currentStockSnap.exists()) {
               currentStockData = currentStockSnap.val();
               var name = currentStockData.Merk+" "+currentStockData.Seri;
@@ -501,6 +505,7 @@ function getLotData() {
 
 function submitWinner(npl){
   var loader = '<i class="fa fa-spinner fa-pulse fa-1x fa-fw" id="btn_loader"></i>';
+  $('#btn_loader').remove();
   $('#proceed-winner').prepend(loader);
   $('#proceed-winner').prop("disabled",true);
   var last = onLog.orderByKey().limitToLast(1);
@@ -581,6 +586,8 @@ function skipLot(){
       var Lot = skipLotNo;
       Lot = parseInt(Lot);
       Lot = Lot + 1;
+      lotSkiped.push(Lot);
+      console.log(lotSkiped);
       $.ajax({
         type: "POST",
         url: "<?php echo base_url('auction/');?>skip",
@@ -1020,6 +1027,23 @@ function restartCurrentSchedule(id){
     error: function (jqXHR, textStatus, errorThrown) {
       $('#loader').empty();
       $('#content').show();
+    },
+  });
+}
+
+function reAvailableSkippedLot(id){
+  $.ajax({
+    type: "POST",
+    url: "<?php echo $this->config->item('ibid_lot');?>/api/updateBySchedule/"+id, // Used for Staging
+    data : {status:"tersedia",reaseon:null},
+    dataType: "json",
+    success: function(data){
+      if (data.status) {
+        // $('#modal').modal('hide');
+        // getLotData();
+      } 
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
     },
   });
 }
