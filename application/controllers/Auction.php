@@ -171,7 +171,7 @@ class Auction extends CI_Controller {
                 $scheduleData = $scheduledata->data;
                 $schedule_id    = $scheduleData->id;
                 // get current availble lot
-                $getLotUrl      = $this->config->item('ibid_lot')."/api/getLot/$schedule_id";
+                $getLotUrl      = $this->config->item('ibid_lot')."/api/getLot?scheduleid=$schedule_id";
                 $lotReady       = json_decode($this->get_curl($getLotUrl));
                 // get last availble lot
                 $getLastLotUrl  = $this->config->item('ibid_lot')."/api/getLastLot/$schedule_id";
