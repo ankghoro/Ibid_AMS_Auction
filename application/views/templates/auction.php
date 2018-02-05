@@ -14,6 +14,10 @@
         <div class="content-page">
             <div class="content">
 
+                <div class="ping-signal green" id="ping-wrapper">
+                    <i class="fa fa-wifi"></i><span class="ping-text" id="ping"></span>
+                </div>
+
                 <div class="container-fluid" id="body">
                     <div class="text-center" id="loader"></div>
                     
