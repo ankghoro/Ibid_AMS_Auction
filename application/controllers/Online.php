@@ -72,9 +72,9 @@ class Online extends CI_Controller {
 	public function scheduler()
 	{
         $database = $this->bid->firebase()->getDatabase();
-        date_default_timezone_set("Asia/Jakarta");
+        // date_default_timezone_set("Asia/Jakarta");
         $currentDateTime = date("d-m-y H:i:s");
-        $url = $this->config->item('ibid_schedule')."/api/scheduleOnlineForTheDay"; 
+        $url = $this->config->item('ibid_schedule')."/api/scheduleOnlineForTheDay";
         // $url = "localhost/ibid-ams-schedule/api/scheduleOnlineForTheDay"; //local uses
         $scheduleOnline = json_decode($this->get_curl($url));
         if ($scheduleOnline) {
@@ -91,7 +91,7 @@ class Online extends CI_Controller {
                     $check = $reference->getValue();
                     if (strtotime($currentDateTime) <= strtotime($dateTime)+$duration) {
                         if (is_null($check)) {
-                            $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter/$id";
+                            $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter?scheduleid=$id";
                             // $lot_url = "localhost/ibid-lot/api/getLotFilter/$id";
                             $lotData = json_decode($this->get_curl($lot_url));
                             if ($lotData->status) {
