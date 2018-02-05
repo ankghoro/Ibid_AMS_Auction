@@ -138,71 +138,14 @@ class Api extends CI_Controller
             $check_schedule = count($schedules->data);
             $arr = array();
             if ($check_schedule != 0) {
+                $jadwal = true; 
+                $status = true;
+                $desc = "Jadwal tersedia";
                 foreach ($schedules->data as $key => $value) {
-                    $schedule_id    = $value->id;
-                    $company_id    = $value->company_id;
-                    $getLotUrl      = $this->config->item('ibid_lot')."/api/getLot/$schedule_id";
-                    $lotReady       = json_decode($this->get_curl($getLotUrl));
-                    $getLastLotUrl  = $this->config->item('ibid_lot')."/api/getLastLot/$schedule_id";
-                    $lastLot        = json_decode($this->get_curl($getLastLotUrl));
-                    $date = $value->date;
-                    $desc = "Data berhasil diambil";
-                    if ($lotReady->status && $lastLot->status) {
-                        $stock_id = $lotReady->data->stock_id;
-                        $currentLot = $lotReady->data->no_lot;
-                        $lastLot = $lastLot->data->no_lot;
-                        $getStockUrl = $this->config->item('ibid_stock')."/api/stockData/".$stock_id;
-                        $stockDatarow = json_decode($this->get_curl($getStockUrl));
-                        $arr[$key]['Lot'] = $currentLot;
-                        $arr[$key]['ScheduleId'] = $schedule_id;
-                        $arr[$key]['CompanyId'] = $company_id;
-                        $arr[$key]['Desc'] = "Lot tersedia";
-                        $PrevLot = $lotReady->prevLot;
-                        if (!is_null($PrevLot)){
-                            $arr[$key]['PrevLot']['Desc'] = $PrevLot->stock_name.' '.$PrevLot->stock_seri.' '.$PrevLot->stock_year;
-                            $arr[$key]['PrevLot']['Price'] = (int)$PrevLot->stock_startprice;
-                        }else{
-                            $arr[$key]['PrevLot'] = [];
-                        }
-                        $NextLot = $lotReady->nextLot;
-                        if (!is_null($NextLot)){
-                            $arr[$key]['NextLot']['Desc'] = $NextLot->stock_name.' '.$NextLot->stock_seri.' '.$NextLot->stock_year;
-                            $arr[$key]['NextLot']['Price'] = (int)$NextLot->stock_startprice;
-                        }else{
-                            $arr[$key]['NextLot'] = [];
-                        }
-                        $arr[$key]['Stock']['AuctionItemId'] = $stockDatarow->AuctionItemId; 
-                        $arr[$key]['Stock']['Merk'] = $stockDatarow->Merk;
-                        $arr[$key]['Stock']['Tipe'] = $stockDatarow->Tipe;
-                        $arr[$key]['Stock']['Silinder'] = $stockDatarow->Silinder;
-                        $arr[$key]['Stock']['Model'] = $stockDatarow->Model;
-                        $arr[$key]['Stock']['Tahun'] = $stockDatarow->Tahun;
-                        $arr[$key]['Stock']['Warna'] = $stockDatarow->Warna;
-                        $arr[$key]['Stock']['Transmisi'] = $stockDatarow->Transmisi;
-                        $arr[$key]['Stock']['NoPolisi'] = $stockDatarow->NoPolisi;
-                        $arr[$key]['Stock']['Kilometer'] = $stockDatarow->Kilometer;
-                        $arr[$key]['Stock']['BahanBakar'] = $stockDatarow->BahanBakar;
-                        $arr[$key]['Stock']['Exterior'] = $stockDatarow->Exterior;
-                        $arr[$key]['Stock']['Interior'] = $stockDatarow->Interior;
-                        $arr[$key]['Stock']['Mesin'] = $stockDatarow->Mesin;
-                        $arr[$key]['Stock']['Rangka'] = $stockDatarow->Rangka;
-                        $arr[$key]['Stock']['Grade'] = $stockDatarow->Grade;
-                        $arr[$key]['Stock']['ItemId'] = $stockDatarow->ItemId;
-                        $arr[$key]['Stock']['Date'] = $date;
-                        $arr[$key]['Stock']['StartPrice'] = (int)$stockDatarow->StartPrice;
-                        $arr[$key]['Stock']['Interval'] = (int)$value->interval;
-    
-                        $jadwal = true; 
-                        $status = true;
-                    } else {
-                        $jadwal = true; 
-                        $status = true;
-                        $arr[$key]['Lot'] = null;
-                        $arr[$key]['ScheduleId'] = $schedule_id;
-                        $arr[$key]['CompanyId'] = $company_id;
-                        $arr[$key]['Desc'] = "Lot sudah tidak tersedia";
-                        $arr[$key]['Stock'] = []; 
-                    }
+                    $arr[$key]['ScheduleId'] = $value->id;
+                    $arr[$key]['CompanyId'] = $value->company_id;
+                    $arr[$key]['companyName'] = $value->CompanyName;
+                    $arr[$key]['Desc'] = "Jadwal tersedia";
                 }
             } else {
                 $jadwal = false;

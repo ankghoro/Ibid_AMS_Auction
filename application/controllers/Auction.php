@@ -159,11 +159,11 @@ class Auction extends CI_Controller {
         $this->load->view('/templates/auction', $data);
 	}
 
-    public function datalot(){
-        if (isset($_COOKIE['UserLogon'])) {
-            $datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
-            $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$datauser['CompanyId']; //Used for Staging
-            // $schedule_url = "localhost/ibid-ams-schedule/api/scheduleForTheDay/".$datauser['CompanyId']; //Used on local
+    public function datalot($companyId){
+        // if (isset($_COOKIE['UserLogon'])) {
+            // $datauser = isset($_COOKIE['UserLogon']) ? unserialize($_COOKIE['UserLogon']) : null;
+            $schedule_url =  $this->config->item('ibid_schedule')."/api/scheduleForTheDay/".$companyId; //Used for Staging
+            // $schedule_url = "localhost/ibid-ams-schedule/api/scheduleForTheDay/".$companyId; //Used on local
             $scheduledata = json_decode($this->get_curl($schedule_url));
             $check_schedule = count($scheduledata->data);
             $arr = array();
@@ -171,7 +171,7 @@ class Auction extends CI_Controller {
                 $scheduleData = $scheduledata->data;
                 $schedule_id    = $scheduleData->id;
                 // get current availble lot
-                $getLotUrl      = $this->config->item('ibid_lot')."/api/getLot/$schedule_id";
+                $getLotUrl      = $this->config->item('ibid_lot')."/api/getLot?scheduleid=$schedule_id";
                 $lotReady       = json_decode($this->get_curl($getLotUrl));
                 // get last availble lot
                 $getLastLotUrl  = $this->config->item('ibid_lot')."/api/getLastLot/$schedule_id";
@@ -247,9 +247,9 @@ class Auction extends CI_Controller {
                     
                     $nodePath = FCPATH.'application/third_party/node/';
                     if((int)@$liveCount != 3){
-                        $commandForRunProxy = "node ".$nodePath."proxy_runner.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
+                        $commandForRunProxy = "node ".$nodePath."proxy_runner.js ".$companyId." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
                         exec($commandForRunProxy ,$proxyPID);
-                        $commandForRunQueueing = "node ".$nodePath."que_worker.js ".$datauser['CompanyId']." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
+                        $commandForRunQueueing = "node ".$nodePath."que_worker.js ".$companyId." ".$arr['ScheduleId']." ".$arr['NoLot']." ".$arr['Interval']." ".$arr['StartPrice']." > /dev/null 2>&1 & echo $!";
                         exec($commandForRunQueueing ,$queuePID);
                     }
 
@@ -284,7 +284,7 @@ class Auction extends CI_Controller {
                 $disable = true;
                 $lotInfoData = [];
             }
-        }
+        // }
         $newData = [
             'jadwal' => $jadwal,
             'schedule_id' => isset($schedule_id) ? $schedule_id : null,
