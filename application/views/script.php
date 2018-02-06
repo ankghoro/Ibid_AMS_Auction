@@ -158,6 +158,13 @@
             }
     });
 
+    $('#no').on('click', function(){
+      if (lotSkiped.length > 0) {
+        cancelSkip();
+        return true;
+      }
+    });
+
     $('#confirm-skip').on('click', function(){
         $('#reason').removeClass('is-invalid');
         $('.invalid-feedback').remove();
@@ -620,6 +627,18 @@ function skipLot(){
         },
       });
   }
+}
+
+function cancelSkip() {
+  var lotdata = lotSkiped;
+  var scheduleid = $('#schedule_id').val();
+    $.ajax({
+      type: "POST",
+      url: "<?php echo $this->config->item('ibid_lot');?>/api/cancelSkip",
+      // url: "http://ibid-lot.oo.oo:8080/api/cancelSkip",
+      data : {lotdata:lotdata,scheduleid:scheduleid},
+      dataType: "json",
+    });
 }
 
 function checkLot(){
