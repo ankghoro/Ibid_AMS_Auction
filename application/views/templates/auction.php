@@ -205,7 +205,7 @@
                                                         <h5 class="main-caption2 weight data-lot" id="schedule_time"></h5>
                                                     </div>
                                                     <div class="col-md-6 col-lg-6 item">
-                                                        <h6 class="title-caption2">Jenis</h6>
+                                                        <h6 class="title-caption2">Objek Lelang</h6>
                                                         <h5 class="main-caption2 weight data-lot" id="schedule_type"></h5>
                                                     </div>
                                                     <div class="col-md-6 col-lg-6 item">
