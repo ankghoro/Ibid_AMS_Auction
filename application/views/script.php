@@ -1148,8 +1148,7 @@ function pingProcess()
    var newPing;
    $.ajax({ 
        type: "GET",
-       // url: "<?php echo $this->config->item('ibid_auction');?>",
-       url: "https://www.google.com/",
+       url: "<?php echo $this->config->item('ibid_auction');?>",
        data: {},
        cache:false,
        crossDomain : true,
