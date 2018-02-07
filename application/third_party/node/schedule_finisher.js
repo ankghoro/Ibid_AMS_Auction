@@ -19,25 +19,21 @@ admin.initializeApp({
   databaseURL: 'https://ibid-ams-sample.firebaseio.com'
 });
 var mainRef = admin.database().ref('company/'+companyId+'/schedule/'+scheduleId+'/lot|stock');
-finisher();
 
-function finisher() {
-	let countUnAvailable = 0;
-	let countAvailable = 0;
-	let done = false;
-	mainRef.once('value', function(mainSnap){
-		if (mainSnap.exists()) {
-			mainData = mainSnap.val();
-			mainData.forEach(value => value.lotData.LotStatus == 'tersedia' ? countAvailable++ : countUnAvailable++);
-			done = countAvailable > 0 ? false : true;
-			if (done) {
-				updateScheduleUrl = process.env.API_SCHEDULE+'api/updateStatus/'+scheduleId;
-				httpPost({},updateScheduleUrl);
-			}
+mainRef.on('value', function(mainSnap){
+	countUnAvailable = 0;
+	countAvailable = 0;
+	done = false;
+	if (mainSnap.exists()) {
+		mainData = mainSnap.val();
+		mainData.forEach(value => value.lotData.LotStatus == 'tersedia' ? countAvailable++ : countUnAvailable++);
+		done = countAvailable > 0 ? false : true;
+		if (done) {
+			updateScheduleUrl = process.env.API_SCHEDULE+'api/updateStatus/'+scheduleId;
+			httpPost({},updateScheduleUrl);
 		}
-		setTimeout(finisher, 30000);
-	});
-}
+	}
+});
 
 function httpPost(data,postUrl){
   const postData = querystring.stringify(data);

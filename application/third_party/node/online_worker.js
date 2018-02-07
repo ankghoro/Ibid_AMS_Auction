@@ -66,7 +66,6 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
       var last = logsRef.orderByKey().limitToLast(1);
       last.once('value', function(snapshot) {
         if (snapshot.exists()) {
-          lotRef.child('LotStatus').set('terjual');
           snapshot.forEach(function(child) {
             winner_npl = logsRef.orderByChild("bid").startAt(child.val().bid).endAt(child.val().bid).limitToFirst(1);
             lotRef.once('value', function(currentStockSnap){
@@ -113,10 +112,11 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
                               state = "Proxy";
                             }
                           }
+                          state = 'terjual';
                           UnitName = dataLot.merk +' '+dataLot.seri
                           winPostData = {UnitName:UnitName,Npl:npl,Lot:dataLot.lot,ScheduleId:scheduleId,Schedule:dataLot.date,Type:1,AuctionItemId:dataLot.stock_id,Price:formedPrice,Va:dataLot.VA,Model:dataLot.model,Merk:dataLot.merk,Tipe:dataLot.tipe,Silinder:dataLot.silinder,Tahun:dataLot.tahun,NoPolisi:dataLot.nopol,winnerState:state};
                           submitWinnerUrl = process.env.API_KPL+'api/submitWinner';
-                          httpPost(winPostData,submitWinnerUrl);
+                          httpPost(winPostData,submitWinnerUrl,state);
                       });
                   }).on('error', function(e){
                         console.log("Got an error: ", e);
@@ -126,10 +126,10 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
             });
           });
         }else{
-          lotRef.child('LotStatus').set('tidak terjual');
+          state = 'tidak terjual';
           lotUnsoldData = {no_lot:lotNum,schedule_id:scheduleId};
           lotUnsoldUrl = process.env.API_LOT+'api/lotUnSold';
-          httpPost(lotUnsoldData,lotUnsoldUrl);
+          httpPost(lotUnsoldData,lotUnsoldUrl,state);
         }
       });
 
@@ -142,7 +142,7 @@ function isEmptyObject(obj) {
   return !Object.keys(obj).length > 0;
 }
 
-function httpPost(data,postUrl){
+function httpPost(data,postUrl,lotState){
   const postData = querystring.stringify(data);
 
   const url_callback = url.parse(postUrl);
@@ -167,9 +167,7 @@ function httpPost(data,postUrl){
     res.on('end', () => {
       mainRef.once('value',function(mainSnap){
         mainData = mainSnap.val();
-        if (!mainData.allowBid && mainData.lotData.LotStatus != 'tersedia') {
-          queue.shutdown().then(process.exit(0))
-        }
+        lotRef.child('LotStatus').set(lotState).then(queue.shutdown().then(process.exit(0)));
       });
     });
   });
