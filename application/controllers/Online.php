@@ -72,7 +72,7 @@ class Online extends CI_Controller {
 	public function scheduler()
 	{
         $database = $this->bid->firebase()->getDatabase();
-        // date_default_timezone_set("Asia/Jakarta");
+        date_default_timezone_set("Asia/Jakarta");
         $currentDateTime = date("d-m-y H:i:s");
         $url = $this->config->item('ibid_schedule')."/api/scheduleOnlineForTheDay";
         // $url = "localhost/ibid-ams-schedule/api/scheduleOnlineForTheDay"; //local uses
