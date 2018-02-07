@@ -152,8 +152,6 @@
             } else {
               checkLot();
               lotSkiped = [];
-              $('#btn_loader').remove();
-              $('#confirm-skip').prop("disabled",false);
               return true;
             }
     });
@@ -410,7 +408,7 @@ function getLotData() {
             $('#confirm-restart').attr('data-scheduleId',data.schedule_id);
             $('#confirm-restart').show();
           }else{
-            message = "Lot di jadwal ini sudah habis, apakah ingin mengakhiri jadwal ini dan lanjut ke jadwal berikutnya ?";
+            message = "Lot di jadwal ini sudah habis, akhiri jadwal ini dan lanjut ke jadwal berikutnya.";
             $('#confirm-done').addClass('btn-success');
             $('#confirm-done').removeClass('btn-default');
             $('#confirm-done').text('Ya');
@@ -887,7 +885,7 @@ function btn_count() {
                                     +'</div>'
                                   +'</div>'
                                   +'<hr class="custom">'
-                                  +'<h4>Isi Npl Pemenang</h4>'
+                                  +'<h4>Isi NPL Pemenang</h4>'
                                   +'<div class="form-group noLot-edit">'
                                     +'<div class="col-md-6" style="padding-left:0">'
                                       +'<input type="text" name="input_npl" class="form-control" id="input_npl" onkeypress="return isNumberKey(event)">'
@@ -928,7 +926,7 @@ function btn_count() {
                                           +'<div class="row">'
                                             +'<div class="col-md-4"><b class="pull-left">Peserta</b></div>'
                                             +'<div class="col-md-8" id="show_date"> : '+state+'</div>'
-                                            +'<div class="col-md-4"><b class="pull-left">Npl</b></div>'
+                                            +'<div class="col-md-4"><b class="pull-left">NPL</b></div>'
                                             +'<div class="col-md-8" id="show_company"> : '+npl+'</div>'
                                           +'</div>'
                                         +'</div>'
