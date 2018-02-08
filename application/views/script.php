@@ -447,6 +447,7 @@ function getLotData() {
         });
       } else {
         $('#bid-log').empty();
+
         activeCompany.child('liveOn').set(null);
         liveCount.set(null);
         onStock.set(null); 
@@ -500,6 +501,7 @@ function getLotData() {
           $('#btn_next').prop("disabled", true);
           $('#skip').prop("disabled", true);
           $('#btn_skip').prop("disabled", true);
+          $('button#start').prop('disabled', true);
       }
       $('#loader').empty();
       $('#content').show();
