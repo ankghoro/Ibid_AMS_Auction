@@ -40,18 +40,27 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
       });
     }
 
-    logsRef.push({
-      bid: newbid || null,
-      type: data.type || null,
-      npl: data.npl || null
-    });
+    if (data.bid < newbid) {
+      sameBid = tasksRef.orderByChild("bid").startAt(data.bid).endAt(data.bid);
+      sameBid.once('value', function(snapshot) {
+        let removeTasks = {};
+        snapshot.forEach( child => child.val().type != 'Floor' ? removeTasks[child.key] = null : console.log('skip remove task') );
+        tasksRef.update(removeTasks).then(resolve());
+      });
+    }else{
+      logsRef.push({
+        bid: newbid || null,
+        type: data.type || null,
+        npl: data.npl || null
+      });
 
-    sameBid = tasksRef.orderByChild("bid").startAt(newbid).endAt(newbid);
-    sameBid.once('value', function(snapshot) {
-      let removeTasks = {};
-      snapshot.forEach(child => removeTasks[child.key] = null);
-      tasksRef.update(removeTasks).then(resolve());
-    });
+      sameBid = tasksRef.orderByChild("bid").startAt(newbid).endAt(newbid);
+      sameBid.once('value', function(snapshot) {
+        let removeTasks = {};
+        snapshot.forEach(child => removeTasks[child.key] = null);
+        tasksRef.update(removeTasks).then(resolve());
+      });
+    }
   });
 });
 
