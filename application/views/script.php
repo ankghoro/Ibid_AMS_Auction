@@ -179,7 +179,6 @@
         if ($('#input_npl').val() == '') {
           $('[name="input_npl"]').addClass('is-invalid');
           $('<div class="invalid-feedback">Wajib isi NPL pemenang</div>').insertAfter('[name="input_npl"]');
-          // alert('isi npl!!');
         } else {
           npl = $('#input_npl').val();
           loader = '<i class="fa fa-spinner fa-pulse fa-1x fa-fw" id="btn_loader"></i>';
@@ -509,7 +508,6 @@ function getLotData() {
     error: function (jqXHR, textStatus, errorThrown) {
         $('#loader').empty();
         $('#content').show();
-        alert('Error get data from ajax');
     },
   });
 }
@@ -569,7 +567,6 @@ function submitWinner(npl){
             $('#btn_loader').remove();
           },
           error: function (jqXHR, textStatus, errorThrown) {
-              // alert('Error post data from ajax');
               $('#proceed-winner').prop("disabled",false);
               $('#btn_loader').remove();
           },
@@ -622,9 +619,6 @@ function skipLot(){
           }
         }
       },
-        error: function (jqXHR, textStatus, errorThrown) {
-          alert('Error get data from ajax');
-        },
       });
   }
 }
@@ -951,9 +945,6 @@ function btn_count() {
       });
 
     }
-    // alert('ok');
-  } else {
-    alert('Item already sold');
   }
 }
 
@@ -1086,7 +1077,6 @@ function doneSchedule(id){
       } 
     },
     error: function (jqXHR, textStatus, errorThrown) {
-        alert('Error get data from ajax');
         $('#loader').empty();
         $('#content').show();
     },
