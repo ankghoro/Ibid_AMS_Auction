@@ -3,14 +3,14 @@
 	position: absolute;
 	top: 5px;
 	right: 40px;	
-	background: rgba(0,0,0,0.5);
+	background: rgba(125,125,125,0.5);
 	padding: 10px;
 	border-bottom-left-radius: 7px;
 	border-bottom-right-radius: 7px;
 }
 
 .red{
-	color: #ce505b;
+	color: #ff0000;
 }
 
 .yellow{
@@ -18,7 +18,7 @@
 }
 
 .green{
-	color: #52f332;
+	color: #00ff00;
 }
 
 .ping-text{

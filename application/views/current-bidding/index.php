@@ -35,7 +35,7 @@
                                                 <h5 class="bold">-</h5>
                                             </div>
                                             <div class="col-6">
-                                                <h6>Harga Awal</h6>
+                                                <h6>Harga Dasar</h6>
                                                 <h5 id="startprice" class="bold">Rp. -</h5>
                                             </div>
                                         </div>
