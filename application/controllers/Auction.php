@@ -14,8 +14,7 @@ class Auction extends CI_Controller {
         }
         parent::__construct();
         $this->load->model('lot_model','lot');
-        $this->load->helper(array('url','cookie'));
-        $this->load->helper('domain_helper');
+        $this->load->helper(array('url','cookie','global'));
         
     }
 
@@ -184,9 +183,7 @@ class Auction extends CI_Controller {
                 $getLotInfoUrl = $this->config->item('ibid_lot')."/api/infoLotOfSchedule/$schedule_id";
                 $lotInfo     = json_decode($this->get_curl($getLotInfoUrl));
                 $date = $scheduleData->date;
-                $schedule_date = $scheduleData->date;
-                $schedule_date = date_create($schedule_date);
-                $schedule_date = date_format($schedule_date, "j F Y");
+                $schedule_date = indonesian_date($scheduleData->date);
                 $company = $scheduleData->CompanyName;
                 $waktu = $scheduleData->waktu;
                 $waktu = date_create($waktu);
