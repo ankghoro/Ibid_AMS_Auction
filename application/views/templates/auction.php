@@ -55,7 +55,7 @@
                                                 <h5 class="bold spec-content data-lot" id="item_tahun">-</h5>
                                             </div>
                                             <div class="col-6 center-align">
-                                                <h6 class="spec-title ">Harga Awal</h6>
+                                                <h6 class="spec-title ">Harga Dasar</h6>
                                                 <h5 class="bold spec-content data-lot" id="item_startprice">-</h5>
                                             </div>
                                         </div>

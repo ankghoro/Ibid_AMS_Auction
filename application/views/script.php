@@ -398,7 +398,7 @@ function getLotData() {
           // lotInfo.skippedLot = 0;
           $('button.last-confirm').hide(); 
           if (data.lotInfo.skippedLot > 0) {
-            message = "Di jadwal ini tersisa "+data.lotInfo.skippedLot+" lot belum terjual, apakah anda ingin melelangnya lagi ?";
+            message = "Di jadwal ini tersisa "+data.lotInfo.skippedLot+" lot belum terjual, apakah anda ingin melelangnya ?";
             $('#confirm-done').text('Tidak');
             $('#confirm-done').removeClass('btn-success');
             $('#confirm-done').addClass('btn-default');
@@ -458,7 +458,7 @@ function getLotData() {
             keyboard: false
           })
           var body ='<h5>Semua jadwal hari ini telah selesai dilaksanakan.</h5>'
-          $('#modal-title').html('<i class="fa fa-send-o"></i> Terimakasih');
+          $('#modal-title').html('<i class="fa fa-send-o"></i> Terima kasih');
           $('#modal-body').empty();
           $('#modal-body').append(body);
           $('#proceed-winner').hide();

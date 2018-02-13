@@ -7,8 +7,7 @@ class Current extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('lot_model','lot');
-        $this->load->helper(array('url','cookie'));
-        $this->load->helper('domain_helper');
+        $this->load->helper(array('url','cookie','global'));
     }
 
     private function check_token($token)
