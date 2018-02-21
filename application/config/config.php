@@ -24,52 +24,45 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 if(defined('STDIN')){
-	$config['base_url'] = 'ibid-auction.stagingapps.net';
+	$config['base_url'] = '.stagingapps.net';
 } else {
-	$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-	$config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
+	$config['base_url'] = is_https() ? "https://" : "http://";
+	$config['base_url'] .= $_SERVER['HTTP_HOST'];
 	$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 }
 
-// formula of base_domain        
-$explode = explode( '.', str_replace(["http://","/"], "",$config['base_url']));
-$index = count($explode) - 1;
-$base_domain = '.'.$explode[$index-1].'.'.$explode[$index];
-
-// base domain
-$config['base_domain'] = $base_domain;
 
 // ADMS Auth
 $config['adms_auth']['login'] = "http://ibidadmsdevserviceaccount.azurewebsites.net/index.php/auth/oauth2";
 $config['adms_auth']['check'] = "http://ibidadmsdevserviceaccount.azurewebsites.net/index.php/auth/oauth2/check";
 
 // Auth
-$config['ibid_auth'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-$config['ibid_auth'] .= "://ibid-ams".$base_domain;
+$config['ibid_auth'] = is_https() ? "https://" : "http://";
+$config['ibid_auth'] .= "ibid-ams.stagingapps.net";
 
 // Schedule 
-$config['ibid_schedule'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-$config['ibid_schedule'] .= "://ibid-ams-schedule".$base_domain;
+$config['ibid_schedule'] = is_https() ? "https://" : "http://";
+$config['ibid_schedule'] .= "ibid-ams-schedule.stagingapps.net";
 
 // Stock
-$config['ibid_stock'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-$config['ibid_stock'] .= "://ibid-ams-stock".$base_domain;
+$config['ibid_stock'] = is_https() ? "https://" : "http://";
+$config['ibid_stock'] .= "ibid-ams-stock.stagingapps.net";
 
 // Lot 
-$config['ibid_lot'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-$config['ibid_lot'] .= "://ibid-ams-lot".$base_domain;
+$config['ibid_lot'] = is_https() ? "https://" : "http://";
+$config['ibid_lot'] .= "ibid-ams-lot.stagingapps.net";
 
 // Auction 
-$config['ibid_auction'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-$config['ibid_auction'] .= "://ibid-ams-auction".$base_domain;
+$config['ibid_auction'] = is_https() ? "https://" : "http://";
+$config['ibid_auction'] .= "ibid-ams-auction.stagingapps.net";
 
 // AutoBid 
-$config['ibid_autobid'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-$config['ibid_autobid'] .= "://ibid-ams-autobid".$base_domain;
+$config['ibid_autobid'] = is_https() ? "https://" : "http://";
+$config['ibid_autobid'] .= "ibid-ams-autobid.stagingapps.net";
 
 // KPL 
-$config['ibid_kpl'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-$config['ibid_kpl'] .= "://ibid-ams-kpl".$base_domain;
+$config['ibid_kpl'] = is_https() ? "https://" : "http://";
+$config['ibid_kpl'] .= "ibid-ams-kpl.stagingapps.net";
 
 /*
 |--------------------------------------------------------------------------
