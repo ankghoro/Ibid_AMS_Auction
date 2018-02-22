@@ -121,10 +121,10 @@ var queue = new Queue({ tasksRef: tasksRef, specsRef: specsRef }, function(data,
                               state = "Proxy";
                             }
                           }
-                          state = 'terjual';
                           UnitName = dataLot.merk +' '+dataLot.seri
                           winPostData = {UnitName:UnitName,Npl:npl,Lot:dataLot.lot,ScheduleId:scheduleId,Schedule:dataLot.date,Type:1,AuctionItemId:dataLot.stock_id,Price:formedPrice,Va:dataLot.VA,Model:dataLot.model,Merk:dataLot.merk,Tipe:dataLot.tipe,Silinder:dataLot.silinder,Tahun:dataLot.tahun,NoPolisi:dataLot.nopol,winnerState:state};
                           submitWinnerUrl = process.env.API_KPL+'api/submitWinner';
+                          state = 'terjual';
                           httpPost(winPostData,submitWinnerUrl,state);
                       });
                   }).on('error', function(e){
