@@ -1,0 +1,52 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Bidding extends CI_Controller {
+	
+ 	public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('bidding_model','bid');
+    }
+
+	public function index()
+	{
+        $data['menu'] = load_menu()['menu'];
+        $data['content'] = 'bidding/index';
+        $data['content_script'] = 'bidding/script';
+        // $data['content_modal'] = 'modal';
+        $this->load->view('/templates/current-bid', $data);
+	}
+
+	public function bid()
+	{
+        print_r($this->input->post('biddertype'));die();
+        $interval = (int)$this->input->post('interval');
+        $biddertype = $this->input->post('biddertype');
+        $startprice = (int)$this->input->post('startprice');
+        $database = $this->bid->firebase()->getDatabase();
+        $reference = $database->getReference('company/3/schedule/1/lot|stock/1321/log');
+        $last = $reference->orderByKey()->limitToLast(1)->getValue();
+
+        if (count($last) > 0) {
+            $last = reset($last);
+            $bid = $last['bid'] + $interval;
+        }else{
+            $bid = $startprice + $interval;
+        }
+
+        $postData = [
+            "bid" => $bid,
+            "type" => $biddertype
+        ];
+        $reference->push($postData);
+
+        echo json_encode(["status" => true]);
+    }
+    
+    public function change(){
+
+    }
+}
+
+?>

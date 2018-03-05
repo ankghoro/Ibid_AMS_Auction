@@ -1,0 +1,578 @@
+html, body{
+	background: #fff;
+	font-family: open sans;
+	text-align: center;
+	color:#fff;
+}
+@font-face {
+    font-family: open sans;
+	src: url('../fonts/regular.ttf') format('ttf'),
+		 url('../fonts/regular.woff') format('woff');
+}
+
+@font-face {
+    font-family: openbold;
+	src: url('../fonts/bold.ttf') format('ttf'),
+		 url('../fonts/bold.woff') format('woff');
+}
+
+.margin0{
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+	margin-bottom: 10px;
+}
+.separator1{
+	border-right: 1px solid rgba(255, 255, 255, 0.2);
+	border-right-style: height: 10px;
+}
+
+.main-title{
+	font-family: openbold;
+	font-size: 1.5em;
+	text-align: left;
+	text-transform: uppercase;
+	margin: 20px 20px 20px 0;
+}
+.sub-title{
+	font-size: 2.5vw;
+}
+.margin11{
+	margin: -11px;
+}
+.side-lot{
+	background-color: #231f42;
+	width: 100%;
+	height: 100%;
+	padding-top: 10px;
+	border-top-left-radius: 10px;
+}
+.lot-number{
+	font-size: 2em;
+	font-family: openbold;
+	line-height: 0.8em;
+}
+hr {
+    display: block;
+	height: 1px;
+	width: 32vw;
+    border: 0;
+    border-top: 1px solid rgb(255, 255, 255);
+    margin: 0em 2em;
+	padding: 0; 
+}
+.top-border{
+	border-top: 1px solid white;
+	margin: 0px 20px;
+}
+.container-fluid{
+	padding-left: 30px;
+	padding-right: 30px;
+	width: 100%;
+	height: 100%;
+	margin-left: auto;
+    margin-right: auto;
+}
+.bid-name{
+	text-align: center;
+	background-color: rgba(0, 0, 0, 0.6);
+	color: white;
+	position: absolute;
+	top:0;
+	width: 100%;
+	min-height: 70px;
+	z-index: 9;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.lot-status{
+	-webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+	background-color: #9E1313;
+	color: white;
+	padding: 2px 10px;
+	border-radius: 5px;
+	margin: 10px;
+    font-size: 9pt;
+}
+
+.color-right{
+	background: black;
+}
+.left-radius{
+	border-top-left-radius: 10px;
+}
+.border-bottom{
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px; 
+	background-color: #ebebed !important;
+}
+.young-purple{
+	background: black;
+	text-align: left;
+	height: 100%;
+	width: 100%;
+	padding-right: 40px;
+	padding-left: 10px;
+	border-top-right-radius: 10px;
+	padding-top: 10px;
+	padding-bottom: 40px;
+}
+.purple-bold{
+	background-color: #1b1837;
+}
+.purple-verybold{
+	background-color: #ebebed;
+}
+.rounded-iden{
+	border-radius: 100px;
+	background-color: #f4fefd;
+	width: 47%;	
+	margin-left: 2px;
+	margin-right: auto;
+	padding: 2px;
+	margin-bottom: 10px;
+	color: #231f42;
+	float: left;
+}
+.card-block{
+	padding: 0;
+}
+.title-caption{
+	font-size: 1.5vw;
+}
+.bold{
+	font-family: openbold;
+}
+.card-img-top{
+	background-image: url(../img/default.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	width:100%;
+	height: 55vh;
+}
+.margin30{
+	padding-top:20px;
+}
+.card{
+	min-height: 90vh;
+	max-height: 90vh;
+	border-radius: 10px;
+}
+.block-content{
+	padding: 10px !important;
+}
+.main-caption{
+	font-family: openbold;
+	font-size: 2.5vw;
+	line-height: 8vh;
+}
+.car-thumbnail{
+	min-width: 100px;
+	min-height: 30vh;
+	max-height: 30vh;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+	background: url('../img/ford.jpg');
+	background-size: cover;
+}
+.btn{
+	margin-top: 5px;
+	border-radius: 4px;
+}
+
+.control-label{
+	font-size: 10pt !important;
+}
+.bottom-content{
+	margin-top: 15px;
+	border-radius: 0 0 10px 10px ;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+	background-color: white;
+}
+.bottom10{
+	margin-top: 2.5vh;
+}
+.top10{
+	margin-top: 1.2vh;
+}
+.content-page {
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .content-page .content {
+	padding: 0 5px 10px 5px;
+	margin-top: 40px;
+  }
+.car-grade{
+	border-radius: 50%;
+	background-color: #903e98;
+	width: 80px;
+	height: 80px;
+	padding-top: 10px;
+	color: white;
+	font-size: 12pt;
+	margin: 10px;
+	position: absolute;
+	bottom: 0;
+	right: 2vw;
+}
+.grade-alpha{
+	font-size: 28pt;
+	line-height: 25pt;
+	font-family: openbold;
+}
+.first-bid{
+	text-align: left;
+	margin-top: 25px;
+	padding-left: 39px;
+	
+}
+
+.stock-detail{
+	color: #1b1837;
+}
+
+.margin20{
+	margin-bottom: 10px !important;
+}
+.bid-topbid{
+	font-size: 2.7vw;
+	font-family: openbold;
+	color: white;
+}
+.left-content{
+	border-radius: 10px;
+	margin-right: 20px;
+	padding: 0;
+	width: 45%;
+}
+.right-content{
+	background-color: white;
+	box-shadow: 1px 2px 4px rgba(0, 0, 0, .3);
+	border-radius: 10px ;
+	margin-left: 0px;
+	margin-top: 10px;
+}
+.openbold{
+	font-family: openbold;
+}
+.default-wrap{
+    border: 3px solid #bd66bd;
+    color: #bd66bd;
+}
+.red-wrap{
+	border: 3px solid #ce505b;
+	color: #ce505b;
+}
+.yellow-wrap{
+	border: 3px solid yellow; 
+	color: yellow;
+}
+.green-wrap{
+	border: 3px solid #52f332; 
+	color: #52f332;
+}
+.bid-count{
+	-webkit-transition: all 1s ease;
+    -moz-transition: all 1s ease;
+    -o-transition: all 1s ease;
+    transition: all 1s ease;
+	/*
+	Hijau
+	border: 3px solid #52f332; 
+	color: #52f332; */
+	/*
+	Kuning
+	border: 3px solid yellow; 
+	color: yellow; */
+	font-size: 3vw;
+	font-family: openbold;
+	border-radius: 50%;
+	height:9vw;
+	width: 9vw;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	padding-top: 20px;
+	line-height: 2vw;
+}
+
+.count-wrap{
+	padding-top: 10px;	
+}
+
+.top-bidder{
+	font-size: 1.5vw;
+	line-height: 35px;
+	font-weight: bold;
+}
+
+.img-top{
+	margin-bottom: 5px;
+	width: 2vw;
+}
+
+.fold-price{
+	color: #0a0523;
+	padding: 5px;
+	margin-bottom: 10px;
+	font-size: 1.5vw;
+}
+}
+
+.right-bottom-content{
+	margin-top: 20px;
+	padding-bottom: 35px;
+}
+
+
+.weight{
+	font-weight: bold;
+}
+
+.item{
+	padding: 10px;
+	border: 1px solid #adabb9;
+	height: 16vh;
+}
+.padding10{
+	padding-top: 20px;
+}
+.padding11{
+	border-top-right-radius: 10px;
+}
+.padding12{
+	padding: 10px;
+}
+.padding13{
+	padding: 0px 10px 0px 20px;
+}
+.pull-right{
+	float: right;
+}
+.dot-separator{
+	color:#36aeac;
+	font-family: openbold;
+	font-size: 3rem;
+	float: left;
+	margin-top: -20px;
+}
+.bidding-log{
+	min-height: 58vh;
+	max-height: 58vh;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	background-color: #ebebed;
+	padding-top: 10px;
+	color: #1b1837 !important;
+	margin-bottom: 10px;
+}
+
+.grey{
+	background-color: #f6f6f8;
+}
+
+.padding20{
+	padding-left: 1.5vw;
+	margin-top: 3vh;
+}
+
+.line-height{
+	line-height: 32pt;
+	font-size: 1.4vw;
+}
+.swal2-modal {
+	width: auto !important;
+	background: rgba(0,0,0,0) !important;
+}
+@media only screen
+and (max-device-width : 320px) {
+	.bid-name > h4 {
+		font-size: 7pt;
+	}
+}
+
+@media only screen
+and (min-device-width : 321px)
+and (max-device-width : 480px) {
+	.bid-name > h4 {
+		font-size: 10pt;
+	}
+}
+
+@media only screen
+and (max-device-width : 768px)
+ {
+	.card{
+		margin-bottom: 10px;
+	}
+    .car-grade{
+		display:block;margin-left:auto;margin-right:auto;
+	}
+	.first-bid{
+		text-align: center;
+	}
+	.first-bid > h4{
+		font-size: 10pt;
+	}
+	.first-bid > h3{
+		font-size: 15pt;
+	}
+	.left-content{
+		width: 100%;
+	}
+	.card{
+		max-height: 100%;
+	}
+	.car-grade{
+		right: 6vw;
+	}
+	.bid-topbid{
+		font-size: 5vw !important;
+		text-align: center;
+	}
+	.padding11{
+		border-top-right-radius: 0;
+	}
+	.padding13{
+		padding: 0px 20px;
+	}
+	.bid-count{
+		height: 15vw;
+		width: 15vw;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		padding-top: 3vw;
+		font-size: 6vw;
+	}
+	.count-right{
+		font-size: 3vw;
+	}
+	.top-bidder{
+		font-size:
+	}
+	.fold-price{
+		font-size: 3vw;
+	}
+	.img-top{
+		width: 5vw;
+	}
+	.top-bidder{
+		font-size: 4vw;
+	}
+	.center-content{
+		margin-left: 20vw;
+	}
+}
+
+@media only screen
+and (min-device-height : 768px)
+{
+	.rounded-iden{
+		height: 8.5vh;
+	}
+		
+}
+
+@media only screen
+and (max-device-width : 1199px)
+{	
+	.item1 {
+	
+		border-right: none !important;
+	}
+	.item2 {
+		
+		border-right: none !important;
+	}
+	.item3 {
+		
+		border-right: none !important;
+	}
+
+	.title-caption{
+		
+			font-size: 8pt !important;
+	}
+	.main-caption{
+		font-size: 11pt !important;
+	}
+
+}
+
+@media only screen
+and (min-device-width : 768px)
+and (max-device-width : 992px)
+{
+	
+	.bold{
+		font-size: 1.5vw;
+	}
+	.young-purple{
+		padding-right: 0;
+		padding-left: 0;
+	}
+	.bid-count{
+		font-size: 3vw;
+		font-weight: bold;
+		border-radius: 50%;
+		height: 6vw;
+		width: 6vw;
+		margin-top: 15px;
+		padding-top: 10px;
+		line-height: 1vw;
+	}
+	.count-right{
+		font-size: 1vw;
+	}
+	.padding13{
+		padding: 0px 0px 0px 10px;
+	}
+	
+	
+}
+
+@media only screen
+and (min-device-width : 640px)
+and (max-device-width : 1199px)
+{
+	.bid-name{
+		font-size: 10pt;
+	}
+	
+}
+
+
+@media only screen
+and (max-device-width : 577px){
+	.main-title{
+		font-size: 4vw;
+	}
+	.sub-title{
+		font-size: 3vw;
+	}
+	.lot-number{
+		font-size: 5vw;
+	}
+	.car-grade{
+		right: 6vw;
+	}
+	.bold{
+		font-size: 4vw;
+	}
+	
+}
+
+@media only screen
+and (min-device-width : 992px){
+	
+	
+}

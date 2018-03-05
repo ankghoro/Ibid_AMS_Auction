@@ -1,0 +1,12 @@
+{
+    "name": "akmalmstfa/ibid-auction",
+    "authors": [
+        {
+            "name": "akmal.m",
+            "email": "akmal.m@smooets.com"
+        }
+    ],
+    "require": {
+        "kreait/firebase-php": "^3.0"
+    }
+}
