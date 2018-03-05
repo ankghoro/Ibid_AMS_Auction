@@ -38,31 +38,31 @@ $config['adms_auth']['check'] = "http://ibidadmsdevserviceaccount.azurewebsites.
 
 // Auth
 $config['ibid_auth'] = is_https() ? "https://" : "http://";
-$config['ibid_auth'] .= "ibid-ams.stagingapps.net";
+$config['ibid_auth'] .= "alpha.ibid.astra.co.id/backend/ams";
 
 // Schedule 
 $config['ibid_schedule'] = is_https() ? "https://" : "http://";
-$config['ibid_schedule'] .= "ibid-ams-schedule.stagingapps.net";
+$config['ibid_schedule'] .= "alpha.ibid.astra.co.id/backend/serviceams/schedule";
 
 // Stock
 $config['ibid_stock'] = is_https() ? "https://" : "http://";
-$config['ibid_stock'] .= "ibid-ams-stock.stagingapps.net";
+$config['ibid_stock'] .= "alpha.ibid.astra.co.id/backend/serviceams/stock";
 
 // Lot 
 $config['ibid_lot'] = is_https() ? "https://" : "http://";
-$config['ibid_lot'] .= "ibid-ams-lot.stagingapps.net";
+$config['ibid_lot'] .= "alpha.ibid.astra.co.id/backend/serviceams/lot";
 
 // Auction 
 $config['ibid_auction'] = is_https() ? "https://" : "http://";
-$config['ibid_auction'] .= "ibid-ams-auction.stagingapps.net";
+$config['ibid_auction'] .= "alpha.ibid.astra.co.id/backend/serviceams/auction";
 
 // AutoBid 
 $config['ibid_autobid'] = is_https() ? "https://" : "http://";
-$config['ibid_autobid'] .= "ibid-ams-autobid.stagingapps.net";
+$config['ibid_autobid'] .= "alpha.ibid.astra.co.id/backend/serviceams/autobid";
 
 // KPL 
 $config['ibid_kpl'] = is_https() ? "https://" : "http://";
-$config['ibid_kpl'] .= "ibid-ams-kpl.stagingapps.net";
+$config['ibid_kpl'] .= "alpha.ibid.astra.co.id/backend/serviceams/kpl";
 
 /*
 |--------------------------------------------------------------------------

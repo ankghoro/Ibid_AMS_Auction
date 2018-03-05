@@ -137,13 +137,13 @@ class Auction extends CI_Controller {
             if (!is_null($UserLogon) && $this->check_token($UserLogon['access_token']) == false) {
                 $refresh_token = $this->refresh_token($UserLogon);
                 if(isset($refresh_token->error)){
-                    delete_cookie('UserLogon', base_domain(base_url()));
-                    redirect($this->config->item('ibid_auth').'/user/login', 'refresh');
+                    delete_cookie('UserLogon', '.astra.co.id');
+                    redirect($this->config->item('ibid_auth'), 'refresh');
                 }else {
                     $UserLogon['access_token'] = $refresh_token->access_token;
                     $UserLogon['refresh_token'] = $refresh_token->refresh_token;
                     
-                    setcookie('UserLogon', serialize($UserLogon), time() + (3600 * 4), "/", base_domain(base_url()));
+                    setcookie('UserLogon', serialize($UserLogon), time() + (3600 * 4), "/", '.astra.co.id');
                     redirect($this->config->item('ibid_auction'), 'refresh');
                 }
             }
