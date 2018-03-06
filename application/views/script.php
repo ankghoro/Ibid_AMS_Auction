@@ -1134,38 +1134,38 @@ function startPing()
 function pingProcess() 
 {
    
-   var ping = new Date;
-   var newPing;
    $.ajax({ 
        type: "GET",
-       url: "<?php echo $this->config->item('ibid_auction');?>",
-       data: {},
-       cache:false,
-       crossDomain : true,
-       success: function(output){ 
-           newPing = new Date - ping;
-           if (newPing >= 999) {
-            newPing = 999
+       url: "<?php echo base_url('auction/');?>ping",
+       success: function(response){ 
+           // newPing = new Date - ping;
+           console.log(response);
+           if (response >= 999) {
+            response = 999
            }
            $('#ping-wrapper').removeClass('green'); 
            $('#ping-wrapper').removeClass('red'); 
            $('#ping-wrapper').removeClass('yellow');
-           if (newPing < 100) {
+           if (response > 0 && response < 100) {
             $('#ping-wrapper').addClass('green');
-           } else if (newPing >=100 && newPing <= 199){
+           } else if (response >=100 && response <= 199){
             $('#ping-wrapper').addClass('yellow');
-           } else if (newPing >= 200){
+           } else if (response >= 200){
             $('#ping-wrapper').addClass('red');
+           } else {
+            $('#ping-wrapper').addClass('red');
+            response = 999;
            }
-           $('#ping').html(newPing+'ms');
+           
+           $('#ping').html(response+'ms');
        },
        error: function(output){ 
-           newPing = 999;
+           response = 999;
             $('#ping-wrapper').removeClass('green'); 
             $('#ping-wrapper').removeClass('red'); 
             $('#ping-wrapper').removeClass('yellow');
            $('#ping-wrapper').addClass('red');
-           $('#ping').html(newPing+'ms');
+           $('#ping').html(response+'ms');
        }
    });
 }

@@ -400,6 +400,18 @@ class Auction extends CI_Controller {
                     ->set_content_type('application/json')
                     ->set_output(json_encode($output));
     }
+
+    public function ping(){
+        $url = "google.com"; //ping to google
+        $ping = exec('ping '.$url);
+        $chunks = explode(' ', $ping);
+        $avg = substr($chunks[12], 0, strlen($chunks[12])-2);
+        $avg = (int) $avg;
+
+        return $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($avg));
+    }
 }
 
 ?>
