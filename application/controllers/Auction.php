@@ -403,7 +403,7 @@ class Auction extends CI_Controller {
 
     public function ping(){
         $url = "google.com"; //ping to google
-        $ping = exec('ping '.$url);
+        $ping = exec('ping '.gethostbyname($url));
         $chunks = explode(' ', $ping);
         $avg = substr($chunks[12], 0, strlen($chunks[12])-2);
         $avg = (int) $avg;
