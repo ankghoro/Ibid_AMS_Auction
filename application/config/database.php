@@ -76,12 +76,12 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'    => '',
-    'hostname' => '202.138.229.146',
-    'username' => 'ibid_ams',
-    'password' => '4ddmJa0Z',
+	    'hostname' => 'ibiddev.database.windows.net',
+    'username' => 'adminibiddev',
+    'password' => 'Serasi123',
     'database' => '',
     'dbdriver' => 'sqlsrv',
-    'port'        => 1433,
+    'port'     => 1433, 
     'dbprefix' => '',
     'pconnect' => FALSE,
     'db_debug' => (ENVIRONMENT !== 'production'),
