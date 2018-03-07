@@ -9,6 +9,10 @@
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('current/assets/css/bootstrap.min.css')?>">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('current/assets/css/style.css')?>">
   <link rel="stylesheet" type="text/css" href="<?php echo base_url('node_modules/sweetalert2/dist/sweetalert2.min.css')?>">
+
+  <link rel="apple-touch-icon" href="<?php echo base_url('assets/img/apple-touch-icon.png'); ?>">
+  <link rel="icon" href="<?php echo base_url('assets/img/favicon.png'); ?>">
+  
 </head>
 <body class="fixed-left">
     <?php $this->load->view($content); ?>
