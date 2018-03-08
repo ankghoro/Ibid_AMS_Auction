@@ -936,6 +936,8 @@ function btn_count() {
                     }       
                   },
                   error: function (jqXHR, textStatus, errorThrown) {
+                    count_value = parseInt(count_value) - 1;
+                    liveCount.set(count_value);
                   },
                 });
               });
