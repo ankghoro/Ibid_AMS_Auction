@@ -537,6 +537,7 @@ function submitWinner(npl){
         Va: currentStockData.VA,
         Model: currentStockData.Model,
         Merk: currentStockData.Merk,
+        Seri: currentStockData.Seri,
         Tipe: currentStockData.Tipe,
         Silinder: currentStockData.Silinder,
         Tahun: currentStockData.Tahun,
