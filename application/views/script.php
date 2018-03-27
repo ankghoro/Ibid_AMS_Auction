@@ -544,6 +544,7 @@ function submitWinner(npl){
         NoPolisi: currentStockData.NoPolisi,
         winnerState: winner.type
       }
+      console.log(postData);
         $.ajax({
           type: "POST",
           url: "<?php echo $this->config->item('ibid_kpl');?>/api/submitWinner", // Used for Staging
