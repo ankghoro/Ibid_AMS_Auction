@@ -565,6 +565,11 @@ function submitWinner(npl){
               $('#floor-bid').prop("disabled", true);
               $('.bid-status').css('background-color','#de2828');
               $('.bid-status').css('color','white');
+
+              //initiate NPL winner ref
+              onSchedule = activeCompany.child('schedule/'+currentStockData.ScheduleId);
+              onLot = onSchedule.child('lot|stock/'+currentStockData.NoLot);
+              onLot.child('winnerNPL').set(npl);
             }
             $('#proceed-winner').prop("disabled",false); 
             $('#btn_loader').remove();
