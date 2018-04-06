@@ -75,12 +75,12 @@ $query_builder = TRUE;
 
 
 $db['default'] = array(
-	'dsn'    => '',
-	    'hostname' => 'ibiddev.database.windows.net',
-    'username' => 'adminibiddev',
-    'password' => 'Serasi123',
-    'database' => 'AMS_ibid_auction',
-    'dbdriver' => 'sqlsrv',
+	'hostname' => '10.201.10.25',
+    'username' => 'SA',
+    'password' => 'P@ssw0rd123',
+    'database' => 'ALPHA_AMS_ibid_auction', 
+    'dbdriver' => 'sqlsrv',  
+    'dsn'      => '',
     'port'     => 1433, 
     'dbprefix' => '',
     'pconnect' => FALSE,
