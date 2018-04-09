@@ -33,8 +33,8 @@ if(defined('STDIN')){
 
 
 // ADMS Auth
-$config['adms_auth']['login'] = "http://ibidadmsdevserviceaccount.azurewebsites.net/index.php/auth/oauth2";
-$config['adms_auth']['check'] = "http://ibidadmsdevserviceaccount.azurewebsites.net/index.php/auth/oauth2/check";
+$config['adms_auth']['login'] = "http://alpha.ibid.astra.co.id/backend/service/akun/auth/oauth2";
+$config['adms_auth']['check'] = "http://alpha.ibid.astra.co.id/backend/service/akun/auth/oauth2/check"; 
 
 // Auth
 $config['ibid_auth'] = is_https() ? "https://" : "http://";
