@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 
 $db['default'] = array(
-	'hostname' => '10.201.10.25',
+	'hostname' => '10.200.10.33',
     'username' => 'SA',
-    'password' => 'P@ssw0rd123',
-    'database' => 'ALPHA_AMS_ibid_auction', 
+    'password' => 'sera12345#@',
+    'database' => 'AMS_ibid_auction', 
     'dbdriver' => 'sqlsrv',  
     'dsn'      => '',
     'port'     => 1433, 
