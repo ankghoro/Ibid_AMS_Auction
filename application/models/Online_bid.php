@@ -15,7 +15,8 @@ class Online_bid extends CI_Model {
         $apiKey = 'AIzaSyC-ZoZ16SiFPoz76W0yJbqhlLOYpPrMU7I';
         return $firebase = (new Factory)
         ->withServiceAccountAndApiKey($serviceAccount,$apiKey)
-        ->withDatabaseUri('https://ibid-ams-sample.firebaseio.com')
+        // ->withDatabaseUri('https://ibid-ams-sample.firebaseio.com')
+        ->withDatabaseUri('https://ibid-firebase.firebaseio.com')
         ->create();
     }
 

@@ -14,7 +14,8 @@ var Interval = process.argv[5];
 var startPrice = process.argv[6];
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://ibid-ams-sample.firebaseio.com'
+  // databaseURL: 'https://ibid-ams-sample.firebaseio.com'
+  databaseURL: 'https://ibid-firebase.firebaseio.com'
 });
 var mainRef = admin.database().ref('company/'+companyId+'/schedule/'+scheduleId+'/lot|stock/'+lotNum);
 var logsRef = mainRef.child('log');
