@@ -6,13 +6,22 @@
 <script>
   // file: script.js
   // Initialize Firebase
-  var config = {
+  /* var config = {
     apiKey: "AIzaSyC-ZoZ16SiFPoz76W0yJbqhlLOYpPrMU7I",
     authDomain: "ibid-ams-sample.firebaseapp.com",
     databaseURL: "https://ibid-ams-sample.firebaseio.com",
     projectId: "ibid-ams-sample",
     storageBucket: "",
     messagingSenderId: "493210877814"
+  };
+  firebase.initializeApp(config); */
+  var config = {
+    apiKey: "AIzaSyBL_2GK0mHB2Vk9_zyRuCihoiTHg_r8WiU",
+    authDomain: "ibid-firebase.firebaseapp.com",
+    databaseURL: "https://ibid-firebase.firebaseio.com",
+    projectId: "ibid-firebase",
+    storageBucket: "ibid-firebase.appspot.com",
+    messagingSenderId: "394594408987"
   };
   firebase.initializeApp(config);
 

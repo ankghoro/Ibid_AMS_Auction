@@ -15,7 +15,8 @@ var phpScriptPath = projectBasePath+process.env.PATH_AUTOBID+'index.php proxy ge
 var serviceAccount = require(projectBasePath+process.env.FIREBASE_DATABASE_SERVICE_ACCOUNT);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://ibid-ams-sample.firebaseio.com'
+  // databaseURL: 'https://ibid-ams-sample.firebaseio.com'
+  databaseURL: 'https://ibid-firebase.firebaseio.com'
 });
 
 var mainRef = admin.database().ref('company/'+companyId+'/schedule/'+scheduleId+'/lot|stock/'+lotNum);

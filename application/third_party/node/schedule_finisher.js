@@ -16,7 +16,8 @@ var companyId = process.argv[2];
 var scheduleId = process.argv[3];
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://ibid-ams-sample.firebaseio.com'
+  // databaseURL: 'https://ibid-ams-sample.firebaseio.com'
+  databaseURL: 'https://ibid-firebase.firebaseio.com'
 });
 var mainRef = admin.database().ref('company/'+companyId+'/schedule/'+scheduleId+'/lot|stock');
 
