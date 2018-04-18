@@ -11,7 +11,9 @@ class Online_bid extends CI_Model {
     }
 
     public function firebase(){
-        $serviceAccount = ServiceAccount::fromJsonFile(FCPATH.'ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json');
+        $firebasePath = FCPATH.'/application/third_party/firebase/';
+        $serviceAccount = ServiceAccount::fromJsonFile($firebasePath.'ibid-firebase-service-account.json');
+        // $serviceAccount = ServiceAccount::fromJsonFile(FCPATH.'ibid-ams-sample-firebase-adminsdk-b6oyv-6befd6b9c5.json');
         $apiKey = 'AIzaSyBL_2GK0mHB2Vk9_zyRuCihoiTHg_r8WiU';
         return $firebase = (new Factory)
         ->withServiceAccountAndApiKey($serviceAccount,$apiKey)
