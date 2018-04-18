@@ -13,7 +13,7 @@ class Bidding_model extends CI_Model {
     public function firebase(){
         $firebasePath = FCPATH.'/application/third_party/firebase/';
         $serviceAccount = ServiceAccount::fromJsonFile($firebasePath.'ibid-firebase-service-account.json');
-        $apiKey = 'AIzaSyC-ZoZ16SiFPoz76W0yJbqhlLOYpPrMU7I';
+        $apiKey = 'AIzaSyBL_2GK0mHB2Vk9_zyRuCihoiTHg_r8WiU';
         return $firebase = (new Factory)
         ->withServiceAccountAndApiKey($serviceAccount,$apiKey)
         // ->withDatabaseUri('https://ibid-ams-sample.firebaseio.com')
