@@ -64,6 +64,10 @@ $config['ibid_autobid'] .= "alpha.ibid.astra.co.id/backend/serviceams/autobid";
 $config['ibid_kpl'] = is_https() ? "https://" : "http://";
 $config['ibid_kpl'] .= "alpha.ibid.astra.co.id/backend/serviceams/kpl";
 
+// NPL 
+$config['ibid_npl'] = is_https() ? "https://" : "http://";
+$config['ibid_npl'] .= "alpha.ibid.astra.co.id/backend/service/npl";
+
 /*
 |--------------------------------------------------------------------------
 | Index File
