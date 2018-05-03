@@ -1031,6 +1031,13 @@ function doneCurrentSchedule(id){
     data : {status:"tidak terjual"},
     dataType: "json",
     success: function(data){
+      
+      $.ajax({
+        type: "POST",
+        url: "<?php echo $this->config->item('ibid_npl');?>/counter/npl/kalah?sch="+id+"", // updateNplKalah
+        success: function(updateDataNpl){}
+      });
+      
       if (data.status) {
         $('#modal').modal('hide');
         doneSchedule(id);
