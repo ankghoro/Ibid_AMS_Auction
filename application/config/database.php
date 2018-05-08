@@ -75,7 +75,7 @@ $query_builder = TRUE;
 
 
 $db['default'] = array(
-	'hostname' => '10.201.10.28',
+	'hostname' => '127.0.0.1',
     'username' => 'SA',
     'password' => 'sera12345#@',
     'database' => 'AMS_ibid_auction', 
