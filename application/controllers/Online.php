@@ -87,7 +87,7 @@ class Online extends CI_Controller {
                     $company = $schedule->company_id;
                     $id = $schedule->id;
                     $reference = $database->getReference("company/$company/schedule/$id");
-                    $check = $reference->getValue();
+                    $check = @$reference->getValue();
                     if (strtotime($currentDateTime) <= strtotime($dateTime)+$duration) {
                         if (is_null($check)) {
                             $lot_url = $this->config->item('ibid_lot')."/api/getLotFilter?scheduleid=$id";
