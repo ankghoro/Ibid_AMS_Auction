@@ -1050,6 +1050,12 @@ function doneCurrentSchedule(id){
         success: function(updateDataNpl){}
       });
       
+      $.ajax({
+        type: "POST",
+        url: "<?php echo $this->config->item('ibid_stock');?>/sap/Winnerauction", // xmlMenangLelang
+        success: function(updateDataNpl){}
+      });
+      
       if (data.status) {
         $('#modal').modal('hide');
         doneSchedule(id);
