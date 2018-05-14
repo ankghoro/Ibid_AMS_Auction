@@ -1037,8 +1037,14 @@ function doneCurrentSchedule(id){
         url: "<?php echo $this->config->item('ibid_npl');?>/counter/npl/kalah?sch="+id+"", // updateNplKalah
         success: function(updateDataNpl){}
       });
+      
+      $.ajax({
+        type: "POST",
+        url: "<?php echo $this->config->item('ibid_npl');?>/counter/npl/npllostxml", // xmlNplKalah
+        success: function(updateDataNpl){}
+      });
 			
-			$.ajax({
+      $.ajax({
         type: "POST",
         url: "<?php echo $this->config->item('ibid_stock');?>/itemStock/AuctionLose?sch="+id+"", // updateStokKalah
         success: function(updateDataNpl){}
