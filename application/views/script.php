@@ -1046,7 +1046,7 @@ function doneCurrentSchedule(id){
 			
       $.ajax({
         type: "POST",
-        url: "<?php echo $this->config->item('ibid_stock');?>/itemStock/AuctionLose?sch="+id+"", // updateStokKalah
+        url: "<?php echo $this->config->item('ibid_stock');?>/itemstock/AuctionLose?sch="+id+"", // updateStokKalah
         success: function(updateDataNpl){}
       });
       
