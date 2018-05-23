@@ -33,40 +33,40 @@ if(defined('STDIN')){
 
 
 // ADMS Auth
-$config['adms_auth']['login'] = "http://alpha.ibid.astra.co.id/backend/service/akun/auth/oauth2";
-$config['adms_auth']['check'] = "http://alpha.ibid.astra.co.id/backend/service/akun/auth/oauth2/check"; 
+$config['adms_auth']['login'] = "http://charlie.ibid.astra.co.id/backend/service/akun/auth/oauth2";
+$config['adms_auth']['check'] = "http://charlie.ibid.astra.co.id/backend/service/akun/auth/oauth2/check"; 
 
 // Auth
 $config['ibid_auth'] = is_https() ? "https://" : "http://";
-$config['ibid_auth'] .= "alpha.ibid.astra.co.id/backend/ams";
+$config['ibid_auth'] .= "charlie.ibid.astra.co.id/backend/ams";
 
 // Schedule 
 $config['ibid_schedule'] = is_https() ? "https://" : "http://";
-$config['ibid_schedule'] .= "alpha.ibid.astra.co.id/backend/serviceams/schedule";
+$config['ibid_schedule'] .= "charlie.ibid.astra.co.id/backend/serviceams/schedule";
 
 // Stock
 $config['ibid_stock'] = is_https() ? "https://" : "http://";
-$config['ibid_stock'] .= "alpha.ibid.astra.co.id/backend/serviceams/stock";
+$config['ibid_stock'] .= "charlie.ibid.astra.co.id/backend/serviceams/stock";
 
 // Lot 
 $config['ibid_lot'] = is_https() ? "https://" : "http://";
-$config['ibid_lot'] .= "alpha.ibid.astra.co.id/backend/serviceams/lot";
+$config['ibid_lot'] .= "charlie.ibid.astra.co.id/backend/serviceams/lot";
 
 // Auction 
 $config['ibid_auction'] = is_https() ? "https://" : "http://";
-$config['ibid_auction'] .= "alpha.ibid.astra.co.id/backend/serviceams/auction";
+$config['ibid_auction'] .= "charlie.ibid.astra.co.id/backend/serviceams/auction";
 
 // AutoBid 
 $config['ibid_autobid'] = is_https() ? "https://" : "http://";
-$config['ibid_autobid'] .= "alpha.ibid.astra.co.id/backend/serviceams/autobid";
+$config['ibid_autobid'] .= "charlie.ibid.astra.co.id/backend/serviceams/autobid";
 
 // KPL 
 $config['ibid_kpl'] = is_https() ? "https://" : "http://";
-$config['ibid_kpl'] .= "alpha.ibid.astra.co.id/backend/serviceams/kpl";
+$config['ibid_kpl'] .= "charlie.ibid.astra.co.id/backend/serviceams/kpl";
 
 // NPL 
 $config['ibid_npl'] = is_https() ? "https://" : "http://";
-$config['ibid_npl'] .= "alpha.ibid.astra.co.id/backend/service/npl";
+$config['ibid_npl'] .= "charlie.ibid.astra.co.id/backend/service/npl";
 
 /*
 |--------------------------------------------------------------------------
