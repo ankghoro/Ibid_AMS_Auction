@@ -197,7 +197,7 @@
           $.ajax({
             type: "GET",
             // url: "http://ibidadmsdevservicenpl.azurewebsites.net/index.php/detail?NPLNumber="+npl+"&ScheduleId="+scheduleId,
-            url: "http://alpha.ibid.astra.co.id/backend/service/npl/index.php/detail?NPLNumber="+npl+"&ScheduleId="+scheduleId,
+            url: "http://charlie.ibid.astra.co.id/backend/service/npl/index.php/detail?NPLNumber="+npl+"&ScheduleId="+scheduleId,
             dataType: "json",
             processData: false,
             contenType: false,
