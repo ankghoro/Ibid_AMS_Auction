@@ -317,7 +317,7 @@ function getLotData() {
                 $('.bid-status').css('color','white');
               }
               $('#item_transmisi').text(currentStockData.Transmisi || '-');
-              $('#item_km').text(addPeriod(currentStockData.Kilometer) || '-');
+              $('#item_km').text(currency_format(currentStockData.Kilometer) || '-');
               $('#item_tahun').text(currentStockData.Tahun || '-');
               $('#item_nopol').text(currentStockData.NoPolisi || '-');
               $('#item_bahanbakar').text(currentStockData.BahanBakar || '-');
@@ -1212,6 +1212,15 @@ function pingProcess()
            $('#ping').html(newPing+'ms');
        }
    });
+}
+
+function currency_format(n) {
+   if(n !== null) {
+      return n.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+   }
+   else {
+      return 0;
+   }
 }
 </script>
 <?php $this->load->view($content_modal); ?>
