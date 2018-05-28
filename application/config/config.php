@@ -70,7 +70,7 @@ $config['ibid_npl'] .= "ibid.astra.co.id/backend/service/npl";
 
 // NPL 
 $config['ping'] = is_https() ? "https://" : "http://";
-$config['ping'] .= "backend/serviceams/assets/._logo.png";
+$config['ping'] .= "ibid.astra.co.id/backend/serviceams/assets/._logo.png";
 
 /*
 |--------------------------------------------------------------------------
