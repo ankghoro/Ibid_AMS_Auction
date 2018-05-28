@@ -1182,7 +1182,7 @@ function pingProcess()
    var newPing;
    $.ajax({ 
        type: "GET",
-       url: "<?php echo $this->config->item('ibid_auction');?>",
+       url: "<?php echo $this->config->item('ping');?>",
        data: {},
        cache:false,
        crossDomain : true,
